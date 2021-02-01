@@ -10,18 +10,18 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public List<Event> _notifications = new List<Event>();
 
-        public IReadOnlyCollection<Event> Notificacoes => _notifications?.AsReadOnly();
+        public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
 
         protected Entity()
             => Id = Guid.NewGuid();
 
-        public void AdicionarEvento(Event evento)
+        public void AddEvent(Event evento)
             => _notifications.Add(evento);
 
-        public void RemoverEvento(Event evento)
+        public void RemoveEvent(Event evento)
             => _notifications.Remove(evento);
 
-        public void LimparEventos()
+        public void ClearEvents()
             => _notifications.Clear();
 
         public override bool Equals(object obj)
@@ -51,7 +51,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
         public override int GetHashCode()
             => (GetType().GetHashCode() * 907) + Id.GetHashCode();
 
-        public virtual bool EhValido()
+        public virtual bool IsValid()
             => throw new NotImplementedException();
 
         public override string ToString()
