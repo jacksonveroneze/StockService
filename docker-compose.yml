@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+    api:
+        container_name: api
+        image: docker.pkg.github.com/jacksonveroneze/viacepdotnet/viacepdotnet:1.0.0
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8000:80
+        links:
+            - database
+        environment:
+            - ASPNETCORE_URLS=http://+:80
+            - DOTNET_RUNNING_IN_CONTAINER=true
+            - ASPNETCORE_ENVIRONMENT=Docker
+
+    database:
+        container_name: database
+        image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+        ports:
+            - 1433:1433
+        environment:
+            SA_PASSWORD: "P@sswordSQLServer123"
+            ACCEPT_EULA: "Y"
+        volumes:
+            - database:/var/opt/mssql/data
+volumes:
+    database:
