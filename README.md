@@ -7,6 +7,13 @@ API para gerenciamento de estoque desenvolvida em .NET 5
 ![GitHub](https://img.shields.io/github/license/jacksonveroneze/OneTimePassword?logoColor=%20)
 ![GitHub last commit](https://img.shields.io/github/last-commit/jacksonveroneze/OneTimePassword)
 
+
+
+| Branch        | Main           | Develop  |
+| ------------- |:-------------:| -----:|
+| Status CI      | ![.NET - Main](https://github.com/jacksonveroneze/StockService/workflows/.NET/badge.svg?branch=main) | ![.NET - Develop](https://github.com/jacksonveroneze/StockService/workflows/.NET/badge.svg?branch=develop) |
+
+
 ## 💻 Sobre o projeto
 
 Tabela de conteúdos
