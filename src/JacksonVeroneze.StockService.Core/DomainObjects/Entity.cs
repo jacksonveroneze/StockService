@@ -62,8 +62,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
         public override int GetHashCode()
             => (GetType().GetHashCode() * 907) + Id.GetHashCode();
 
-        public virtual bool IsValid()
-            => ValidState;
+        public virtual bool IsValid() => ValidState;
 
         public void IncrementVersion() => Version++;
 

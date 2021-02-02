@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E7814FF8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Domain.Tests", "tests\JacksonVeroneze.StockService.Domain.Tests\JacksonVeroneze.StockService.Domain.Tests.csproj", "{A9746081-FD90-4234-9A2F-431DFFEE1B8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Data", "src\JacksonVeroneze.StockService.Data\JacksonVeroneze.StockService.Data.csproj", "{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,10 +64,23 @@ Global
 		{A9746081-FD90-4234-9A2F-431DFFEE1B8E}.Release|x64.Build.0 = Release|Any CPU
 		{A9746081-FD90-4234-9A2F-431DFFEE1B8E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9746081-FD90-4234-9A2F-431DFFEE1B8E}.Release|x86.Build.0 = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Debug|x86.Build.0 = Debug|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|x64.Build.0 = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9AA921BC-3128-49E7-9E74-7277369F037B} = {680B2B70-0017-40A3-8DF9-F7BD5906C01B}
 		{208708C6-C5D6-4D90-9620-1E39B9E5B1A6} = {680B2B70-0017-40A3-8DF9-F7BD5906C01B}
 		{A9746081-FD90-4234-9A2F-431DFFEE1B8E} = {E7814FF8-AAE4-49CA-A6DC-16AEBFBFA01C}
+		{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD} = {680B2B70-0017-40A3-8DF9-F7BD5906C01B}
 	EndGlobalSection
 EndGlobal
