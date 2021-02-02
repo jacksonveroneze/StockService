@@ -6,14 +6,25 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 {
     public class Entity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; } = Guid.NewGuid();
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public DateTime? UpdatedAt { get; set; } = null;
+
+        public DateTime? DeletedAt { get; set; } = null;
+
+        public int Version { get; set; } = 1;
+
+        protected bool ValidState = false;
 
         public List<Event> _notifications = new List<Event>();
 
         public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
 
         protected Entity()
-            => Id = Guid.NewGuid();
+        {
+        }
 
         public void AddEvent(Event evento)
             => _notifications.Add(evento);
@@ -52,9 +63,12 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
             => (GetType().GetHashCode() * 907) + Id.GetHashCode();
 
         public virtual bool IsValid()
-            => throw new NotImplementedException();
+            => ValidState;
+
+        public void IncrementVersion() => Version++;
 
         public override string ToString()
-            => $"{GetType().Name} [Id={Id}]";
+            => $"{GetType().Name}: Id: {Id}, CreatedAt: {CreatedAt}, " +
+               $"UpdatedAt: {UpdatedAt}, DeletedAt: {DeletedAt}, Version: {Version}";
     }
 }
