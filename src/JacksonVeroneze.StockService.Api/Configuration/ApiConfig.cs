@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Prometheus;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -43,9 +44,13 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             CultureInfo[] supportedCultures = {new CultureInfo("pt-BR")};
             app.UseRequestLocalization(new RequestLocalizationOptions {DefaultRequestCulture = new RequestCulture("pt-BR", "pt-BR"), SupportedCultures = supportedCultures, SupportedUICultures = supportedCultures});
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseHealthChecks("/health");
+
+            app.UseMetricServer();
+
+            app.UseHttpMetrics();
 
             app.UseRouting();
 
