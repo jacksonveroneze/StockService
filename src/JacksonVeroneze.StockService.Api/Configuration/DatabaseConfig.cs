@@ -10,11 +10,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     {
         public static void AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-
-            services.AddDbContext<DatabaseContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                    .UseSnakeCaseNamingConvention());
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<DatabaseContext>(options =>
+                    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+                        .UseSnakeCaseNamingConvention());
         }
     }
 }

@@ -8,7 +8,9 @@ namespace JacksonVeroneze.StockService.Mapper
     {
         public ProfileMapStock()
         {
-            CreateMap<ProductDto, Product>().ReverseMap();
+            CreateMap<ProductDto, Product>()
+                .ConstructUsing(x => new Product(x.Description))
+                .ReverseMap();
         }
     }
 }

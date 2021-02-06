@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Communication.Mediator;
 using JacksonVeroneze.StockService.Core.Data;
+using JacksonVeroneze.StockService.Core.Messages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -16,11 +17,13 @@ namespace JacksonVeroneze.StockService.Data
             => _mediatorHandler = mediatorHandler;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            => modelBuilder.ApplyConfigurationsFromAssembly(typeof(DbContext).Assembly);
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
 
+            modelBuilder.Ignore<Event>();
+        }
 
-
-        public async Task<bool> Commit()
+        public async Task<bool> CommitAsync()
         {
             foreach (EntityEntry entry in ChangeTracker.Entries())
             {

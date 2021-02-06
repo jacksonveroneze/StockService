@@ -1,4 +1,7 @@
-﻿using System.Net.Mime;
+﻿using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Application.DTO;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,11 +28,17 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public ActionResult Add()
+        public async Task<ActionResult<ProductDto>> Add([FromBody] ProductDto productDto)
         {
-            _logger.LogInformation("Request: {0}", $"{nameof(ProductsController)} - {nameof(Add)}");
+            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Data: {2}",
+                $"{nameof(ProductsController)}", $"{nameof(Add)}", productDto.ToString());
 
-            return Ok("ok");
+            ProductDto result = await _applicationService.AddASync(productDto);
+
+            if (result is null)
+                return BadRequest(_applicationService.ValidationResult.Errors.Select(x => x.ErrorMessage));
+
+            return Ok(productDto);
         }
     }
 }

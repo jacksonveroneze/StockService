@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AutoMapper" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
   </ItemGroup>
 
 </Project>

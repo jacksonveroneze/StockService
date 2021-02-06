@@ -13,11 +13,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Title = "JacksonVeroneze.StockService.Api",
+                        Title = "StockService Api",
                         Version = "v1",
                         Description = "StockService",
-                        Contact = new OpenApiContact() {Name = "Jackson Veroneze", Email = "jackson@jacksonveroneze.com"},
-                        License = new OpenApiLicense() {Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT")}
+                        Contact = new OpenApiContact {Name = "Jackson Veroneze", Email = "jackson@jacksonveroneze.com"},
+                        License = new OpenApiLicense {Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT")}
                     }
                 );
 

@@ -1,4 +1,7 @@
+using JacksonVeroneze.StockService.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -14,7 +17,17 @@ namespace JacksonVeroneze.StockService.Api
 
             Log.Information("Starting up");
 
-            CreateHostBuilder(args).Build().Run();
+            IHost host = CreateHostBuilder(args).Build();
+
+            Log.Information("Performing migrations.");
+
+            using IServiceScope scope = host.Services.CreateScope();
+
+            DatabaseContext db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+            db.Database.Migrate();
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

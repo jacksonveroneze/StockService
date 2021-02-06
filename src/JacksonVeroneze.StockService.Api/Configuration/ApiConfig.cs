@@ -25,7 +25,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             services.AddDatabaseConfiguration(configuration);
 
-            services.AddMediatR(typeof(Startup));
+            services.AddAutoMediatRConfiguration();
 
             services.AddDependencyInjectionConfiguration();
 
