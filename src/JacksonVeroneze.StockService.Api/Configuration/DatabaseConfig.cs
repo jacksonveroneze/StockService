@@ -13,7 +13,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+                    .UseSnakeCaseNamingConvention());
         }
     }
 }

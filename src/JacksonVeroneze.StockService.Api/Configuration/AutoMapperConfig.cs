@@ -1,3 +1,4 @@
+using JacksonVeroneze.StockService.Mapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
@@ -6,7 +7,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     {
         public static void AddAutoMapperConfiguration(this IServiceCollection services)
         {
-
+            services.AddAutoMapper(typeof(ProfileMapStock));
         }
     }
 }

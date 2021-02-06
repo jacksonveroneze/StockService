@@ -18,6 +18,8 @@ namespace JacksonVeroneze.StockService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(typeof(DbContext).Assembly);
 
+
+
         public async Task<bool> Commit()
         {
             foreach (EntityEntry entry in ChangeTracker.Entries())

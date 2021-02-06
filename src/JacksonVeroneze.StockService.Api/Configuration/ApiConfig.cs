@@ -1,4 +1,5 @@
 using JacksonVeroneze.StockService.Api.Middlewares;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             services.AddAutoMapperConfiguration();
 
             services.AddDatabaseConfiguration(configuration);
+
+            services.AddMediatR(typeof(Startup));
 
             services.AddDependencyInjectionConfiguration();
 

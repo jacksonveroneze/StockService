@@ -16,14 +16,15 @@ services:
             - ASPNETCORE_ENVIRONMENT=Docker
 
     database:
-        container_name: database
-        image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
-        ports:
-            - 1433:1433
+        image: postgres:13
+        container_name: postgres
         environment:
-            SA_PASSWORD: "P@sswordSQLServer123"
-            ACCEPT_EULA: "Y"
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - TZ=GMT
         volumes:
-            - database:/var/opt/mssql/data
+            - database:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
 volumes:
     database:
