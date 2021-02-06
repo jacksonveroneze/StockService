@@ -1,8 +1,6 @@
-using System.Globalization;
 using JacksonVeroneze.StockService.Api.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +10,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class ApiConfig
     {
-        private const string AllowAllCors = "AllowAll";
+        private const string CorsPolicyName = "AllowAll";
 
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
@@ -20,16 +18,15 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             services.AddHealthChecks();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(AllowAllCors,
-                    builder =>
-                    {
-                        builder.AllowAnyHeader();
-                        builder.AllowAnyMethod();
-                        builder.AllowAnyOrigin();
-                    });
-            });
+            services.AddCorsConfiguration(CorsPolicyName);
+
+            services.AddAutoMapperConfiguration();
+
+            services.AddDatabaseConfiguration(configuration);
+
+            services.AddDependencyInjectionConfiguration();
+
+            services.AddSwaggerConfiguration();
 
             services.AddControllers();
 
@@ -41,10 +38,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            CultureInfo[] supportedCultures = {new CultureInfo("pt-BR")};
-            app.UseRequestLocalization(new RequestLocalizationOptions {DefaultRequestCulture = new RequestCulture("pt-BR", "pt-BR"), SupportedCultures = supportedCultures, SupportedUICultures = supportedCultures});
-
-            //app.UseHttpsRedirection();
+            app.UseCultureSetup();
 
             app.UseHealthChecks("/health");
 
@@ -56,9 +50,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             app.UseAuthorization();
 
-            app.UseCors(AllowAllCors);
+            app.UseCors(CorsPolicyName);
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseSwaggerSetup();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

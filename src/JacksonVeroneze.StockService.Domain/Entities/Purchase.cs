@@ -34,9 +34,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         {
             ValidateOpenState();
 
-            if (item.IsValid() is false)
-                return;
-
             if (ExistsItem(item))
             {
                 PurchaseItem currentItem = _items.First(x => x.Id == item.Id);
@@ -84,8 +81,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validacoes.ValidarSeVazio(Description, "A descrição não pode estar vazia");
             Validacoes.ValidarTamanho(Description, 1, 100, "A descrição não pode estar vazia");
             Validacoes.ValidarSeNulo(Date, "A data não pode estar vazia");
-
-            ValidState = true;
         }
     }
 }

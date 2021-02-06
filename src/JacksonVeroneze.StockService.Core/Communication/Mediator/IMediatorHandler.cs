@@ -7,12 +7,12 @@ namespace JacksonVeroneze.StockService.Core.Communication.Mediator
 {
     public interface IMediatorHandler
     {
-        Task PublicarEvento<T>(T evento) where T : Event;
+        Task PublishEvent<T>(T evento) where T : Event;
 
-        Task<bool> EnviarComando<T>(T comando) where T : Command;
+        Task<bool> SendCommand<T>(T comando) where T : Command;
 
-        Task PublicarNotificacao<T>(T notificacao) where T : DomainNotification;
+        Task PublishNotification<T>(T notification) where T : DomainNotification;
 
-        Task PublicarDomainEvent<T>(T notificacao) where T : DomainEvent;
+        Task PublishDomainEvent<T>(T notification) where T : DomainEvent;
     }
 }

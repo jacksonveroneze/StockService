@@ -41,8 +41,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validacoes.ValidarSeMenorQue(Amount, 1, "A quantidade deve ser maior que zero");
             Validacoes.ValidarSeNulo(Value, "O Valor não pode estar vazio");
             Validacoes.ValidarSeMenorQue(Value, 1, "O Valor deve ser maior que zero");
-
-            ValidState = true;
         }
     }
 }

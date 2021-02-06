@@ -13,24 +13,16 @@ namespace JacksonVeroneze.StockService.Core.Communication.Mediator
         public MediatorHandler(IMediator mediator)
             => _mediator = mediator;
 
-        public async Task<bool> EnviarComando<T>(T comando) where T : Command
-        {
-            return await _mediator.Send(comando);
-        }
+        public async Task<bool> SendCommand<T>(T comando) where T : Command
+            => await _mediator.Send(comando);
 
-        public async Task PublicarEvento<T>(T evento) where T : Event
-        {
-            await _mediator.Publish(evento);
-        }
+        public async Task PublishEvent<T>(T evento) where T : Event
+            => await _mediator.Publish(evento);
 
-        public async Task PublicarNotificacao<T>(T notificacao) where T : DomainNotification
-        {
-            await _mediator.Publish(notificacao);
-        }
+        public async Task PublishNotification<T>(T notification) where T : DomainNotification
+            => await _mediator.Publish(notification);
 
-        public async Task PublicarDomainEvent<T>(T notificacao) where T : DomainEvent
-        {
-            await _mediator.Publish(notificacao);
-        }
+        public async Task PublishDomainEvent<T>(T notification) where T : DomainEvent
+            => await _mediator.Publish(notification);
     }
 }

@@ -16,8 +16,6 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public int Version { get; set; } = 1;
 
-        protected bool ValidState = false;
-
         public List<Event> _notifications = new List<Event>();
 
         public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
@@ -61,8 +59,6 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public override int GetHashCode()
             => (GetType().GetHashCode() * 907) + Id.GetHashCode();
-
-        public virtual bool IsValid() => ValidState;
 
         public void IncrementVersion() => Version++;
 

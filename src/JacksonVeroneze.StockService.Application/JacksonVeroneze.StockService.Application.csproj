@@ -4,4 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="AutoMapper" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
