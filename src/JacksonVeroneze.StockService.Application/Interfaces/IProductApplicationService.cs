@@ -1,15 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO;
+using JacksonVeroneze.StockService.Application.Util;
 
 namespace JacksonVeroneze.StockService.Application.Interfaces
 {
     public interface IProductApplicationService
     {
-        public ValidationResult ValidationResult { get; }
-
-        Task<ProductDto> AddASync(ProductDto productDto);
+        Task<ApplicationDataResult<ProductDto>> AddASync(ProductDto productDto);
 
         Task UpdateASync(ProductDto productDto);
 

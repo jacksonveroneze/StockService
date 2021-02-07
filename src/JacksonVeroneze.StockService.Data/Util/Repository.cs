@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace JacksonVeroneze.StockService.Core.Data
+namespace JacksonVeroneze.StockService.Data.Util
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
-        public IUnitOfWork UnitOfWork { get; }
+        public IUnitOfWork UnitOfWork => _context;
 
-        protected readonly DbContext _context;
+        protected readonly DatabaseContext _context;
 
-        protected Repository(DbContext context)
+        protected Repository(DatabaseContext context)
             => _context = context;
 
         public async Task AddAsync(T entity)

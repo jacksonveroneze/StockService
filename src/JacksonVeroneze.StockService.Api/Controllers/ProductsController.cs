@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO;
 using JacksonVeroneze.StockService.Application.Interfaces;
+using JacksonVeroneze.StockService.Application.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -33,10 +33,10 @@ namespace JacksonVeroneze.StockService.Api.Controllers
             _logger.LogInformation("Request: Controller: {0} - Method: {1} - Data: {2}",
                 $"{nameof(ProductsController)}", $"{nameof(Add)}", productDto.ToString());
 
-            ProductDto result = await _applicationService.AddASync(productDto);
+            ApplicationDataResult<ProductDto> result = await _applicationService.AddASync(productDto);
 
-            if (result is null)
-                return BadRequest(_applicationService.ValidationResult.Errors.Select(x => x.ErrorMessage));
+            if (!result.IsSuccess)
+                return BadRequest(result.Errors);
 
             return Ok(productDto);
         }

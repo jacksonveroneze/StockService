@@ -26,7 +26,7 @@ namespace JacksonVeroneze.StockService.Api.Middlewares
             }
             catch (Exception e)
             {
-                string result = JsonConvert.SerializeObject(new {error = e.Message});
+                string result = JsonConvert.SerializeObject(new {error = e.Message, trace = e.StackTrace});
 
                 context.Response.ContentType = "application/json";
 
