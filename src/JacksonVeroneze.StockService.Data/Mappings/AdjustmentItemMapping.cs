@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace JacksonVeroneze.StockService.Data.Mappings
 {
-    public class PurchaseItemMapping : IEntityTypeConfiguration<PurchaseItem>
+    public class AdjustmentItemMapping : IEntityTypeConfiguration<AdjustmentItem>
     {
-        public void Configure(EntityTypeBuilder<PurchaseItem> builder)
+        public void Configure(EntityTypeBuilder<AdjustmentItem> builder)
         {
             builder.HasKey(c => c.Id);
 
@@ -26,13 +26,13 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.Version)
                 .IsRequired();
 
-            builder.HasOne(p => p.Purchase)
+            builder.HasOne(p => p.Adjustment)
                 .WithMany(b => b.Items)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(p => p.Product)
-                .WithMany(b => b.ItemsPurchase)
+                .WithMany(b => b.ItemsAdjustment)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }

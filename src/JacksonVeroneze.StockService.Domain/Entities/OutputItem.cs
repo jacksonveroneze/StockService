@@ -2,25 +2,25 @@ using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
-    public class PurchaseItem : Entity
+    public class OutputItem : Entity
     {
         public int Amount { get; private set; }
 
         public decimal Value { get; private set; }
 
-        public Purchase Purchase { get; private set; }
+        public Output Output { get; private set; }
 
         public Product Product { get; private set; }
 
-        protected PurchaseItem()
+        protected OutputItem()
         {
         }
 
-        public PurchaseItem(int amount, decimal value, Purchase purchase, Product product)
+        public OutputItem(int amount, decimal value, Output output, Product product)
         {
             Amount = amount;
             Value = value;
-            Purchase = purchase;
+            Output = output;
             Product = product;
 
             Validate();
@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public decimal CalculteValue() => Value * Amount;
 
-        public void UpdateItemFromOtherItem(PurchaseItem item)
+        public void UpdateItemFromOtherItem(OutputItem item)
         {
             Amount += item.Amount;
             Value += item.Value;

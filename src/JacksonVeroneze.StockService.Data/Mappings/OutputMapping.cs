@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace JacksonVeroneze.StockService.Data.Mappings
 {
-    public class ProductMapping : IEntityTypeConfiguration<Product>
+    public class OutputMapping : IEntityTypeConfiguration<Output>
     {
-        public void Configure(EntityTypeBuilder<Product> builder)
+        public void Configure(EntityTypeBuilder<Output> builder)
         {
             builder.HasKey(c => c.Id);
 
@@ -14,7 +14,10 @@ namespace JacksonVeroneze.StockService.Data.Mappings
                 .HasMaxLength(100)
                 .IsRequired();
 
-            builder.Property(c => c.IsActive)
+            builder.Property(c => c.Date)
+                .IsRequired();
+
+            builder.Property(c => c.State)
                 .IsRequired();
 
             builder.Property(c => c.UpdatedAt);

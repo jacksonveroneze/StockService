@@ -8,8 +8,6 @@ namespace JacksonVeroneze.StockService.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Purchase> builder)
         {
-            builder.ToTable("purchase");
-
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Description)
@@ -17,6 +15,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
                 .IsRequired();
 
             builder.Property(c => c.Date)
+                .IsRequired();
+
+            builder.Property(c => c.State)
                 .IsRequired();
 
             builder.Property(c => c.UpdatedAt);
