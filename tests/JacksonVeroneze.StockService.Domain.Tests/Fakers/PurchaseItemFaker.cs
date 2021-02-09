@@ -12,7 +12,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Fakers
                     new PurchaseItem(
                         f.Random.Int(1, 100),
                         f.Random.Decimal(1, 100),
-                        purchase
+                        purchase,
+                        ProductFaker.GenerateFaker().Generate()
                     )
                 );
         }
