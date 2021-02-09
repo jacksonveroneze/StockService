@@ -1,4 +1,6 @@
-﻿using System.Net.Mime;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO;
 using JacksonVeroneze.StockService.Application.Interfaces;
@@ -23,7 +25,37 @@ namespace JacksonVeroneze.StockService.Api.Controllers
 
         //
         // Summary:
-        //     /// Method responsible for action: Add (POST). ///
+        //     /// Method responsible for action: Get. ///
+        //
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
+        {
+            _logger.LogInformation("Request: Controller: {0} - Method: {1}",
+                $"{nameof(ProductsController)}", $"{nameof(Get)}");
+
+            return Ok(await _applicationService.FindAllAsync());
+        }
+
+        //
+        // Summary:
+        //     /// Method responsible for action: Get. ///
+        //
+        [HttpGet("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<ProductDto>> GetById(Guid id)
+        {
+            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
+                $"{nameof(ProductsController)}", $"{nameof(GetById)}", id.ToString());
+
+            return Ok(await _applicationService.FindAsync(id));
+        }
+
+        //
+        // Summary:
+        //     /// Method responsible for action: Add. ///
         //
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
@@ -39,6 +71,23 @@ namespace JacksonVeroneze.StockService.Api.Controllers
                 return BadRequest(result.Errors);
 
             return Ok(productDto);
+        }
+
+        //
+        // Summary:
+        //     /// Method responsible for action: Delete. ///
+        //
+        [HttpDelete("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
+                $"{nameof(ProductsController)}", $"{nameof(Delete)}", id.ToString());
+
+            await _applicationService.RemoveASync(id);
+
+            return NoContent();
         }
     }
 }

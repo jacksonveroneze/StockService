@@ -24,5 +24,8 @@ namespace JacksonVeroneze.StockService.Data.Util
 
         public Task<T> FindAsync(Guid id)
             => _context.Set<T>().SingleOrDefaultAsync(x => x.Id == id);
+
+        public void RemoveAsync(T entity)
+            => _context.Set<T>().Remove(entity);
     }
 }

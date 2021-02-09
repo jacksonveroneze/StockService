@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,6 +25,12 @@ namespace JacksonVeroneze.StockService.Application.Services
             _productRepository = productRepository;
         }
 
+        public async Task<ProductDto> FindAsync(Guid id)
+            => _mapper.Map<ProductDto>(await _productRepository.FindAsync(id));
+
+        public async Task<IEnumerable<ProductDto>> FindAllAsync()
+            => _mapper.Map<IEnumerable<ProductDto>>(await _productRepository.FindAllAsync());
+
         public async Task<ApplicationDataResult<ProductDto>> AddASync(ProductDto productDto)
         {
             ValidationResult validationResult = await new ProductDtoValidator()
@@ -40,8 +48,15 @@ namespace JacksonVeroneze.StockService.Application.Services
             return new ApplicationDataResult<ProductDto>(_mapper.Map<ProductDto>(product));
         }
 
-        public Task UpdateASync(ProductDto productDto) => throw new NotImplementedException();
+        public Task<ApplicationDataResult<ProductDto>> UpdateASync(ProductDto productDto) => throw new NotImplementedException();
 
-        public Task RemoveASync(Guid productId) => throw new NotImplementedException();
+        public async Task RemoveASync(Guid id)
+        {
+            Product product = await _productRepository.FindAsync(id);
+
+            _productRepository.RemoveAsync(product);
+
+            await _productRepository.UnitOfWork.CommitAsync();
+        }
     }
 }
