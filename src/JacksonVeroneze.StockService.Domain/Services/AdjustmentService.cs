@@ -7,12 +7,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
     public class AdjustmentService : IAdjustmentService
     {
         private readonly IAdjustmentRepository _repository;
-        private readonly IMediatorHandler _mediatorHandler;
+        private readonly IBusHandler _busHandler;
 
-        public AdjustmentService(IAdjustmentRepository repository, IMediatorHandler mediatorHandler)
+        public AdjustmentService(IAdjustmentRepository repository, IBusHandler busHandler)
         {
             _repository = repository;
-            _mediatorHandler = mediatorHandler;
+            _busHandler = busHandler;
         }
     }
 }

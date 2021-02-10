@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using JacksonVeroneze.StockService.Application.DTO;
 using JacksonVeroneze.StockService.Application.DTO.Product;
+using JacksonVeroneze.StockService.Application.DTO.Purchase;
+using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Domain.Entities;
 
 namespace JacksonVeroneze.StockService.Mapper
@@ -9,9 +10,17 @@ namespace JacksonVeroneze.StockService.Mapper
     {
         public ProfileMapStock()
         {
-            CreateMap<ProductRequestDto, Product>()
-                .ConstructUsing(x => new Product(x.Description))
-                .ReverseMap();
+            CreateMap<AddOrUpdateProductDto, Product>()
+                .ConstructUsing(x => new Product(x.Description));
+
+            CreateMap<Product, ProductDto>();
+
+            CreateMap<AddOrUpdatePurchaseDto, Purchase>()
+                .ConstructUsing(x => new Purchase(x.Description, x.Date));
+
+            CreateMap<Purchase, PurchaseDto>();
+
+            CreateMap<PurchaseItem, Application.DTO.PurchaseItem.PurchaseItemDto>();
         }
     }
 }

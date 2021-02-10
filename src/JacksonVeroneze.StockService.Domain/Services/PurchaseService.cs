@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus.Mediator;
+using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -10,12 +11,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _repository;
-        private readonly IMediatorHandler _mediatorHandler;
+        private readonly IBusHandler _busHandler;
 
-        public PurchaseService(IPurchaseRepository repository, IMediatorHandler mediatorHandler)
+        public PurchaseService(IPurchaseRepository repository, IBusHandler busHandler)
         {
             _repository = repository;
-            _mediatorHandler = mediatorHandler;
+            _busHandler = busHandler;
         }
 
         public async Task AddItem(Purchase purchase, PurchaseItem item)
@@ -25,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             await _repository.AddAsync(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _mediatorHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
+                await _busHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
         }
 
         public async Task RemoveItem(Purchase purchase, PurchaseItem item)
@@ -35,7 +36,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Remove(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _mediatorHandler.PublishDomainEvent(new PurchaseItemRemoved(item.Id));
+                await _busHandler.PublishDomainEvent(new PurchaseItemRemoved(item.Id));
         }
 
         public async Task Close(Purchase purchase)
@@ -46,7 +47,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
 
             if (await _repository.UnitOfWork.CommitAsync())
                 foreach (PurchaseItem purchaseItem in purchase.Items)
-                    await _mediatorHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id, purchaseItem.Id));
+                    await _busHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id, purchaseItem.Id));
         }
     }
 }

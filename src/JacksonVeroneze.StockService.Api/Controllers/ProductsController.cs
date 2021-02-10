@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<ProductResultDto>>> Get()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1}",
                 $"{nameof(ProductsController)}", $"{nameof(Get)}");
@@ -46,7 +46,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpGet("{id}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
-        public async Task<ActionResult<ProductResultDto>> Find(Guid id)
+        public async Task<ActionResult<ProductDto>> Find(Guid id)
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
                 $"{nameof(ProductsController)}", $"{nameof(Find)}", id.ToString());
@@ -61,17 +61,17 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult<ProductResultDto>> Add([FromBody] ProductRequestDto productRequestDto)
+        public async Task<ActionResult<ProductDto>> Add([FromBody] AddOrUpdateProductDto addOrUpdateProductDto)
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1} - Data: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(Add)}", productRequestDto.ToString());
+                $"{nameof(ProductsController)}", $"{nameof(Add)}", addOrUpdateProductDto.ToString());
 
-            ApplicationDataResult<ProductResultDto> result = await _applicationService.AddASync(productRequestDto);
+            ApplicationDataResult<ProductDto> result = await _applicationService.AddASync(addOrUpdateProductDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
 
-            return Ok(productRequestDto);
+            return Ok(addOrUpdateProductDto);
         }
 
         //

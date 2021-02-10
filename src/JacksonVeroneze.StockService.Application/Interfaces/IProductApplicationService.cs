@@ -8,13 +8,13 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 {
     public interface IProductApplicationService
     {
-        Task<ProductResultDto> FindAsync(Guid id);
+        Task<ProductDto> FindAsync(Guid id);
 
-        Task<IEnumerable<ProductResultDto>> FindAllAsync();
+        Task<IEnumerable<ProductDto>> FindAllAsync();
 
-        Task<ApplicationDataResult<ProductResultDto>> AddASync(ProductRequestDto productRequestDto);
+        Task<ApplicationDataResult<ProductDto>> AddASync(AddOrUpdateProductDto data);
 
-        Task<ApplicationDataResult<ProductResultDto>> UpdateASync(ProductRequestDto productRequestDto);
+        Task<ApplicationDataResult<ProductDto>> UpdateASync(AddOrUpdateProductDto data);
 
         Task RemoveASync(Guid id);
     }

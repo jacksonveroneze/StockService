@@ -6,11 +6,11 @@ using MediatR;
 
 namespace JacksonVeroneze.StockService.Bus.Mediator
 {
-    public class MediatorHandler : IMediatorHandler
+    public class BusHandler : IBusHandler
     {
         private readonly IMediator _mediator;
 
-        public MediatorHandler(IMediator mediator)
+        public BusHandler(IMediator mediator)
             => _mediator = mediator;
 
         public async Task<bool> SendCommand<T>(T comando) where T : Command

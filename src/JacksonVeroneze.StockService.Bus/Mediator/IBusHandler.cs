@@ -5,7 +5,7 @@ using JacksonVeroneze.StockService.Core.Messages.CommonMessages.Notifications;
 
 namespace JacksonVeroneze.StockService.Bus.Mediator
 {
-    public interface IMediatorHandler
+    public interface IBusHandler
     {
         Task PublishEvent<T>(T evento) where T : Event;
 

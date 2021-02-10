@@ -9,13 +9,13 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 {
     public interface IPurchaseApplicationService
     {
-        Task<PurchaseResponse> FindAsync(Guid id);
+        Task<PurchaseDto> FindAsync(Guid id);
 
-        Task<IEnumerable<PurchaseResponse>> FindAllAsync();
+        Task<IEnumerable<PurchaseDto>> FindAllAsync();
 
-        Task<ApplicationDataResult<PurchaseResponse>> AddAsync(PurchaseAddUpdateRequest updateRequest);
+        Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data);
 
-        Task<ApplicationDataResult<PurchaseResponse>> UpdateAsync(PurchaseAddUpdateRequest updateRequest);
+        Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(AddOrUpdatePurchaseDto data);
 
         Task RemoveAsync(Guid id);
 
@@ -23,13 +23,13 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 
         //
 
-        Task<PurchaseItemResponse> FindItemAsync(Guid id, Guid itemId);
+        Task<PurchaseItemDto> FindItemAsync(Guid id, Guid itemId);
 
-        Task<IEnumerable<PurchaseItemResponse>> FindItensAsync(Guid id);
+        Task<IEnumerable<PurchaseItemDto>> FindItensAsync(Guid id);
 
-        Task<ApplicationDataResult<PurchaseResponse>> AddItemAsync(Guid id, PurchaseAddUpdateItem request);
+        Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto request);
 
-        Task<ApplicationDataResult<PurchaseResponse>> UpdateItemAsync(Guid id, PurchaseAddUpdateItem request);
+        Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto request);
 
         Task RemoveItemAsync(Guid id, Guid itemId);
     }

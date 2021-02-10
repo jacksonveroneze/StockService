@@ -68,13 +68,22 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private bool ExistsItem(PurchaseItem item)
             => _items.Any(x => x.Id == item.Id);
 
-        public void Close() => State = PurchaseStateEnum.Closed;
+        public void Close()
+        {
+            if (State == PurchaseStateEnum.Closed)
+                throw new DomainException("Este registro já está fechado.");
+
+            State = PurchaseStateEnum.Closed;
+        }
 
         private void ValidateOpenState()
         {
             if (State == PurchaseStateEnum.Closed)
                 throw new DomainException("Este registro já está fechado, não pode ser movimentado.");
         }
+
+        public PurchaseItem FindItemById(Guid id)
+            => _items.FirstOrDefault(x => x.Id == id);
 
         private void Validate()
         {

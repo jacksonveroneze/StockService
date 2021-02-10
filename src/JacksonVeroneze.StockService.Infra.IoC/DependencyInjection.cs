@@ -12,8 +12,8 @@ namespace JacksonVeroneze.StockService.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
-            // MediatorHandler
-            services.AddScoped<IMediatorHandler, MediatorHandler>();
+            // BusHandler
+            services.AddScoped<IBusHandler, BusHandler>();
 
             // Application
             services.AddScoped<IProductApplicationService, ProductApplicationService>();

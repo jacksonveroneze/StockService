@@ -2,7 +2,7 @@ using System;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Product
 {
-    public class ProductResultDto
+    public class ProductDto
     {
         public Guid Id { get; set; }
 
