@@ -5,12 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
-using JacksonVeroneze.StockService.Application.DTO;
-using JacksonVeroneze.StockService.Application.DTO.Validations;
+using JacksonVeroneze.StockService.Application.DTO.Product;
+using JacksonVeroneze.StockService.Application.DTO.Product.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
-using JacksonVeroneze.StockService.Domain.Interfaces;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Services
@@ -26,30 +25,30 @@ namespace JacksonVeroneze.StockService.Application.Services
             _productRepository = productRepository;
         }
 
-        public async Task<ProductDto> FindAsync(Guid id)
-            => _mapper.Map<ProductDto>(await _productRepository.FindAsync(id));
+        public async Task<ProductResultDto> FindAsync(Guid id)
+            => _mapper.Map<ProductResultDto>(await _productRepository.FindAsync(id));
 
-        public async Task<IEnumerable<ProductDto>> FindAllAsync()
-            => _mapper.Map<IEnumerable<ProductDto>>(await _productRepository.FindAllAsync());
+        public async Task<IEnumerable<ProductResultDto>> FindAllAsync()
+            => _mapper.Map<IEnumerable<ProductResultDto>>(await _productRepository.FindAllAsync());
 
-        public async Task<ApplicationDataResult<ProductDto>> AddASync(ProductDto productDto)
+        public async Task<ApplicationDataResult<ProductResultDto>> AddASync(ProductRequestDto productRequestDto)
         {
             ValidationResult validationResult = await new ProductDtoValidator()
-                .ValidateAsync(productDto);
+                .ValidateAsync(productRequestDto);
 
             if (validationResult.IsValid is false)
-                return new ApplicationDataResult<ProductDto>(validationResult.Errors.Select(x => x.ErrorMessage));
+                return new ApplicationDataResult<ProductResultDto>(validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Product product = _mapper.Map<Product>(productDto);
+            Product product = _mapper.Map<Product>(productRequestDto);
 
             await _productRepository.AddAsync(product);
 
             await _productRepository.UnitOfWork.CommitAsync();
 
-            return new ApplicationDataResult<ProductDto>(_mapper.Map<ProductDto>(product));
+            return new ApplicationDataResult<ProductResultDto>(_mapper.Map<ProductResultDto>(product));
         }
 
-        public Task<ApplicationDataResult<ProductDto>> UpdateASync(ProductDto productDto) => throw new NotImplementedException();
+        public Task<ApplicationDataResult<ProductResultDto>> UpdateASync(ProductRequestDto productRequestDto) => throw new NotImplementedException();
 
         public async Task RemoveASync(Guid id)
         {

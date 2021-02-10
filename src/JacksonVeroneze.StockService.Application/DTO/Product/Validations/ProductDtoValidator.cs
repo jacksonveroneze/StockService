@@ -1,8 +1,8 @@
 using FluentValidation;
 
-namespace JacksonVeroneze.StockService.Application.DTO.Validations
+namespace JacksonVeroneze.StockService.Application.DTO.Product.Validations
 {
-    public class ProductDtoValidator : AbstractValidator<ProductDto>
+    public class ProductDtoValidator : AbstractValidator<ProductRequestDto>
     {
         public ProductDtoValidator()
         {

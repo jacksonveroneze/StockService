@@ -1,8 +1,8 @@
 using System;
 
-namespace JacksonVeroneze.StockService.Application.DTO
+namespace JacksonVeroneze.StockService.Application.DTO.Product
 {
-    public class ProductDto
+    public class ProductResultDto
     {
         public Guid Id { get; set; }
 

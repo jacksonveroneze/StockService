@@ -22,7 +22,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             purchase.AddItem(item);
 
-            _repository.Update(purchase);
+            await _repository.AddAsync(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
                 await _mediatorHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));

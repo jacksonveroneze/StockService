@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO;
+using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
+        public async Task<ActionResult<IEnumerable<ProductResultDto>>> Get()
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1}",
                 $"{nameof(ProductsController)}", $"{nameof(Get)}");
@@ -44,11 +45,11 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         //
         [HttpGet("{id}")]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<ProductDto>> GetById(Guid id)
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
+        public async Task<ActionResult<ProductResultDto>> Find(Guid id)
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(GetById)}", id.ToString());
+                $"{nameof(ProductsController)}", $"{nameof(Find)}", id.ToString());
 
             return Ok(await _applicationService.FindAsync(id));
         }
@@ -60,17 +61,17 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult<ProductDto>> Add([FromBody] ProductDto productDto)
+        public async Task<ActionResult<ProductResultDto>> Add([FromBody] ProductRequestDto productRequestDto)
         {
             _logger.LogInformation("Request: Controller: {0} - Method: {1} - Data: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(Add)}", productDto.ToString());
+                $"{nameof(ProductsController)}", $"{nameof(Add)}", productRequestDto.ToString());
 
-            ApplicationDataResult<ProductDto> result = await _applicationService.AddASync(productDto);
+            ApplicationDataResult<ProductResultDto> result = await _applicationService.AddASync(productRequestDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
 
-            return Ok(productDto);
+            return Ok(productRequestDto);
         }
 
         //
