@@ -1,9 +1,9 @@
 ﻿using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
-using JacksonVeroneze.StockService.Core.Communication.Mediator;
+using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Data;
 using JacksonVeroneze.StockService.Data.Repositories;
-using JacksonVeroneze.StockService.Domain.Interfaces;
+using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Infra.IoC

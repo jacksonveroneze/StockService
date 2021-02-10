@@ -11,10 +11,12 @@ namespace JacksonVeroneze.StockService.Core.Data
 
         Task AddAsync(T entity);
 
+        void Update(T entity);
+
         Task<List<T>> FindAllAsync();
 
         Task<T> FindAsync(Guid id);
 
-        void RemoveAsync(T entity);
+        void Remove(T entity);
     }
 }

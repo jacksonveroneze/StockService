@@ -66,7 +66,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
 
-            purchase.Finish();
+            purchase.Close();
 
             PurchaseItem item1 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
 

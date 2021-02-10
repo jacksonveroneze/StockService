@@ -68,7 +68,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private bool ExistsItem(PurchaseItem item)
             => _items.Any(x => x.Id == item.Id);
 
-        public void Finish() => State = PurchaseStateEnum.Closed;
+        public void Close() => State = PurchaseStateEnum.Closed;
 
         private void ValidateOpenState()
         {

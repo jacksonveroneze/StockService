@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Bus\JacksonVeroneze.StockService.Bus.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
   </ItemGroup>
 

@@ -4,9 +4,9 @@ using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Data.Repositories
 {
-    public class PurchaseRepository : Repository<Purchase>, IPurchaseRepository
+    public class AdjustmentRepository : Repository<Adjustment>, IAdjustmentRepository
     {
-        public PurchaseRepository(DatabaseContext context) : base(context)
+        public AdjustmentRepository(DatabaseContext context) : base(context)
         {
         }
     }

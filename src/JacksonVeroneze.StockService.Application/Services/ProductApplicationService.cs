@@ -11,6 +11,7 @@ using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Interfaces;
+using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Services
 {
@@ -54,7 +55,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             Product product = await _productRepository.FindAsync(id);
 
-            _productRepository.RemoveAsync(product);
+            _productRepository.Remove(product);
 
             await _productRepository.UnitOfWork.CommitAsync();
         }

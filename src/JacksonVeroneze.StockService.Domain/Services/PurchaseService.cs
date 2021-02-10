@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Core.Communication.Mediator;
+using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Domain.Entities;
-using JacksonVeroneze.StockService.Domain.Interfaces;
+using JacksonVeroneze.StockService.Domain.Events;
+using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
+using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
 namespace JacksonVeroneze.StockService.Domain.Services
 {
@@ -16,9 +18,35 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _mediatorHandler = mediatorHandler;
         }
 
-        public Task AddAsync(Purchase purchase)
+        public async Task AddItem(Purchase purchase, PurchaseItem item)
         {
-            return Task.CompletedTask;
+            purchase.AddItem(item);
+
+            _repository.Update(purchase);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _mediatorHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
+        }
+
+        public async Task RemoveItem(Purchase purchase, PurchaseItem item)
+        {
+            purchase.RemoveItem(item);
+
+            _repository.Remove(purchase);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _mediatorHandler.PublishDomainEvent(new PurchaseItemRemoved(item.Id));
+        }
+
+        public async Task Close(Purchase purchase)
+        {
+            purchase.Close();
+
+            _repository.Update(purchase);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                foreach (PurchaseItem purchaseItem in purchase.Items)
+                    await _mediatorHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id, purchaseItem.Id));
         }
     }
 }

@@ -1,7 +1,6 @@
-using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
-using JacksonVeroneze.StockService.Domain.Interfaces;
+using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Data.Repositories
 {

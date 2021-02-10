@@ -3,7 +3,7 @@ using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Core.Messages.CommonMessages.DomainEvents;
 using JacksonVeroneze.StockService.Core.Messages.CommonMessages.Notifications;
 
-namespace JacksonVeroneze.StockService.Core.Communication.Mediator
+namespace JacksonVeroneze.StockService.Bus.Mediator
 {
     public interface IMediatorHandler
     {
