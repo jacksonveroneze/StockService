@@ -7,7 +7,7 @@ namespace JacksonVeroneze.StockService.Core.Data
 {
     public interface IRepository<T> where T : Entity
     {
-        public IUnitOfWork UnitOfWork { get; }
+        public IUnitOfWork UnitOfWork { get; set; }
 
         Task AddAsync(T entity);
 

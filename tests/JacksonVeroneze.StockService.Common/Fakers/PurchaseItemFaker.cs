@@ -1,7 +1,7 @@
 using Bogus;
 using JacksonVeroneze.StockService.Domain.Entities;
 
-namespace JacksonVeroneze.StockService.Domain.Tests.Fakers
+namespace JacksonVeroneze.StockService.Common.Fakers
 {
     public class PurchaseItemFaker
     {

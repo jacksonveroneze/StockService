@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Data.Util;

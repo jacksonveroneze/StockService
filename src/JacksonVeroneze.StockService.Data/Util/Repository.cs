@@ -9,12 +9,15 @@ namespace JacksonVeroneze.StockService.Data.Util
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
-        public IUnitOfWork UnitOfWork => _context;
+        public IUnitOfWork UnitOfWork { get; set; }
 
         protected readonly DatabaseContext _context;
 
         protected Repository(DatabaseContext context)
-            => _context = context;
+        {
+            _context = context;
+            UnitOfWork = _context;
+        }
 
         public async Task AddAsync(T entity)
             => await _context.Set<T>().AddAsync(entity);

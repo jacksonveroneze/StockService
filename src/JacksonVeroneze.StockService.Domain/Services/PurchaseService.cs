@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus.Mediator;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -23,7 +22,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             purchase.AddItem(item);
 
-            await _repository.AddAsync(purchase);
+            _repository.Update(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
                 await _busHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
