@@ -137,5 +137,35 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             // Assert
             purchase.TotalValue.Should().Be(itemsMock.Sum(x => x.CalculteValue()));
         }
+
+        [Fact(DisplayName = "DeveGerarFecharACompraCorretamenteSeEstiverAberta")]
+        [Trait("Purchase", "Close")]
+        public void Purchase_AddItem_DeveGerarFecharACompraCorretamenteSeEstiverAberta()
+        {
+            // Arange
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+
+            // Act
+            purchase.Close();
+
+            // Assert
+            purchase.State.Should().Be(PurchaseStateEnum.Closed);
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionAoFecharUmaCompraJaFechada")]
+        [Trait("Purchase", "Close")]
+        public void Purchase_RemoveItem_DeveGerarDomainExceptionAoFecharUmaCompraJaFechada()
+        {
+            // Arange
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+
+            purchase.Close();
+
+            // Act
+            Action act = () => purchase.Close();
+
+            // Assert
+            act.Should().Throw<DomainException>();
+        }
     }
 }

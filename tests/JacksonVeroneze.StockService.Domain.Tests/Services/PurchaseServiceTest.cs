@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,6 +6,7 @@ using FluentAssertions;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
+using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -24,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         private Mock<IPurchaseRepository> _purchaseRepositoryMock;
         private Mock<IBusHandler> _busHandlerMock;
 
-        [Fact(DisplayName = "DeveAdicionarOItemACompraQuandoEmEstadoValido")]
+        [Fact(DisplayName = "DeveAdicionarOsItensACompraQuandoEmEstadoValido")]
         [Trait("PurchaseService", "AddItem")]
         public void PurchaseService_AddItem_DeveAdicionarOsItensACompraQuandoEmEstadoValido()
         {
@@ -106,6 +108,29 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Exactly(totalItens));
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadaETentarFecharNovamente")]
+        [Trait("PurchaseService", "Close")]
+        public void PurchaseService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadaETentarFecharNovamente()
+        {
+            // Arange
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+
+            purchase.Close();
+
+            ConfigureMock();
+
+            FactoryService();
+
+            // Act
+            Action act = () => purchase.Close();
+
+            // Assert
+            act.Should().Throw<DomainException>();
+            _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Never);
+            _unitOfWork.Verify(x => x.CommitAsync(), Times.Never);
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Never);
         }
 
         private void ConfigureMock()
