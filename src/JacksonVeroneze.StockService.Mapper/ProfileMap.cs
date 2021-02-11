@@ -20,7 +20,7 @@ namespace JacksonVeroneze.StockService.Mapper
 
             CreateMap<Purchase, PurchaseDto>();
 
-            CreateMap<PurchaseItem, Application.DTO.PurchaseItem.PurchaseItemDto>();
+            CreateMap<PurchaseItem, PurchaseItemDto>();
         }
     }
 }

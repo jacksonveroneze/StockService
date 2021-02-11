@@ -9,9 +9,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.Product
         public string Description { get; set; }
 
         public Task<ValidationResult> Validate()
-        {
-            return new AddOrUpdateProductDtoValidator()
+            => new AddOrUpdateProductDtoValidator()
                 .ValidateAsync(this);
-        }
     }
 }

@@ -21,6 +21,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             // Domain
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            // Context
             services.AddScoped<DatabaseContext>();
         }
     }

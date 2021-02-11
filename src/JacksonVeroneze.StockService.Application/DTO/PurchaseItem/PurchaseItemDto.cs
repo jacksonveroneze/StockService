@@ -9,7 +9,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.PurchaseItem
 
         public decimal Value { get; set; }
 
-        public Purchase.PurchaseDto Purchase { get; set; }
+        public PurchaseDto Purchase { get; set; }
 
         public ProductDto Product { get; set; }
     }

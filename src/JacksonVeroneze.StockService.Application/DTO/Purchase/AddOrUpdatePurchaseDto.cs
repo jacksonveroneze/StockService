@@ -12,9 +12,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.Purchase
         public DateTime Date { get; set; }
 
         public Task<ValidationResult> Validate()
-        {
-            return new AddOrUpdatePurchaseDtoValidator()
+            => new AddOrUpdatePurchaseDtoValidator()
                 .ValidateAsync(this);
-        }
     }
 }
