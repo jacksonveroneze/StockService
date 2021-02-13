@@ -1,4 +1,3 @@
-using System;
 using JacksonVeroneze.StockService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,12 +7,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class DatabaseConfig
     {
-        public static void AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddEntityFrameworkNpgsql()
+        public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
+            => services.AddEntityFrameworkNpgsql()
                 .AddDbContext<DatabaseContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
                         .UseSnakeCaseNamingConvention());
-        }
     }
 }

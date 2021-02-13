@@ -19,21 +19,14 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             services.AddHealthChecks();
 
-            services.AddCorsConfiguration(CorsPolicyName);
-
-            services.AddAutoMapperConfiguration();
-
-            services.AddDatabaseConfiguration(configuration);
-
-            services.AddAutoMediatRConfiguration();
-
-            services.AddDependencyInjectionConfiguration();
-
-            services.AddSwaggerConfiguration();
-
-            services.AddAuthenticationConfiguration(configuration);
-
-            services.AddControllers();
+            services.AddCorsConfiguration(CorsPolicyName)
+                .AddAutoMapperConfiguration()
+                .AddDatabaseConfiguration(configuration)
+                .AddAutoMediatRConfiguration()
+                .AddDependencyInjectionConfiguration()
+                .AddSwaggerConfiguration()
+                .AddAuthenticationConfiguration(configuration)
+                .AddControllers();
 
             return services;
         }
@@ -43,29 +36,18 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseCultureSetup();
-
-            app.UseHealthChecks("/health");
-
-            app.UseMetricServer();
-
-            app.UseHttpMetrics();
-
-            app.UseSerilogRequestLogging();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseCors(CorsPolicyName);
-
-            app.UseMiddleware<ErrorHandlingMiddleware>();
-
-            app.UseSwaggerSetup();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseCultureSetup()
+                .UseHealthChecks("/health")
+                .UseMetricServer()
+                .UseHttpMetrics()
+                .UseSerilogRequestLogging()
+                .UseRouting()
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseCors(CorsPolicyName)
+                .UseMiddleware<ErrorHandlingMiddleware>()
+                .UseSwaggerSetup()
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             return app;
         }

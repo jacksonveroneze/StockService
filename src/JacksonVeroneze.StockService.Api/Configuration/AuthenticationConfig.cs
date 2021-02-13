@@ -6,7 +6,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class AuthenticationConfig
     {
-        public static void AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {
@@ -17,6 +17,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 options.Authority = configuration["Auth:Authority"];
                 options.Audience = configuration["Auth:Audience"];
             });
+
+            return services;
         }
     }
 }

@@ -5,7 +5,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class DependencyInjectionConfig
     {
-        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
-            => DependencyInjection.RegisterServices(services);
+        public static IServiceCollection AddDependencyInjectionConfiguration(this IServiceCollection services)
+        {
+            DependencyInjection.RegisterServices(services);
+
+            return services;
+        }
     }
 }

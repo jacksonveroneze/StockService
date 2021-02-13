@@ -7,7 +7,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class SwaggerConfig
     {
-        public static void AddSwaggerConfiguration(this IServiceCollection services)
+        public static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -33,14 +33,18 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {{new OpenApiSecurityScheme {Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}}, new string[] { }}});
             });
+
+            return services;
         }
 
-        public static void UseSwaggerSetup(this IApplicationBuilder app)
+        public static IApplicationBuilder UseSwaggerSetup(this IApplicationBuilder app)
         {
             if (app == null) throw new ArgumentNullException(nameof(app));
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockService v1"));
+
+            return app;
         }
     }
 }

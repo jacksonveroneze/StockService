@@ -4,7 +4,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class CorsConfig
     {
-        public static void AddCorsConfiguration(this IServiceCollection services, string corsPolicy)
+        public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, string corsPolicy)
         {
             services.AddCors(options =>
             {
@@ -16,6 +16,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                         builder.AllowAnyOrigin();
                     });
             });
+
+            return services;
         }
     }
 }

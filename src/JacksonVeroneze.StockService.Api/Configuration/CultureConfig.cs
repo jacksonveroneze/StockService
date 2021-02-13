@@ -6,7 +6,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class CultureConfig
     {
-        public static void UseCultureSetup(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCultureSetup(this IApplicationBuilder app)
         {
             CultureInfo[] supportedCultures = {new CultureInfo("pt-BR")};
             app.UseRequestLocalization(new RequestLocalizationOptions
@@ -15,6 +15,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             });
+
+            return app;
         }
     }
 }
