@@ -1,11 +1,11 @@
 using JacksonVeroneze.StockService.Api.Middlewares;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prometheus;
+using Serilog;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -31,6 +31,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             services.AddSwaggerConfiguration();
 
+            services.AddAuthenticationConfiguration(configuration);
+
             services.AddControllers();
 
             return services;
@@ -49,7 +51,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             app.UseHttpMetrics();
 
+            app.UseSerilogRequestLogging();
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

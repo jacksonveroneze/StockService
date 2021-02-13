@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Application.DTO;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class ProductsController : ControllerBase
     {
