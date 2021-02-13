@@ -1,5 +1,4 @@
 using Serilog;
-using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace JacksonVeroneze.StockService.Api.Util
