@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Domain.Filters;
 
 namespace JacksonVeroneze.StockService.Application.Interfaces
 {
@@ -11,6 +12,7 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
         Task<ProductDto> FindAsync(Guid id);
 
         Task<IEnumerable<ProductDto>> FindAllAsync();
+        Task<IEnumerable<ProductDto>> FilterAsync(ProductFilter filter);
 
         Task<ApplicationDataResult<ProductDto>> AddASync(AddOrUpdateProductDto data);
 

@@ -8,6 +8,7 @@ using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Services
@@ -28,6 +29,9 @@ namespace JacksonVeroneze.StockService.Application.Services
 
         public async Task<IEnumerable<ProductDto>> FindAllAsync()
             => _mapper.Map<IEnumerable<ProductDto>>(await _productRepository.FindAllAsync());
+
+        public async Task<IEnumerable<ProductDto>> FilterAsync(ProductFilter filter)
+            => _mapper.Map<IEnumerable<ProductDto>>(await _productRepository.FilterAsync(filter));
 
         public async Task<ApplicationDataResult<ProductDto>> AddASync(AddOrUpdateProductDto data)
         {
