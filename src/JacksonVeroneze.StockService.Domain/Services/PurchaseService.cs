@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events;
+using JacksonVeroneze.StockService.Domain.Events.Purchase;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
@@ -55,8 +56,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                foreach (PurchaseItem purchaseItem in purchase.Items)
-                    await _busHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id, purchaseItem.Id));
+                await _busHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id));
         }
     }
 }

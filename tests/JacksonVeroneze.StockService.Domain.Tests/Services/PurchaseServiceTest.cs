@@ -9,6 +9,7 @@ using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events;
+using JacksonVeroneze.StockService.Domain.Events.Purchase;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
@@ -134,7 +135,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             purchase.TotalValue.Should().Be(purchaseItens.Sum(x => x.CalculteValue()));
             _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
-            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Exactly(totalItens));
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Once);
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadaETentarFecharNovamente")]
