@@ -28,16 +28,12 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public decimal CalculteValue() => Value * Amount;
 
-        public void UpdateItemFromOtherItem(PurchaseItem item)
-        {
-            Amount += item.Amount;
-            Value += item.Value;
-        }
-
         public void Update(int amount, decimal value)
         {
             Amount = amount;
             Value = value;
+
+            Validate();
         }
 
         private void Validate()

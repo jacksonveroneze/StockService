@@ -35,15 +35,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateOpenState();
 
             if (ExistsItem(item))
-            {
-                PurchaseItem currentItem = _items.First(x => x.Id == item.Id);
-
-                currentItem.UpdateItemFromOtherItem(item);
-
-                RemoveItem(item);
-
-                item = currentItem;
-            }
+                throw new DomainException("Este item encontra-se como filho do registro atual.");
 
             _items.Add(item);
 
@@ -62,12 +54,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             CalculateTotalValue();
         }
 
-        private void CalculateTotalValue()
-            => TotalValue = _items.Sum(x => x.CalculteValue());
-
-        private bool ExistsItem(PurchaseItem item)
-            => _items.Any(x => x.Id == item.Id);
-
         public void Close()
         {
             if (State == PurchaseStateEnum.Closed)
@@ -76,20 +62,26 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             State = PurchaseStateEnum.Closed;
         }
 
+        public PurchaseItem FindItemById(Guid id)
+            => _items.FirstOrDefault(x => x.Id == id);
+
         private void ValidateOpenState()
         {
             if (State == PurchaseStateEnum.Closed)
                 throw new DomainException("Este registro já está fechado, não pode ser movimentado.");
         }
 
-        public PurchaseItem FindItemById(Guid id)
-            => _items.FirstOrDefault(x => x.Id == id);
+        private void CalculateTotalValue()
+            => TotalValue = _items.Sum(x => x.CalculteValue());
+
+        private bool ExistsItem(PurchaseItem item)
+            => _items.Any(x => x.Id == item.Id);
 
         private void Validate()
         {
             Validacoes.ValidarSeVazio(Description, "A descrição não pode estar vazia");
-            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição não pode estar vazia");
-            Validacoes.ValidarSeNulo(Date, "A data não pode estar vazia");
+            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição deve ter entre 1 e 100 caracteres");
+            Validacoes.ValidarSeMaiorQue(Date, DateTime.Now, "A data não pode ser superior a data atual");
         }
     }
 }

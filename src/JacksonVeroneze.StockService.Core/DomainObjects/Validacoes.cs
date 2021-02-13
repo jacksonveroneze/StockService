@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace JacksonVeroneze.StockService.Core.DomainObjects
@@ -103,6 +104,12 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
         public static void ValidarSeMenorQue(int valor, int minimo, string mensagem)
         {
             if (valor < minimo)
+                throw new DomainException(mensagem);
+        }
+
+        public static void ValidarSeMaiorQue(DateTime valor, DateTime minimo, string mensagem)
+        {
+            if (valor > minimo)
                 throw new DomainException(mensagem);
         }
 

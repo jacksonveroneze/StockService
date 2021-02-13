@@ -11,15 +11,19 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 {
     public class PurchaseTest
     {
-        [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoreInvalidos")]
+        [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
         [Trait("Purchase", "Validate")]
-        public void Purchase_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoreInvalidos()
+        public void Purchase_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
-            Func<Purchase> func = () => new Purchase(string.Empty, DateTime.Now.AddDays(1));
+            Func<Purchase> func1 = () => new Purchase(string.Empty, DateTime.Now);
+            Func<Purchase> func2 = () => new Purchase(Util.GenerateStringFaker(101), DateTime.Now);
+            Func<Purchase> func3 = () => new Purchase("descrição", DateTime.Now.AddDays(1));
 
             // Assert
-            func.Should().Throw<DomainException>();
+            func1.Should().Throw<DomainException>();
+            func2.Should().Throw<DomainException>();
+            func3.Should().Throw<DomainException>();
         }
 
         [Fact(DisplayName = "DeveAdicionarOsItensCorretamenteQuandoValidos")]
@@ -39,24 +43,22 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             purchase.Items.Should().HaveCount(10);
         }
 
-        [Fact(DisplayName = "DeveAtualizarUmItemAoTentarAdicionarEOMesmoJaExistir")]
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir")]
         [Trait("Purchase", "AddItem")]
-        public void Purchase_AddItem_DeveAtualizarUmItemAoTentarAdicionarEOMesmoJaExistir()
+        public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
 
-            PurchaseItem item = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem item1 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
 
-            purchase.AddItem(item);
+            purchase.AddItem(item1);
 
             // Act
-            purchase.AddItem(item);
+            Action act = () => purchase.AddItem(item1);
 
             // Assert
-            purchase.Items.Should().HaveCount(1);
-            purchase.Items.First().Amount.Should().Be(item.Amount);
-            purchase.Items.First().Value.Should().Be(item.Value);
+            act.Should().Throw<DomainException>();
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEPurchaseIsClosed")]
@@ -86,18 +88,15 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(2);
 
-            PurchaseItem item1 = itemsMock.First();
-            PurchaseItem item2 = itemsMock.Last();
-
-            purchase.AddItem(item1);
-            purchase.AddItem(item2);
+            purchase.AddItem(itemsMock.First());
+            purchase.AddItem(itemsMock.Last());
 
             // Act
-            purchase.RemoveItem(item1);
+            purchase.RemoveItem(itemsMock.First());
 
             // Assert
             purchase.Items.Should().HaveCount(1);
-            purchase.Items.Should().NotContain(x => x.Id == item1.Id);
+            purchase.Items.Should().NotContain(x => x.Id == itemsMock.First().Id);
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoRemoverUmItemInexistente")]
@@ -109,13 +108,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(2);
 
-            PurchaseItem item1 = itemsMock.First();
-            PurchaseItem item2 = itemsMock.Last();
-
-            purchase.AddItem(item1);
+            purchase.AddItem(itemsMock.First());
 
             // Act
-            Action act = () => purchase.RemoveItem(item2);
+            Action act = () => purchase.RemoveItem(itemsMock.Last());
 
             // Assert
             act.Should().Throw<DomainException>();
