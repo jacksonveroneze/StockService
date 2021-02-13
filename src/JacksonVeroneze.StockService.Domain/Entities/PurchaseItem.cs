@@ -28,10 +28,11 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public decimal CalculteValue() => Value * Amount;
 
-        public void Update(int amount, decimal value)
+        public void Update(int amount, decimal value, Product product)
         {
             Amount = amount;
             Value = value;
+            Product = product;
 
             Validate();
         }

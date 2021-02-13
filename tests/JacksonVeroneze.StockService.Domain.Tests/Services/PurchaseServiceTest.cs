@@ -52,6 +52,33 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseItemAdded>()), Times.Exactly(totalItens));
         }
 
+        [Fact(DisplayName = "DeveAdicionarOsItensACompraQuandoEmEstadoValido")]
+        [Trait("PurchaseService", "UpdateItem")]
+        public void PurchaseService_UpdateItem_DeveAtualizarOsItensACompraQuandoEmEstadoValido()
+        {
+            // Arange
+            int totalItens = 5;
+
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.GenerateFaker(purchase).Generate(totalItens);
+
+            ConfigureMock();
+
+            FactoryService();
+
+            foreach (PurchaseItem purchaseItem in purchaseItens)
+                _purchaseService.AddItem(purchase, purchaseItem);
+
+            // Act
+            _purchaseService.UpdateItem(purchase, purchaseItens.First());
+
+            // Assert
+            purchase.Items.Should().HaveCount(totalItens);
+            purchase.TotalValue.Should().Be(purchaseItens.Sum(x => x.CalculteValue()));
+            _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Exactly(totalItens + 1));
+            _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseItemUpdated>()), Times.Once);
+        }
 
         [Fact(DisplayName = "DeveRemoverOItemDaCompraQuandoExistirNaMesma")]
         [Trait("PurchaseService", "RemoveItem")]
@@ -155,6 +182,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             _purchaseRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Purchase>()))
                 .Returns(Task.CompletedTask);
+
+            _purchaseRepositoryMock.Setup(x => x.Update(It.IsAny<Purchase>()));
         }
 
         private void FactoryService()

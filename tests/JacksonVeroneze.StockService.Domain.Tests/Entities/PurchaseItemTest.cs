@@ -49,11 +49,12 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             // Arange && Act
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
             Product product = ProductFaker.GenerateFaker().Generate();
+            Product newProduct = ProductFaker.GenerateFaker().Generate();
 
             PurchaseItem item = new PurchaseItem(10, 2, purchase, product);
 
             // Act
-            item.Update(10,5);
+            item.Update(10, 5, newProduct);
 
             // Assert
             item.Amount.Should().Be(10);

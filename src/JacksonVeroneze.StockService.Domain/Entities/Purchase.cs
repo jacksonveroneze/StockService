@@ -42,12 +42,20 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             CalculateTotalValue();
         }
 
+        public void UpdateItem(PurchaseItem item)
+        {
+            ValidateExistsItem(item);
+
+            PurchaseItem existItem = FindItemById(item.Id);
+
+            existItem.Update(item.Amount, item.Value, item.Product);
+        }
+
         public void RemoveItem(PurchaseItem item)
         {
             ValidateOpenState();
 
-            if (ExistsItem(item) is false)
-                throw new DomainException("Este item não encontra-se como filho do registro atual.");
+            ValidateExistsItem(item);
 
             _items.Remove(item);
 
@@ -64,6 +72,12 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public PurchaseItem FindItemById(Guid id)
             => _items.FirstOrDefault(x => x.Id == id);
+
+        public void ValidateExistsItem(PurchaseItem item)
+        {
+            if (ExistsItem(item) is false)
+                throw new DomainException("Este item não encontra-se como filho do registro atual.");
+        }
 
         private void ValidateOpenState()
         {

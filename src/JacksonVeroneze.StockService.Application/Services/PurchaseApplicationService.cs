@@ -41,7 +41,8 @@ namespace JacksonVeroneze.StockService.Application.Services
             ValidationResult validationResult = await data.Validate();
 
             if (validationResult.IsValid is false)
-                return new ApplicationDataResult<PurchaseDto>(validationResult.Errors.Select(x => x.ErrorMessage));
+                return new ApplicationDataResult<PurchaseDto>(
+                    validationResult.Errors.Select(x => x.ErrorMessage));
 
             Purchase purchase = _mapper.Map<Purchase>(data);
 
@@ -58,7 +59,8 @@ namespace JacksonVeroneze.StockService.Application.Services
             ValidationResult validationResult = await data.Validate();
 
             if (validationResult.IsValid is false)
-                return new ApplicationDataResult<PurchaseDto>(validationResult.Errors.Select(x => x.ErrorMessage));
+                return new ApplicationDataResult<PurchaseDto>(
+                    validationResult.Errors.Select(x => x.ErrorMessage));
 
             Purchase purchase = _mapper.Map<Purchase>(data);
 
@@ -102,7 +104,11 @@ namespace JacksonVeroneze.StockService.Application.Services
 
         public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto request)
         {
-            // validar DTO - request.
+            ValidationResult validationResult = await request.Validate();
+
+            if (validationResult.IsValid is false)
+                return new ApplicationDataResult<PurchaseItemDto>(
+                    validationResult.Errors.Select(x => x.ErrorMessage));
 
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
@@ -114,8 +120,23 @@ namespace JacksonVeroneze.StockService.Application.Services
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
-        public Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto request)
-            => throw new NotImplementedException();
+        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto request)
+        {
+            ValidationResult validationResult = await request.Validate();
+
+            if (validationResult.IsValid is false)
+                return new ApplicationDataResult<PurchaseItemDto>(
+                    validationResult.Errors.Select(x => x.ErrorMessage));
+
+            Purchase purchase = await _purchaseRepository.FindAsync(id);
+
+            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(request);
+
+            await _purchaseService.UpdateItem(purchase, purchaseItem);
+
+            return new ApplicationDataResult<PurchaseItemDto>(
+                _mapper.Map<PurchaseItemDto>(purchaseItem));
+        }
 
         public async Task RemoveItemAsync(Guid id, Guid itemId)
         {

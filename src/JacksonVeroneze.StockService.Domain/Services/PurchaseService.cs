@@ -28,6 +28,16 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
         }
 
+        public async Task UpdateItem(Purchase purchase, PurchaseItem item)
+        {
+            purchase.UpdateItem(item);
+
+            _repository.Update(purchase);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _busHandler.PublishDomainEvent(new PurchaseItemUpdated(item.Id));
+        }
+
         public async Task RemoveItem(Purchase purchase, PurchaseItem item)
         {
             purchase.RemoveItem(item);

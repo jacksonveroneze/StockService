@@ -79,6 +79,40 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemUmItemInexistente")]
+        [Trait("Purchase", "UpdateItem")]
+        public void Purchase_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemUmItemInexistente()
+        {
+            // Arange
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+
+            PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+
+            // Act
+            Action act = () => purchase.UpdateItem(purchaseItem);
+
+            // Assert
+            act.Should().Throw<DomainException>();
+        }
+
+        [Fact(DisplayName = "DeveAtualizarCorretamenteUmItemUmItemQuandoOMesmoExistir")]
+        [Trait("Purchase", "UpdateItem")]
+        public void Purchase_UpdateItem_DeveAtualizarCorretamenteUmItemUmItemQuandoOMesmoExistir()
+        {
+            // Arange
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+
+            PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+
+            purchase.AddItem(purchaseItem);
+
+            // Act
+            purchase.UpdateItem(purchaseItem);
+
+            // Assert
+            purchase.Items.Should().HaveCount(1);
+        }
+
         [Fact(DisplayName = "DeveRemoverCorretamenteQuandoItemExistir")]
         [Trait("Purchase", "RemoveItem")]
         public void Purchase_RemoveItem_DeveRemoverCorretamenteQuandoItemExistir()
@@ -116,7 +150,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             // Assert
             act.Should().Throw<DomainException>();
         }
-
 
         [Fact(DisplayName = "DeveSomarCorretamenteValorTotal")]
         [Trait("Purchase", "CalculateTotalValue")]

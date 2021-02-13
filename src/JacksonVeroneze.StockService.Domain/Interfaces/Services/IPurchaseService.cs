@@ -7,6 +7,8 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
     {
         Task AddItem(Purchase purchase, PurchaseItem item);
 
+        Task UpdateItem(Purchase purchase, PurchaseItem item);
+
         Task RemoveItem(Purchase purchase, PurchaseItem item);
 
         Task Close(Purchase purchase);
