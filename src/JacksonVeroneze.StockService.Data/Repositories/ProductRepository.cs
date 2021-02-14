@@ -19,7 +19,8 @@ namespace JacksonVeroneze.StockService.Data.Repositories
 
         public Task<List<Product>> FilterAsync(ProductFilter filter)
         {
-            Expression<Func<Product, bool>> expression = x => x.Description.Equals(filter.Description);
+            Expression<Func<Product, bool>> expression =
+                x => x.Description.Contains(filter.Description);
 
             return _context.Set<Product>()
                 .Where(expression)
