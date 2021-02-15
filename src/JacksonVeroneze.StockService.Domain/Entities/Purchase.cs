@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
@@ -11,9 +12,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public DateTime Date { get; private set; }
 
-        public decimal TotalValue { get; private set; }
-
         public PurchaseStateEnum State { get; private set; } = PurchaseStateEnum.Open;
+
+        public decimal TotalValue { get; private set; }
 
         private readonly List<PurchaseItem> _items = new List<PurchaseItem>();
         public IReadOnlyCollection<PurchaseItem> Items => _items;
@@ -35,7 +36,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateOpenState();
 
             if (ExistsItem(item))
-                throw new DomainException("Este item encontra-se como filho do registro atual.");
+                throw new DomainException(Messages.ItemFound);
 
             _items.Add(item);
 
@@ -49,6 +50,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             PurchaseItem existItem = FindItemById(item.Id);
 
             existItem.Update(item.Amount, item.Value, item.Product);
+
+            CalculateTotalValue();
         }
 
         public void RemoveItem(PurchaseItem item)
@@ -65,7 +68,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public void Close()
         {
             if (State == PurchaseStateEnum.Closed)
-                throw new DomainException("Este registro já está fechado.");
+                throw new DomainException(Messages.RegisterClosed);
 
             State = PurchaseStateEnum.Closed;
         }
@@ -76,13 +79,13 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public void ValidateExistsItem(PurchaseItem item)
         {
             if (ExistsItem(item) is false)
-                throw new DomainException("Este item não encontra-se como filho do registro atual.");
+                throw new DomainException(Messages.ItemNotFound);
         }
 
         private void ValidateOpenState()
         {
             if (State == PurchaseStateEnum.Closed)
-                throw new DomainException("Este registro já está fechado, não pode ser movimentado.");
+                throw new DomainException(Messages.RegisterClosedNotMoviment);
         }
 
         private void CalculateTotalValue()

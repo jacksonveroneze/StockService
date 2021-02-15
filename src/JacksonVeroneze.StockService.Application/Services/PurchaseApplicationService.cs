@@ -102,9 +102,9 @@ namespace JacksonVeroneze.StockService.Application.Services
             return _mapper.Map<IEnumerable<PurchaseItemDto>>(purchase.Items);
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto request)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
         {
-            ValidationResult validationResult = await request.Validate();
+            ValidationResult validationResult = await data.Validate();
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseItemDto>(
@@ -112,7 +112,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(request);
+            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
 
             await _purchaseService.AddItem(purchase, purchaseItem);
 
@@ -120,9 +120,9 @@ namespace JacksonVeroneze.StockService.Application.Services
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto request)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
         {
-            ValidationResult validationResult = await request.Validate();
+            ValidationResult validationResult = await data.Validate();
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseItemDto>(
@@ -130,7 +130,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(request);
+            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
 
             await _purchaseService.UpdateItem(purchase, purchaseItem);
 

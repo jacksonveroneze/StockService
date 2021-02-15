@@ -8,7 +8,6 @@ using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
-using JacksonVeroneze.StockService.Domain.Events;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
@@ -21,15 +20,14 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
     public class PurchaseServiceTest
     {
         private IPurchaseService _purchaseService;
-
         //
         private Mock<IUnitOfWork> _unitOfWork;
         private Mock<IPurchaseRepository> _purchaseRepositoryMock;
         private Mock<IBusHandler> _busHandlerMock;
 
-        [Fact(DisplayName = "DeveAdicionarOsItensACompraQuandoEmEstadoValido")]
+        [Fact(DisplayName = "DeveAdicionarOsItensQuandoEmEstadoValid")]
         [Trait("PurchaseService", "AddItem")]
-        public void PurchaseService_AddItem_DeveAdicionarOsItensACompraQuandoEmEstadoValido()
+        public void PurchaseService_AddItem_DeveAdicionarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -53,9 +51,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseItemAdded>()), Times.Exactly(totalItens));
         }
 
-        [Fact(DisplayName = "DeveAdicionarOsItensACompraQuandoEmEstadoValido")]
+        [Fact(DisplayName = "DeveAtualizarOsItensQuandoEmEstadoValido")]
         [Trait("PurchaseService", "UpdateItem")]
-        public void PurchaseService_UpdateItem_DeveAtualizarOsItensACompraQuandoEmEstadoValido()
+        public void PurchaseService_UpdateItem_DeveAtualizarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -81,9 +79,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseItemUpdated>()), Times.Once);
         }
 
-        [Fact(DisplayName = "DeveRemoverOItemDaCompraQuandoExistirNaMesma")]
+        [Fact(DisplayName = "DeveRemoverOItemQuandoOMesmoExistir")]
         [Trait("PurchaseService", "RemoveItem")]
-        public void PurchaseService_RemoveItem_DeveRemoverOItemDaCompraQuandoExistirNaMesma()
+        public void PurchaseService_RemoveItem_DeveRemoverOItemQuandoOMesmoExistir()
         {
             // Arange
             int totalItens = 5;
@@ -109,9 +107,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseItemRemoved>()), Times.Once);
         }
 
-        [Fact(DisplayName = "DeveFecharACompraCorretamenteQuandoEmEstadoValida")]
+        [Fact(DisplayName = "DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto")]
         [Trait("PurchaseService", "Close")]
-        public void PurchaseService_Close_DeveFecharACompraCorretamenteQuandoEstiverAberta()
+        public void PurchaseService_Close_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
         {
             // Arange
             int totalItens = 5;
@@ -138,9 +136,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Once);
         }
 
-        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadaETentarFecharNovamente")]
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
         [Trait("PurchaseService", "Close")]
-        public void PurchaseService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadaETentarFecharNovamente()
+        public void PurchaseService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();

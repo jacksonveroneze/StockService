@@ -1,4 +1,7 @@
+using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus.Mediator;
+using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Events.Adjustment;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
@@ -13,6 +16,46 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             _repository = repository;
             _busHandler = busHandler;
+        }
+
+        public async Task AddItem(Adjustment adjustment, AdjustmentItem item)
+        {
+            adjustment.AddItem(item);
+
+            _repository.Update(adjustment);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _busHandler.PublishDomainEvent(new AdjustmentItemAdded(item.Id));
+        }
+
+        public async Task UpdateItem(Adjustment adjustment, AdjustmentItem item)
+        {
+            adjustment.UpdateItem(item);
+
+            _repository.Update(adjustment);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _busHandler.PublishDomainEvent(new AdjustmentItemUpdated(item.Id));
+        }
+
+        public async Task RemoveItem(Adjustment adjustment, AdjustmentItem item)
+        {
+            adjustment.RemoveItem(item);
+
+            _repository.Remove(adjustment);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _busHandler.PublishDomainEvent(new AdjustmentItemRemoved(item.Id));
+        }
+
+        public async Task Close(Adjustment adjustment)
+        {
+            adjustment.Close();
+
+            _repository.Update(adjustment);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _busHandler.PublishDomainEvent(new AdjustmentClosed(adjustment.Id));
         }
     }
 }

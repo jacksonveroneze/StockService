@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
@@ -11,9 +12,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public DateTime Date { get; private set; }
 
-        public decimal TotalValue { get; private set; }
+        public AdjustmentStateEnum State { get; private set; } = AdjustmentStateEnum.Open;
 
-        public PurchaseStateEnum State { get; private set; } = PurchaseStateEnum.Open;
+        public decimal TotalValue { get; private set; }
 
         private readonly List<AdjustmentItem> _items = new List<AdjustmentItem>();
         public IReadOnlyCollection<AdjustmentItem> Items => _items;
@@ -35,17 +36,20 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateOpenState();
 
             if (ExistsItem(item))
-            {
-                AdjustmentItem currentItem = _items.First(x => x.Id == item.Id);
-
-                currentItem.UpdateItemFromOtherItem(item);
-
-                RemoveItem(item);
-
-                item = currentItem;
-            }
+                throw new DomainException(Messages.ItemFound);
 
             _items.Add(item);
+
+            CalculateTotalValue();
+        }
+
+        public void UpdateItem(AdjustmentItem item)
+        {
+            ValidateExistsItem(item);
+
+            AdjustmentItem existItem = FindItemById(item.Id);
+
+            existItem.Update(item.Amount, item.Value, item.Product);
 
             CalculateTotalValue();
         }
@@ -54,12 +58,34 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         {
             ValidateOpenState();
 
-            if (ExistsItem(item) is false)
-                throw new DomainException("Este item não encontra-se como filho do registro atual.");
+            ValidateExistsItem(item);
 
             _items.Remove(item);
 
             CalculateTotalValue();
+        }
+
+        public void Close()
+        {
+            if (State == AdjustmentStateEnum.Closed)
+                throw new DomainException(Messages.RegisterClosed);
+
+            State = AdjustmentStateEnum.Closed;
+        }
+
+        public AdjustmentItem FindItemById(Guid id)
+            => _items.FirstOrDefault(x => x.Id == id);
+
+        public void ValidateExistsItem(AdjustmentItem item)
+        {
+            if (ExistsItem(item) is false)
+                throw new DomainException(Messages.ItemNotFound);
+        }
+
+        private void ValidateOpenState()
+        {
+            if (State == AdjustmentStateEnum.Closed)
+                throw new DomainException(Messages.RegisterClosedNotMoviment);
         }
 
         private void CalculateTotalValue()
@@ -68,19 +94,11 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private bool ExistsItem(AdjustmentItem item)
             => _items.Any(x => x.Id == item.Id);
 
-        public void Finish() => State = PurchaseStateEnum.Closed;
-
-        private void ValidateOpenState()
-        {
-            if (State == PurchaseStateEnum.Closed)
-                throw new DomainException("Este registro já está fechado, não pode ser movimentado.");
-        }
-
         private void Validate()
         {
             Validacoes.ValidarSeVazio(Description, "A descrição não pode estar vazia");
-            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição não pode estar vazia");
-            Validacoes.ValidarSeNulo(Date, "A data não pode estar vazia");
+            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição deve ter entre 1 e 100 caracteres");
+            Validacoes.ValidarSeMaiorQue(Date, DateTime.Now, "A data não pode ser superior a data atual");
         }
     }
 }

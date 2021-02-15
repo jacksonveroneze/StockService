@@ -6,6 +6,7 @@ using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using Xunit;
+using UtilCommon = JacksonVeroneze.StockService.Common.Fakers.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 {
@@ -17,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         {
             // Arange && Act
             Func<Purchase> func1 = () => new Purchase(string.Empty, DateTime.Now);
-            Func<Purchase> func2 = () => new Purchase(Util.GenerateStringFaker(101), DateTime.Now);
+            Func<Purchase> func2 = () => new Purchase(UtilCommon.GenerateStringFaker(101), DateTime.Now);
             Func<Purchase> func3 = () => new Purchase("descrição", DateTime.Now.AddDays(1));
 
             // Assert
@@ -61,9 +62,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
-        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEPurchaseIsClosed")]
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado")]
         [Trait("Purchase", "AddItem")]
-        public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEPurchaseIsClosed()
+        public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
@@ -79,9 +80,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
-        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemUmItemInexistente")]
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente")]
         [Trait("Purchase", "UpdateItem")]
-        public void Purchase_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemUmItemInexistente()
+        public void Purchase_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
@@ -95,9 +96,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
-        [Fact(DisplayName = "DeveAtualizarCorretamenteUmItemUmItemQuandoOMesmoExistir")]
+        [Fact(DisplayName = "DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir")]
         [Trait("Purchase", "UpdateItem")]
-        public void Purchase_UpdateItem_DeveAtualizarCorretamenteUmItemUmItemQuandoOMesmoExistir()
+        public void Purchase_UpdateItem_DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
@@ -167,9 +168,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             purchase.TotalValue.Should().Be(itemsMock.Sum(x => x.CalculteValue()));
         }
 
-        [Fact(DisplayName = "DeveGerarFecharACompraCorretamenteSeEstiverAberta")]
+        [Fact(DisplayName = "DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto")]
         [Trait("Purchase", "Close")]
-        public void Purchase_AddItem_DeveGerarFecharACompraCorretamenteSeEstiverAberta()
+        public void Purchase_AddItem_DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
@@ -181,9 +182,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             purchase.State.Should().Be(PurchaseStateEnum.Closed);
         }
 
-        [Fact(DisplayName = "DeveGerarDomainExceptionAoFecharUmaCompraJaFechada")]
+        [Fact(DisplayName = "DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado")]
         [Trait("Purchase", "Close")]
-        public void Purchase_RemoveItem_DeveGerarDomainExceptionAoFecharUmaCompraJaFechada()
+        public void Purchase_RemoveItem_DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();

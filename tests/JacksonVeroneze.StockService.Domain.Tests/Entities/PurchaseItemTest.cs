@@ -25,9 +25,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             func2.Should().Throw<DomainException>();
         }
 
-        [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("PurchaseItem", "Validate")]
-        public void PurchaseItem_Validate_DeveCalculaCorretamenteOValorDoItem()
+        [Fact(DisplayName = "DeveCalculaCorretamenteOValorDoItem")]
+        [Trait("PurchaseItem", "CalculteValue")]
+        public void PurchaseItem_CalculteValue_DeveCalculaCorretamenteOValorDoItem()
         {
             // Arange && Act
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
@@ -42,9 +42,29 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             value.Should().Be(20);
         }
 
-        [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("PurchaseItem", "Validate")]
-        public void PurchaseItem_Validate_DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos()
+        [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos")]
+        [Trait("PurchaseItem", "Update")]
+        public void PurchaseItem_Update_DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos()
+        {
+            // Arange && Act
+            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Product product = ProductFaker.GenerateFaker().Generate();
+            Product newProduct = ProductFaker.GenerateFaker().Generate();
+
+            PurchaseItem item = new PurchaseItem(10, 2, purchase, product);
+
+            // Act
+            Action action1 = () => item.Update(0, 5, newProduct);
+            Action action2 = () => item.Update(1, 0, newProduct);
+
+            // Assert
+            action1.Should().Throw<DomainException>();
+            action2.Should().Throw<DomainException>();
+        }
+
+        [Fact(DisplayName = "DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos")]
+        [Trait("PurchaseItem", "Update")]
+        public void PurchaseItem_Update_DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos()
         {
             // Arange && Act
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();

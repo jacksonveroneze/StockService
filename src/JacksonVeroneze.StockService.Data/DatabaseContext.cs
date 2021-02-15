@@ -24,6 +24,12 @@ namespace JacksonVeroneze.StockService.Data
 
             modelBuilder.Ignore<Event>();
 
+            modelBuilder.Entity<Adjustment>().HasQueryFilter(x => x.DeletedAt == null);
+            modelBuilder.Entity<AdjustmentItem>().HasQueryFilter(x => x.DeletedAt == null);
+            modelBuilder.Entity<Output>().HasQueryFilter(x => x.DeletedAt == null);
+            modelBuilder.Entity<OutputItem>().HasQueryFilter(x => x.DeletedAt == null);
+            modelBuilder.Entity<Purchase>().HasQueryFilter(x => x.DeletedAt == null);
+            modelBuilder.Entity<PurchaseItem>().HasQueryFilter(x => x.DeletedAt == null);
             modelBuilder.Entity<Product>().HasQueryFilter(x => x.DeletedAt == null);
         }
 

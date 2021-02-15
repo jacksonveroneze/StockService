@@ -5,9 +5,9 @@ namespace JacksonVeroneze.StockService.Application.Util
 {
     public class ApplicationDataResult<T>
     {
-        public IEnumerable<string> Errors { get; private set; } = new List<string>();
+        public IEnumerable<string> Errors { get; } = new List<string>();
 
-        public T Data { get; private set; }
+        public T Data { get; }
 
         public bool IsSuccess => !Errors.Any();
 
