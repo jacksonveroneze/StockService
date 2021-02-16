@@ -34,9 +34,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
-            _logger.LogInformation("Request: Controller: {0} - Method: {1}",
-                $"{nameof(ProductsController)}", $"{nameof(Get)}");
-
             return Ok(await _applicationService.FindAllAsync());
         }
 
@@ -49,9 +46,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
         public async Task<ActionResult<ProductDto>> Find(Guid id)
         {
-            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(Find)}", id.ToString());
-
             return Ok(await _applicationService.FindAsync(id));
         }
 
@@ -64,9 +58,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult<ProductDto>> Add([FromBody] AddOrUpdateProductDto addOrUpdateProductDto)
         {
-            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Data: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(Add)}", addOrUpdateProductDto.ToString());
-
             ApplicationDataResult<ProductDto> result = await _applicationService.AddASync(addOrUpdateProductDto);
 
             if (!result.IsSuccess)
@@ -84,9 +75,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {
-            _logger.LogInformation("Request: Controller: {0} - Method: {1} - Id: {2}",
-                $"{nameof(ProductsController)}", $"{nameof(Delete)}", id.ToString());
-
             await _applicationService.RemoveASync(id);
 
             return NoContent();
