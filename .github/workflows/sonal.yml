@@ -57,7 +57,7 @@ jobs:
         run: |
           dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
           
-          ~/.sonar/scanner/dotnet-sonarscanner begin /k:jacksonveroneze_stock-service /o:jacksonveroneze /d:sonar.login="${{ secrets.SONAR_TOKEN }}" d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./tests/JacksonVeroneze.StockService.Domain.Tests/coverage.opencover.xml /d:sonar.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**" /d:sonar.coverage.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**" /v:${{ github.run_id }}
+          ~/.sonar/scanner/dotnet-sonarscanner begin /k:jacksonveroneze_stock-service /o:jacksonveroneze /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./tests/JacksonVeroneze.StockService.Domain.Tests/coverage.opencover.xml /d:sonar.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**" /d:sonar.coverage.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**" /v:${{ github.run_id }}
             
           dotnet build --configuration Release --no-restore
           
