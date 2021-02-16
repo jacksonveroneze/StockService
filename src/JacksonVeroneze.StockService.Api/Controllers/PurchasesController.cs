@@ -22,8 +22,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public ActionResult Get()
         {
-            _logger.LogInformation("Request: {0}", "Solicitado GET.");
-
             return Ok("ok");
         }
     }
