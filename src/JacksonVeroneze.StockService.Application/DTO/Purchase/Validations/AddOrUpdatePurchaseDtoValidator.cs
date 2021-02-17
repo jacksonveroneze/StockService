@@ -1,3 +1,4 @@
+using System;
 using FluentValidation;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Purchase.Validations
@@ -11,7 +12,8 @@ namespace JacksonVeroneze.StockService.Application.DTO.Purchase.Validations
                 .Length(1, 100);
 
             RuleFor(x => x.Date)
-                .NotNull();
+                .NotNull()
+                .LessThan(DateTime.Now);
         }
     }
 }

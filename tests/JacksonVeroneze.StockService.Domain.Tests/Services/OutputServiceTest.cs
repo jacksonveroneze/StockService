@@ -26,8 +26,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         private Mock<IBusHandler> _busHandlerMock;
 
         [Fact(DisplayName = "DeveAdicionarOsItensQuandoEmEstadoValid")]
-        [Trait("OutputService", "AddItem")]
-        public void OutputService_AddItem_DeveAdicionarOsItensQuandoEmEstadoValido()
+        [Trait("OutputService", "AddItemAsync")]
+        public void OutputService_AddItemAsync_DeveAdicionarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -41,7 +41,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Act
             foreach (OutputItem outputItem in outputItens)
-                _outputService.AddItem(output, outputItem);
+                _outputService.AddItemAsync(output, outputItem);
 
             // Assert
             output.Items.Should().HaveCount(totalItens);
@@ -52,8 +52,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveAtualizarOsItensQuandoEmEstadoValido")]
-        [Trait("OutputService", "UpdateItem")]
-        public void OutputService_UpdateItem_DeveAtualizarOsItensQuandoEmEstadoValido()
+        [Trait("OutputService", "UpdateItemAsync")]
+        public void OutputService_UpdateItemAsync_DeveAtualizarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -66,10 +66,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (OutputItem outputItem in outputItens)
-                _outputService.AddItem(output, outputItem);
+                _outputService.AddItemAsync(output, outputItem);
 
             // Act
-            _outputService.UpdateItem(output, outputItens.First());
+            _outputService.UpdateItemAsync(output, outputItens.First());
 
             // Assert
             output.Items.Should().HaveCount(totalItens);
@@ -80,8 +80,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveRemoverOItemQuandoOMesmoExistir")]
-        [Trait("OutputService", "RemoveItem")]
-        public void OutputService_RemoveItem_DeveRemoverOItemQuandoOMesmoExistir()
+        [Trait("OutputService", "RemoveItemAsync")]
+        public void OutputService_RemoveItemAsync_DeveRemoverOItemQuandoOMesmoExistir()
         {
             // Arange
             int totalItens = 5;
@@ -94,10 +94,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (OutputItem outputItem in outputItens)
-                _outputService.AddItem(output, outputItem);
+                _outputService.AddItemAsync(output, outputItem);
 
             // Act
-            _outputService.RemoveItem(output, outputItens.First());
+            _outputService.RemoveItemAsync(output, outputItens.First());
 
             // Assert
             output.Items.Should().HaveCount(totalItens - 1);
@@ -108,8 +108,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto")]
-        [Trait("OutputService", "Close")]
-        public void OutputService_Close_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
+        [Trait("OutputService", "CloseAsync")]
+        public void OutputService_CloseAsync_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
         {
             // Arange
             int totalItens = 5;
@@ -122,10 +122,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (OutputItem outputItem in outputItens)
-                _outputService.AddItem(output, outputItem);
+                _outputService.AddItemAsync(output, outputItem);
 
             // Act
-            _outputService.Close(output);
+            _outputService.CloseAsync(output);
 
             // Assert
             output.State.Should().Be(OutputStateEnum.Closed);
@@ -137,8 +137,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
-        [Trait("OutputService", "Close")]
-        public void OutputService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
+        [Trait("OutputService", "CloseAsync")]
+        public void OutputService_CloseAsync_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
             Output output = OutputFaker.GenerateFaker().Generate();

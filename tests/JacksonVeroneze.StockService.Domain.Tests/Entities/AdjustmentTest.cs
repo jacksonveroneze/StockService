@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveAdicionarOsItensCorretamenteQuandoValidos")]
-        [Trait("Adjustment", "AddItem")]
+        [Trait("Adjustment", "AddItemAsync")]
         public void Adjustment_AddItem_DeveAdicionarOsItensCorretamenteQuandoValidos()
         {
             // Arange
@@ -45,7 +45,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir")]
-        [Trait("Adjustment", "AddItem")]
+        [Trait("Adjustment", "AddItemAsync")]
         public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir()
         {
             // Arange
@@ -63,7 +63,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado")]
-        [Trait("Adjustment", "AddItem")]
+        [Trait("Adjustment", "AddItemAsync")]
         public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado()
         {
             // Arange
@@ -81,7 +81,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente")]
-        [Trait("Adjustment", "UpdateItem")]
+        [Trait("Adjustment", "UpdateItemAsync")]
         public void Adjustment_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
         {
             // Arange
@@ -97,7 +97,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir")]
-        [Trait("Adjustment", "UpdateItem")]
+        [Trait("Adjustment", "UpdateItemAsync")]
         public void Adjustment_UpdateItem_DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir()
         {
             // Arange
@@ -115,7 +115,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveRemoverCorretamenteQuandoItemExistir")]
-        [Trait("Adjustment", "RemoveItem")]
+        [Trait("Adjustment", "RemoveItemAsync")]
         public void Adjustment_RemoveItem_DeveRemoverCorretamenteQuandoItemExistir()
         {
             // Arange
@@ -135,7 +135,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoRemoverUmItemInexistente")]
-        [Trait("Adjustment", "RemoveItem")]
+        [Trait("Adjustment", "RemoveItemAsync")]
         public void Adjustment_RemoveItem_DeveGerarDomainExceptionQuandoRemoverUmItemInexistente()
         {
             // Arange
@@ -169,7 +169,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto")]
-        [Trait("Adjustment", "Close")]
+        [Trait("Adjustment", "CloseAsync")]
         public void Adjustment_AddItem_DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto()
         {
             // Arange
@@ -183,7 +183,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado")]
-        [Trait("Adjustment", "Close")]
+        [Trait("Adjustment", "CloseAsync")]
         public void Adjustment_RemoveItem_DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado()
         {
             // Arange

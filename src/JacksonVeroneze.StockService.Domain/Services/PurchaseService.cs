@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _busHandler = busHandler;
         }
 
-        public async Task AddItem(Purchase purchase, PurchaseItem item)
+        public async Task AddItemAsync(Purchase purchase, PurchaseItem item)
         {
             purchase.AddItem(item);
 
@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new PurchaseItemAdded(item.Id));
         }
 
-        public async Task UpdateItem(Purchase purchase, PurchaseItem item)
+        public async Task UpdateItemAsync(Purchase purchase, PurchaseItem item)
         {
             purchase.UpdateItem(item);
 
@@ -38,7 +38,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new PurchaseItemUpdated(item.Id));
         }
 
-        public async Task RemoveItem(Purchase purchase, PurchaseItem item)
+        public async Task RemoveItemAsync(Purchase purchase, PurchaseItem item)
         {
             purchase.RemoveItem(item);
 
@@ -48,7 +48,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new PurchaseItemRemoved(item.Id));
         }
 
-        public async Task Close(Purchase purchase)
+        public async Task CloseAsync(Purchase purchase)
         {
             purchase.Close();
 

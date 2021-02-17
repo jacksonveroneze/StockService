@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\JacksonVeroneze.StockService.Application\JacksonVeroneze.StockService.Application.csproj" />
     <ProjectReference Include="..\..\src\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
   </ItemGroup>
   

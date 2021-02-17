@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _busHandler = busHandler;
         }
 
-        public async Task AddItem(Output output, OutputItem item)
+        public async Task AddItemAsync(Output output, OutputItem item)
         {
             output.AddItem(item);
 
@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new OutputItemAdded(item.Id));
         }
 
-        public async Task UpdateItem(Output output, OutputItem item)
+        public async Task UpdateItemAsync(Output output, OutputItem item)
         {
             output.UpdateItem(item);
 
@@ -38,7 +38,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new OutputItemUpdated(item.Id));
         }
 
-        public async Task RemoveItem(Output output, OutputItem item)
+        public async Task RemoveItemAsync(Output output, OutputItem item)
         {
             output.RemoveItem(item);
 
@@ -48,7 +48,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new OutputItemRemoved(item.Id));
         }
 
-        public async Task Close(Output output)
+        public async Task CloseAsync(Output output)
         {
             output.Close();
 

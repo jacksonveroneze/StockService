@@ -5,12 +5,12 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
 {
     public interface IAdjustmentService
     {
-        Task AddItem(Adjustment adjustment, AdjustmentItem item);
+        Task AddItemAsync(Adjustment adjustment, AdjustmentItem item);
 
-        Task UpdateItem(Adjustment adjustment, AdjustmentItem item);
+        Task UpdateItemAsync(Adjustment adjustment, AdjustmentItem item);
 
-        Task RemoveItem(Adjustment adjustment, AdjustmentItem item);
+        Task RemoveItemAsync(Adjustment adjustment, AdjustmentItem item);
 
-        Task Close(Adjustment adjustment);
+        Task CloseAsync(Adjustment adjustment);
     }
 }

@@ -26,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         private Mock<IBusHandler> _busHandlerMock;
 
         [Fact(DisplayName = "DeveAdicionarOsItensQuandoEmEstadoValid")]
-        [Trait("AdjustmentService", "AddItem")]
+        [Trait("AdjustmentService", "AddItemAsync")]
         public void AdjustmentService_AddItem_DeveAdicionarOsItensQuandoEmEstadoValido()
         {
             // Arange
@@ -41,7 +41,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Act
             foreach (AdjustmentItem adjustmentItem in adjustmentItens)
-                _adjustmentService.AddItem(adjustment, adjustmentItem);
+                _adjustmentService.AddItemAsync(adjustment, adjustmentItem);
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens);
@@ -52,7 +52,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveAtualizarOsItensQuandoEmEstadoValido")]
-        [Trait("AdjustmentService", "UpdateItem")]
+        [Trait("AdjustmentService", "UpdateItemAsync")]
         public void AdjustmentService_UpdateItem_DeveAtualizarOsItensQuandoEmEstadoValido()
         {
             // Arange
@@ -66,10 +66,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (AdjustmentItem adjustmentItem in adjustmentItens)
-                _adjustmentService.AddItem(adjustment, adjustmentItem);
+                _adjustmentService.AddItemAsync(adjustment, adjustmentItem);
 
             // Act
-            _adjustmentService.UpdateItem(adjustment, adjustmentItens.First());
+            _adjustmentService.UpdateItemAsync(adjustment, adjustmentItens.First());
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens);
@@ -80,7 +80,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveRemoverOItemQuandoOMesmoExistir")]
-        [Trait("AdjustmentService", "RemoveItem")]
+        [Trait("AdjustmentService", "RemoveItemAsync")]
         public void AdjustmentService_RemoveItem_DeveRemoverOItemQuandoOMesmoExistir()
         {
             // Arange
@@ -94,10 +94,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (AdjustmentItem adjustmentItem in adjustmentItens)
-                _adjustmentService.AddItem(adjustment, adjustmentItem);
+                _adjustmentService.AddItemAsync(adjustment, adjustmentItem);
 
             // Act
-            _adjustmentService.RemoveItem(adjustment, adjustmentItens.First());
+            _adjustmentService.RemoveItemAsync(adjustment, adjustmentItens.First());
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens - 1);
@@ -108,7 +108,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto")]
-        [Trait("AdjustmentService", "Close")]
+        [Trait("AdjustmentService", "CloseAsync")]
         public void AdjustmentService_Close_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
         {
             // Arange
@@ -122,10 +122,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (AdjustmentItem adjustmentItem in adjustmentItens)
-                _adjustmentService.AddItem(adjustment, adjustmentItem);
+                _adjustmentService.AddItemAsync(adjustment, adjustmentItem);
 
             // Act
-            _adjustmentService.Close(adjustment);
+            _adjustmentService.CloseAsync(adjustment);
 
             // Assert
             adjustment.State.Should().Be(AdjustmentStateEnum.Closed);
@@ -137,7 +137,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
-        [Trait("AdjustmentService", "Close")]
+        [Trait("AdjustmentService", "CloseAsync")]
         public void AdjustmentService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange

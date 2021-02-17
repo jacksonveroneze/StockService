@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _busHandler = busHandler;
         }
 
-        public async Task AddItem(Adjustment adjustment, AdjustmentItem item)
+        public async Task AddItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.AddItem(item);
 
@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new AdjustmentItemAdded(item.Id));
         }
 
-        public async Task UpdateItem(Adjustment adjustment, AdjustmentItem item)
+        public async Task UpdateItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.UpdateItem(item);
 
@@ -38,7 +38,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new AdjustmentItemUpdated(item.Id));
         }
 
-        public async Task RemoveItem(Adjustment adjustment, AdjustmentItem item)
+        public async Task RemoveItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.RemoveItem(item);
 
@@ -48,7 +48,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _busHandler.PublishDomainEvent(new AdjustmentItemRemoved(item.Id));
         }
 
-        public async Task Close(Adjustment adjustment)
+        public async Task CloseAsync(Adjustment adjustment)
         {
             adjustment.Close();
 

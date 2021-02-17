@@ -8,6 +8,7 @@ using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
@@ -32,8 +33,8 @@ namespace JacksonVeroneze.StockService.Application.Services
             => _mapper.Map<PurchaseDto>(
                 await _purchaseRepository.FindAsync(id));
 
-        public async Task<IEnumerable<PurchaseDto>> FindAllAsync()
-            => _mapper.Map<IEnumerable<PurchaseDto>>(
+        public async Task<IList<PurchaseDto>> FindAllAsync()
+            => _mapper.Map<List<PurchaseDto>>(
                 await _purchaseRepository.FindAllAsync());
 
         public async Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data)
@@ -54,7 +55,7 @@ namespace JacksonVeroneze.StockService.Application.Services
                 _mapper.Map<PurchaseDto>(purchase));
         }
 
-        public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(AddOrUpdatePurchaseDto data)
+        public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid id, AddOrUpdatePurchaseDto data)
         {
             ValidationResult validationResult = await data.Validate();
 
@@ -62,7 +63,12 @@ namespace JacksonVeroneze.StockService.Application.Services
                 return new ApplicationDataResult<PurchaseDto>(
                     validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Purchase purchase = _mapper.Map<Purchase>(data);
+            Purchase purchase = await _purchaseRepository.FindAsync(id);
+
+            if (purchase is null)
+                throw new DomainException("Registro não encontrado.");
+
+            purchase.Update(data.Description, data.Date);
 
             _purchaseRepository.Update(purchase);
 
@@ -76,16 +82,22 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
+            if (purchase is null)
+                throw new DomainException("Registro não encontrado.");
+
             _purchaseRepository.Remove(purchase);
 
             await _purchaseRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task Close(Guid id)
+        public async Task CloseAsync(Guid id)
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            await _purchaseService.Close(purchase);
+            if (purchase is null)
+                throw new DomainException("Registro não encontrado.");
+
+            await _purchaseService.CloseAsync(purchase);
         }
 
         public async Task<PurchaseItemDto> FindItemAsync(Guid id, Guid itemId)
@@ -95,11 +107,11 @@ namespace JacksonVeroneze.StockService.Application.Services
             return _mapper.Map<PurchaseItemDto>(purchase.FindItemById(id));
         }
 
-        public async Task<IEnumerable<PurchaseItemDto>> FindItensAsync(Guid id)
+        public async Task<IList<PurchaseItemDto>> FindItensAsync(Guid id)
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            return _mapper.Map<IEnumerable<PurchaseItemDto>>(purchase.Items);
+            return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
         }
 
         public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
@@ -114,7 +126,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
 
-            await _purchaseService.AddItem(purchase, purchaseItem);
+            await _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             return new ApplicationDataResult<PurchaseItemDto>(
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
@@ -132,7 +144,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
 
-            await _purchaseService.UpdateItem(purchase, purchaseItem);
+            await _purchaseService.UpdateItemAsync(purchase, purchaseItem);
 
             return new ApplicationDataResult<PurchaseItemDto>(
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
@@ -144,7 +156,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             PurchaseItem purchaseItem = purchase.FindItemById(id);
 
-            await _purchaseService.RemoveItem(purchase, purchaseItem);
+            await _purchaseService.RemoveItemAsync(purchase, purchaseItem);
         }
     }
 }

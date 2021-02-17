@@ -73,6 +73,14 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             State = PurchaseStateEnum.Closed;
         }
 
+        public void Update(string description, DateTime date)
+        {
+            Description = description;
+            Date = date;
+
+            Validate();
+        }
+
         public PurchaseItem FindItemById(Guid id)
             => _items.FirstOrDefault(x => x.Id == id);
 

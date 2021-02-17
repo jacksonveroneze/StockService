@@ -26,8 +26,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         private Mock<IBusHandler> _busHandlerMock;
 
         [Fact(DisplayName = "DeveAdicionarOsItensQuandoEmEstadoValid")]
-        [Trait("PurchaseService", "AddItem")]
-        public void PurchaseService_AddItem_DeveAdicionarOsItensQuandoEmEstadoValido()
+        [Trait("PurchaseService", "AddItemAsync")]
+        public void PurchaseService_AddItemAsync_DeveAdicionarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -41,7 +41,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Act
             foreach (PurchaseItem purchaseItem in purchaseItens)
-                _purchaseService.AddItem(purchase, purchaseItem);
+                _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             // Assert
             purchase.Items.Should().HaveCount(totalItens);
@@ -52,8 +52,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveAtualizarOsItensQuandoEmEstadoValido")]
-        [Trait("PurchaseService", "UpdateItem")]
-        public void PurchaseService_UpdateItem_DeveAtualizarOsItensQuandoEmEstadoValido()
+        [Trait("PurchaseService", "UpdateItemAsync")]
+        public void PurchaseService_UpdateItemAsync_DeveAtualizarOsItensQuandoEmEstadoValido()
         {
             // Arange
             int totalItens = 5;
@@ -66,10 +66,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (PurchaseItem purchaseItem in purchaseItens)
-                _purchaseService.AddItem(purchase, purchaseItem);
+                _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             // Act
-            _purchaseService.UpdateItem(purchase, purchaseItens.First());
+            _purchaseService.UpdateItemAsync(purchase, purchaseItens.First());
 
             // Assert
             purchase.Items.Should().HaveCount(totalItens);
@@ -80,8 +80,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveRemoverOItemQuandoOMesmoExistir")]
-        [Trait("PurchaseService", "RemoveItem")]
-        public void PurchaseService_RemoveItem_DeveRemoverOItemQuandoOMesmoExistir()
+        [Trait("PurchaseService", "RemoveItemAsync")]
+        public void PurchaseService_RemoveItemAsync_DeveRemoverOItemQuandoOMesmoExistir()
         {
             // Arange
             int totalItens = 5;
@@ -94,10 +94,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (PurchaseItem purchaseItem in purchaseItens)
-                _purchaseService.AddItem(purchase, purchaseItem);
+                _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             // Act
-            _purchaseService.RemoveItem(purchase, purchaseItens.First());
+            _purchaseService.RemoveItemAsync(purchase, purchaseItens.First());
 
             // Assert
             purchase.Items.Should().HaveCount(totalItens - 1);
@@ -108,8 +108,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto")]
-        [Trait("PurchaseService", "Close")]
-        public void PurchaseService_Close_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
+        [Trait("PurchaseService", "CloseAsync")]
+        public void PurchaseService_CloseAsync_DeveMudarOEstadoParaFechadoCorretamenteQuandoEstiverAberto()
         {
             // Arange
             int totalItens = 5;
@@ -122,10 +122,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             FactoryService();
 
             foreach (PurchaseItem purchaseItem in purchaseItens)
-                _purchaseService.AddItem(purchase, purchaseItem);
+                _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             // Act
-            _purchaseService.Close(purchase);
+            _purchaseService.CloseAsync(purchase);
 
             // Assert
             purchase.State.Should().Be(PurchaseStateEnum.Closed);
@@ -137,8 +137,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
-        [Trait("PurchaseService", "Close")]
-        public void PurchaseService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
+        [Trait("PurchaseService", "CloseAsync")]
+        public void PurchaseService_CloseAsync_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
             Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
