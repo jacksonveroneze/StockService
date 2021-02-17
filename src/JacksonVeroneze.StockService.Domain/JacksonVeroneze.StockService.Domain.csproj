@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Bus\JacksonVeroneze.StockService.Bus.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Core\JacksonVeroneze.StockService.Core.csproj" />
+  </ItemGroup>
+
+</Project>

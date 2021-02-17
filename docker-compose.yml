@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+    api:
+        container_name: api
+        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.0
+        tty: true
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 8080:80
+        links:
+            - database
+        environment:
+            - ASPNETCORE_URLS=http://+:80
+            - DOTNET_RUNNING_IN_CONTAINER=true
+            - ASPNETCORE_ENVIRONMENT=Docker
+
+    database:
+        container_name: database
+        image: postgres:13-alpine
+        container_name: postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - TZ=GMT
+        volumes:
+            - database:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+
+    rabbitmq:
+        image: rabbitmq:3.8-management-alpine
+        container_name: rabbitmq
+        ports:
+            - 15672:15672
+            - 5672:5672
+        volumes:
+            - rabbitmq:/var/lib/rabbitmq
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin
+volumes:
+    database:
+    rabbitmq:
