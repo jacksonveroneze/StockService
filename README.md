@@ -6,7 +6,7 @@ API para gerenciamento de estoque desenvolvida em .NET 5
 
 ![GitHub](https://img.shields.io/github/license/jacksonveroneze/OneTimePassword?logoColor=%20)
 ![GitHub last commit](https://img.shields.io/github/last-commit/jacksonveroneze/OneTimePassword)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jacksonveroneze_stock-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=jacksonveroneze_stock-service)
 
 
 | Branch        | Main           | Develop  |
