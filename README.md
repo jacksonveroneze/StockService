@@ -1,4 +1,4 @@
-![Image](https://github.com/jacksonveroneze/StockService/blob/master/assets/stock.png)
+![Image](https://github.com/jacksonveroneze/StockService/blob/main/assets/stock.png)
 
 # StockService
 
