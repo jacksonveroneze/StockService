@@ -119,5 +119,5 @@ jobs:
         with:
           app-name: 'stock-jacksonveroneze'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_3de25c9220504d568e7022c17abe6fe6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3DE25C9220504D568E7022C17ABE6FE6 }}
           package: ${{env.DOTNET_ROOT}}/myapp
