@@ -35,7 +35,9 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: |
+          dotnet build --configuration Release --no-restore
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
   sonar:
       name: Run Sonar
@@ -93,3 +95,29 @@ jobs:
             dotnet build --configuration Release --no-restore
 
             ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+            
+
+  build-and-deploy:
+    runs-on: Ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'stock-jacksonveroneze'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_3de25c9220504d568e7022c17abe6fe6 }}
+          package: ${{env.DOTNET_ROOT}}/myapp
