@@ -10,7 +10,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
             => services.AddEntityFrameworkSqlServer()
                 .AddDbContext<DatabaseContext>(options =>
-                    options.UseSqlServer(configuration.GetValue<string>("CONNECTIONSTRINGS_DEFAULTCONNECTION"))
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
                         .UseSnakeCaseNamingConvention());
     }
 }
