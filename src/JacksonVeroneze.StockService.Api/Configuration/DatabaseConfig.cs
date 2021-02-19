@@ -8,9 +8,9 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     public static class DatabaseConfig
     {
         public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services, IConfiguration configuration)
-            => services.AddEntityFrameworkNpgsql()
+            => services.AddEntityFrameworkSqlServer()
                 .AddDbContext<DatabaseContext>(options =>
-                    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+                    options.UseSqlServer(configuration.GetValue<string>("CONNECTIONSTRINGS_DEFAULTCONNECTION"))
                         .UseSnakeCaseNamingConvention());
     }
 }
