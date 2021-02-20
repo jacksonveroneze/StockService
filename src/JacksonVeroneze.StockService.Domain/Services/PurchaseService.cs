@@ -55,7 +55,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new PurchaseClosed(purchase.Id));
+                await _busHandler.PublishDomainEvent(new PurchaseClosedEvent(purchase.Id));
         }
     }
 }

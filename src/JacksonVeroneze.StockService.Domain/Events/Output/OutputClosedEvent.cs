@@ -3,9 +3,9 @@ using JacksonVeroneze.StockService.Core.Messages.CommonMessages.DomainEvents;
 
 namespace JacksonVeroneze.StockService.Domain.Events.Output
 {
-    public class OutputClosed : DomainEvent
+    public class OutputClosedEvent : DomainEvent
     {
-        public OutputClosed(Guid aggregateId) : base(aggregateId)
+        public OutputClosedEvent(Guid aggregateId) : base(aggregateId)
         {
         }
     }

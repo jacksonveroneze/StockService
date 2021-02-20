@@ -250,7 +250,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseItemRemoved>(It.IsAny<PurchaseItemRemoved>()))
                 .Returns(Task.CompletedTask);
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseClosed>(It.IsAny<PurchaseClosed>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseClosedEvent>(It.IsAny<PurchaseClosedEvent>()))
                 .Returns(Task.CompletedTask);
 
             _productRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Guid>()))

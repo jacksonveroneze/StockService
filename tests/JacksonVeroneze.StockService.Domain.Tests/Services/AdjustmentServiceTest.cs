@@ -133,7 +133,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             adjustment.TotalValue.Should().Be(adjustmentItens.Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
-            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentClosed>()), Times.Once);
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentClosedEvent>()), Times.Once);
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
@@ -156,7 +156,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             act.Should().Throw<DomainException>();
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Never);
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Never);
-            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentClosed>()), Times.Never);
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentClosedEvent>()), Times.Never);
         }
 
         private void ConfigureMock()
@@ -176,7 +176,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Setup(x => x.PublishDomainEvent<AdjustmentItemRemoved>(It.IsAny<AdjustmentItemRemoved>()))
                 .Returns(Task.CompletedTask);
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<AdjustmentClosed>(It.IsAny<AdjustmentClosed>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent<AdjustmentClosedEvent>(It.IsAny<AdjustmentClosedEvent>()))
                 .Returns(Task.CompletedTask);
 
             _adjustmentRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Adjustment>()))

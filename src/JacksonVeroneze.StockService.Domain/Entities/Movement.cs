@@ -22,6 +22,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
+        public void AddItem(MovementItem item)
+            => _items.Add(item);
+
         private void Validate()
         {
         }

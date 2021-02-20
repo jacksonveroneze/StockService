@@ -133,7 +133,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             purchase.TotalValue.Should().Be(purchaseItens.Sum(x => x.CalculteValue()));
             _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
-            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Once);
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosedEvent>()), Times.Once);
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente")]
@@ -156,7 +156,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             act.Should().Throw<DomainException>();
             _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Never);
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Never);
-            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosed>()), Times.Never);
+            _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<PurchaseClosedEvent>()), Times.Never);
         }
 
         private void ConfigureMock()
@@ -176,7 +176,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseItemRemoved>(It.IsAny<PurchaseItemRemoved>()))
                 .Returns(Task.CompletedTask);
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseClosed>(It.IsAny<PurchaseClosed>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseClosedEvent>(It.IsAny<PurchaseClosedEvent>()))
                 .Returns(Task.CompletedTask);
 
             _purchaseRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Purchase>()))
