@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
@@ -20,13 +21,22 @@ namespace JacksonVeroneze.StockService.Application.Services
         private readonly IMapper _mapper;
         private readonly IPurchaseService _purchaseService;
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IValidator<AddOrUpdatePurchaseDto> _validatorPurchase;
+        private readonly IValidator<AddOrUpdatePurchaseItemDto> _validatorPurchaseItem;
 
         public PurchaseApplicationService(IMapper mapper, IPurchaseService purchaseService,
-            IPurchaseRepository purchaseRepository)
+            IPurchaseRepository purchaseRepository,
+            IProductRepository productRepository,
+            IValidator<AddOrUpdatePurchaseDto> validatorPurchase,
+            IValidator<AddOrUpdatePurchaseItemDto> validatorPurchaseItem)
         {
             _mapper = mapper;
             _purchaseService = purchaseService;
             _purchaseRepository = purchaseRepository;
+            _productRepository = productRepository;
+            _validatorPurchase = validatorPurchase;
+            _validatorPurchaseItem = validatorPurchaseItem;
         }
 
         public async Task<PurchaseDto> FindAsync(Guid id)
@@ -39,7 +49,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
         public async Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data)
         {
-            ValidationResult validationResult = await data.Validate();
+            ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseDto>(
@@ -57,7 +67,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
         public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid id, AddOrUpdatePurchaseDto data)
         {
-            ValidationResult validationResult = await data.Validate();
+            ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseDto>(
@@ -114,17 +124,19 @@ namespace JacksonVeroneze.StockService.Application.Services
             return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(AddOrUpdatePurchaseItemDto data)
         {
-            ValidationResult validationResult = await data.Validate();
+            ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseItemDto>(
                     validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Purchase purchase = await _purchaseRepository.FindAsync(id);
+            Purchase purchase = await _purchaseRepository.FindAsync(data.PurchaseId);
 
-            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
+            Product product = await _productRepository.FindAsync(data.ProductId);
+
+            PurchaseItem purchaseItem = new PurchaseItem(data.Amount, data.Value, purchase, product);
 
             await _purchaseService.AddItemAsync(purchase, purchaseItem);
 
@@ -132,15 +144,15 @@ namespace JacksonVeroneze.StockService.Application.Services
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(AddOrUpdatePurchaseItemDto data)
         {
-            ValidationResult validationResult = await data.Validate();
+            ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
                 return new ApplicationDataResult<PurchaseItemDto>(
                     validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Purchase purchase = await _purchaseRepository.FindAsync(id);
+            Purchase purchase = await _purchaseRepository.FindAsync(data.PurchaseId);
 
             PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
 
@@ -154,7 +166,13 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
+            if (purchase is null)
+                throw new DomainException("Registro pai não encontrado.");
+
             PurchaseItem purchaseItem = purchase.FindItemById(id);
+
+            if (purchaseItem is null)
+                throw new DomainException("Registro não encontrado.");
 
             await _purchaseService.RemoveItemAsync(purchase, purchaseItem);
         }

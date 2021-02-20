@@ -4,20 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace JacksonVeroneze.StockService.Data.Mappings
 {
-    public class PurchaseMapping : IEntityTypeConfiguration<Purchase>
+    public class MovementItemMapping : IEntityTypeConfiguration<MovementItem>
     {
-        public void Configure(EntityTypeBuilder<Purchase> builder)
+        public void Configure(EntityTypeBuilder<MovementItem> builder)
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.Description)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            builder.Property(c => c.Date)
-                .IsRequired();
-
-            builder.Property(c => c.State)
+            builder.Property(c => c.Amount)
                 .IsRequired();
 
             builder.Property(c => c.CreatedAt)
@@ -29,6 +22,11 @@ namespace JacksonVeroneze.StockService.Data.Mappings
 
             builder.Property(c => c.Version)
                 .IsRequired();
+
+            builder.HasOne(p => p.Movement)
+                .WithMany(b => b.Items)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

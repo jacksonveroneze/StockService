@@ -1,4 +1,9 @@
-﻿using JacksonVeroneze.StockService.Application.Interfaces;
+﻿using FluentValidation;
+using JacksonVeroneze.StockService.Application.DTO.Purchase;
+using JacksonVeroneze.StockService.Application.DTO.Purchase.Validations;
+using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
+using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
+using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Data;
@@ -24,11 +29,17 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IAdjustmentRepository, AdjustmentRepository>();
             services.AddScoped<IOutputRepository, OutputRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            services.AddScoped<IMovementRepository, MovementRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<IAdjustmentService, AdjustmentService>();
             services.AddScoped<IOutputService, OutputService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IMovementService, MovementService>();
+
+            // Validations
+            services.AddScoped<IValidator<AddOrUpdatePurchaseDto>, AddOrUpdatePurchaseDtoValidator>();
+            services.AddScoped<IValidator<AddOrUpdatePurchaseItemDto>, AddOrUpdatePurchaseItemDtoValidator>();
 
             // Context
             services.AddScoped<DatabaseContext>();

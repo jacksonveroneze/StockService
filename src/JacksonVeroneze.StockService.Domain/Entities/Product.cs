@@ -12,10 +12,12 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private readonly List<PurchaseItem> _itemsPurchase = new List<PurchaseItem>();
         private readonly List<AdjustmentItem> _itemsAdjustment = new List<AdjustmentItem>();
         private readonly List<OutputItem> _itemsOutput = new List<OutputItem>();
+        private readonly List<Movement> _itemsMovement = new List<Movement>();
 
         public IReadOnlyCollection<PurchaseItem> ItemsPurchase => _itemsPurchase;
         public IReadOnlyCollection<AdjustmentItem> ItemsAdjustment => _itemsAdjustment;
         public IReadOnlyCollection<OutputItem> ItemsOutput => _itemsOutput;
+        public IReadOnlyCollection<Movement> ItemsMovement => _itemsMovement;
 
         protected Product()
         {

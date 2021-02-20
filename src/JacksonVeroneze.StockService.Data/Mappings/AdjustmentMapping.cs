@@ -20,6 +20,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.State)
                 .IsRequired();
 
+            builder.Property(c => c.CreatedAt)
+                .IsRequired();
+
             builder.Property(c => c.UpdatedAt);
 
             builder.Property(c => c.DeletedAt);
