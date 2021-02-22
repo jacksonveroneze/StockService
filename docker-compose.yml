@@ -7,39 +7,49 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        ports:
-            - 8080:80
-        links:
-            - database
         environment:
             - ASPNETCORE_URLS=http://+:80
             - DOTNET_RUNNING_IN_CONTAINER=true
             - ASPNETCORE_ENVIRONMENT=Docker
+        healthcheck:
+            test: [ "CMD", "curl --fail http://localhost:8080/healh || exit 1" ]
+            interval: 10s
+            retries: 20
+        links:
+            - database
+            - rabbitmq
+        ports:
+            - 8080:80
 
     database:
         container_name: database
-        image: postgres:13-alpine
-        container_name: postgres
+        image: mcr.microsoft.com/mssql/server:2019-latest
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - TZ=GMT
-        volumes:
-            - database:/var/lib/postgresql/data
+            SA_PASSWORD: Pass@word
+            ACCEPT_EULA: Y
+        healthcheck:
+            test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-Usa", "-PPass@word", "-Q", "select 1" ]
+            interval: 10s
+            retries: 20
         ports:
-            - 5432:5432
+            - 1433:1433
 
     rabbitmq:
         image: rabbitmq:3.8-management-alpine
         container_name: rabbitmq
-        ports:
-            - 15672:15672
-            - 5672:5672
-        volumes:
-            - rabbitmq:/var/lib/rabbitmq
         environment:
             - RABBITMQ_DEFAULT_USER=admin
             - RABBITMQ_DEFAULT_PASS=admin
+        healthcheck:
+            test: [ "CMD", "curl --fail http://localhost:15672 || exit 1" ]
+            interval: 10s
+            retries: 20
+        volumes:
+            - rabbitmq:/var/lib/rabbitmq
+        ports:
+            - 15672:15672
+            - 5672:5672
+
 volumes:
     database:
     rabbitmq:

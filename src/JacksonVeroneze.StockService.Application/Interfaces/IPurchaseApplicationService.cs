@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Domain.Filters;
 
 namespace JacksonVeroneze.StockService.Application.Interfaces
 {
@@ -12,6 +13,8 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
         Task<PurchaseDto> FindAsync(Guid id);
 
         Task<IList<PurchaseDto>> FindAllAsync();
+
+        Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter);
 
         Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data);
 

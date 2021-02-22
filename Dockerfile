@@ -13,4 +13,5 @@ RUN dotnet publish app/JacksonVeroneze.StockService.Api/JacksonVeroneze.StockSer
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 COPY --from=build-env /app/out .
+
 ENTRYPOINT ["dotnet", "JacksonVeroneze.StockService.Api.dll"]

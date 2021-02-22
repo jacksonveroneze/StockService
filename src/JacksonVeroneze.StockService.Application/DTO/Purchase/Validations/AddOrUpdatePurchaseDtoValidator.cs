@@ -8,7 +8,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Purchase.Validations
         public AddOrUpdatePurchaseDtoValidator()
         {
             RuleFor(x => x.Description)
-                .NotEmpty()
                 .Length(1, 100);
 
             RuleFor(x => x.Date)

@@ -14,7 +14,6 @@ namespace JacksonVeroneze.StockService.Api.Graphql.Schema.PurchaseSchema
             Field(x => x.Description);
             Field(x => x.Date);
             Field(x => x.TotalValue);
-            Field(x => x.State);
         }
     }
 }

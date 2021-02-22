@@ -35,7 +35,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
             {
                 x.Schema = _schema;
                 x.Query = request.Query;
-                x.Inputs = request.Variables?.ToObject<Inputs>();
+                x.Inputs = request.Variables?.ToInputs();
                 x.ComplexityConfiguration = new ComplexityConfiguration {MaxDepth = 15};
             }).ConfigureAwait(false);
 

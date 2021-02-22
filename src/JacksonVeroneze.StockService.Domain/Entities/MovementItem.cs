@@ -8,6 +8,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public Movement Movement { get; private set; }
 
+        public MovementItem()
+        {
+        }
+
         public MovementItem(int amount, Movement movement)
         {
             Amount = amount;

@@ -11,6 +11,7 @@ using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
@@ -46,6 +47,10 @@ namespace JacksonVeroneze.StockService.Application.Services
         public async Task<IList<PurchaseDto>> FindAllAsync()
             => _mapper.Map<List<PurchaseDto>>(
                 await _purchaseRepository.FindAllAsync());
+
+        public async Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
+            => _mapper.Map<List<PurchaseDto>>(
+                await _purchaseRepository.FilterAsync(pagination, filter));
 
         public async Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data)
         {

@@ -9,6 +9,7 @@ namespace JacksonVeroneze.StockService.Data.Util
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
+        protected int LimitDefault = 30;
         public IUnitOfWork UnitOfWork { get; set; }
 
         protected readonly DatabaseContext _context;
