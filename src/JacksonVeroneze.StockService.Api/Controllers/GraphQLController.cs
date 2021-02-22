@@ -29,7 +29,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] GraphQLQuery request)
+        public async Task<IActionResult> PostAsync([FromBody] GraphQLQuery request)
         {
             ExecutionResult result = await _documentExecutor.ExecuteAsync(x =>
             {

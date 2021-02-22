@@ -11,6 +11,8 @@ namespace JacksonVeroneze.StockService.Api.Graphql.Schema.PurchaseSchema
             Description = "Purchase Filter Type";
 
             Field(x => x.Description, true);
+            Field(x => x.DateInitial, true);
+            Field(x => x.DateEnd, true);
         }
     }
 }

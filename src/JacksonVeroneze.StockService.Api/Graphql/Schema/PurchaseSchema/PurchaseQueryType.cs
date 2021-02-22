@@ -1,6 +1,7 @@
 using System;
 using GraphQL;
 using GraphQL.Types;
+using JacksonVeroneze.StockService.Api.Graphql.Schema.CommonSchema;
 using JacksonVeroneze.StockService.Api.Graphql.Schema.Util;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Domain.Filters;
@@ -17,7 +18,7 @@ namespace JacksonVeroneze.StockService.Api.Graphql.Schema.PurchaseSchema
             Field<ListGraphType<PurchaseType>>(
                 "allPurchases",
                 arguments: new QueryArguments(
-                    new QueryArgument<PurchasePaginateInputType> {Name = Constants.Paginate},
+                    new QueryArgument<CommonPaginateInputType> {Name = Constants.Paginate},
                     new QueryArgument<PurchaseFilterInputType> {Name = Constants.Filter}
                 ),
                 resolve: context =>

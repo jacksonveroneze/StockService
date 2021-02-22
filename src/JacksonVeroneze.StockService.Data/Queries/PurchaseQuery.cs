@@ -13,12 +13,13 @@ namespace JacksonVeroneze.StockService.Data.Queries
             Expression<Func<Purchase, bool>> expression = order => true;
 
             if (!string.IsNullOrEmpty(filter.Description))
-            {
-                Expression<Func<Purchase, bool>> expressionDescription =
-                    x => x.Description.Contains(filter.Description);
+                expression = expression.And(x => x.Description.Contains(filter.Description));
 
-                expression = expression.And(expressionDescription);
-            }
+            if (filter.DateInitial.HasValue)
+                expression = expression.And(x => x.Date >= filter.DateInitial);
+
+            if (filter.DateEnd.HasValue)
+                expression = expression.And(x => x.Date <= filter.DateEnd);
 
             return expression;
         }
