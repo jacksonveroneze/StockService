@@ -30,8 +30,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             services.AddTransient<PurchaseQueryType>();
             services.AddTransient<PurchaseType>();
 
-            services
-                .AddGraphQL((options, provider) =>
+            services.AddGraphQL((options, provider) =>
                 {
                     options.EnableMetrics = false;
                     var logger = provider.GetRequiredService<ILogger<Startup>>();
