@@ -42,8 +42,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseCors(CorsPolicyName)
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseSwaggerSetup()
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                .UseGraphQLSetup();
 
             return app;
         }
