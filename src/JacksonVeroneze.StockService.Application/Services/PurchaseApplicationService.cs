@@ -44,10 +44,6 @@ namespace JacksonVeroneze.StockService.Application.Services
             => _mapper.Map<PurchaseDto>(
                 await _purchaseRepository.FindAsync(id));
 
-        public async Task<IList<PurchaseDto>> FindAllAsync()
-            => _mapper.Map<List<PurchaseDto>>(
-                await _purchaseRepository.FindAllAsync());
-
         public async Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
             => _mapper.Map<List<PurchaseDto>>(
                 await _purchaseRepository.FilterAsync(pagination, filter));

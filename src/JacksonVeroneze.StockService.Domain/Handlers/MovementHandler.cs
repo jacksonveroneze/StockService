@@ -30,13 +30,36 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 
             foreach (PurchaseItem purchaseItem in purchase.Items)
             {
-                Movement movement = await _movementRepository.FindByProductIdAsync(purchaseItem.Product.Id);
+                Movement movement = await SearchMovement(purchaseItem.Product);
 
-                if (movement is null)
-                    await _movementRepository.AddAsync(new Movement(purchaseItem.Product));
+                MovementItem movementItem = FactoryMovementItem(purchaseItem.Amount, movement);
 
-                await _movementService.AddItemAsync(movement, new MovementItem(purchaseItem.Amount, movement));
+                await _movementService.AddItemAsync(movement, movementItem);
             }
         }
+
+        private async Task<Movement> SearchMovement(Product product)
+        {
+            Movement movement = await _movementRepository.FindByProductIdAsync(product.Id);
+
+            if (movement != null)
+                return movement;
+
+            return await CreateMovement(product);
+        }
+
+        private async Task<Movement> CreateMovement(Product product)
+        {
+            Movement movement = new Movement(product);
+
+            await _movementRepository.AddAsync(movement);
+
+            await _movementRepository.UnitOfWork.CommitAsync();
+
+            return movement;
+        }
+
+        private MovementItem FactoryMovementItem(int amount, Movement movement)
+            => new MovementItem(amount, movement);
     }
 }

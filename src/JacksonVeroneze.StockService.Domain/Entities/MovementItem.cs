@@ -6,7 +6,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
     {
         public int Amount { get; private set; }
 
-        public Movement Movement { get; private set; }
+        public virtual Movement Movement { get; private set; }
 
         public MovementItem()
         {

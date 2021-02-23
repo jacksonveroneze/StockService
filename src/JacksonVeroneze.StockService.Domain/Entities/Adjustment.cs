@@ -17,7 +17,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public decimal TotalValue { get; private set; }
 
         private readonly List<AdjustmentItem> _items = new List<AdjustmentItem>();
-        public IReadOnlyCollection<AdjustmentItem> Items => _items;
+        public virtual IReadOnlyCollection<AdjustmentItem> Items => _items;
 
         protected Adjustment()
         {

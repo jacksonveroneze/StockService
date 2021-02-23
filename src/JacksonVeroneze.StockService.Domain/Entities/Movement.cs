@@ -5,11 +5,11 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 {
     public class Movement : Entity, IAggregateRoot
     {
-        public Product Product { get; private set; }
+        public virtual Product Product { get; private set; }
 
         private readonly List<MovementItem> _items = new List<MovementItem>();
 
-        public IReadOnlyCollection<MovementItem> Items => _items;
+        public virtual IReadOnlyCollection<MovementItem> Items => _items;
 
         protected Movement()
         {

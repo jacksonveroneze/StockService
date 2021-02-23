@@ -12,6 +12,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
 
             builder.HasIndex(x => new {x.Description, x.IsActive}).IsUnique();
 
+            builder.Property(c => c.Id)
+                .ValueGeneratedNever();
+
             builder.Property(c => c.Description)
                 .HasMaxLength(100)
                 .IsRequired();

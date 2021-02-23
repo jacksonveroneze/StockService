@@ -8,9 +8,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public decimal Value { get; private set; }
 
-        public Purchase Purchase { get; private set; }
+        public virtual Purchase Purchase { get; private set; }
 
-        public Product Product { get; private set; }
+        public virtual Product Product { get; private set; }
 
         protected PurchaseItem()
         {

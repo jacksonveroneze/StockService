@@ -10,6 +10,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
         {
             builder.HasKey(c => c.Id);
 
+            builder.Property(c => c.Id)
+                .ValueGeneratedNever();
+            
             builder.Property(c => c.CreatedAt)
                 .IsRequired();
 

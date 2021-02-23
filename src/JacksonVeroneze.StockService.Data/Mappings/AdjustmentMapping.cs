@@ -10,6 +10,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
         {
             builder.HasKey(c => c.Id);
 
+            builder.Property(c => c.Id)
+                .ValueGeneratedNever();
+
             builder.Property(c => c.Description)
                 .HasMaxLength(100)
                 .IsRequired();
@@ -29,6 +32,8 @@ namespace JacksonVeroneze.StockService.Data.Mappings
 
             builder.Property(c => c.Version)
                 .IsRequired();
+
+            builder.Ignore(x => x.TotalValue);
         }
     }
 }

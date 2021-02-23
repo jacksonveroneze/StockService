@@ -15,7 +15,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     state = table.Column<int>(type: "int", nullable: false),
-                    total_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -34,7 +33,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     state = table.Column<int>(type: "int", nullable: false),
-                    total_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -70,7 +68,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     state = table.Column<int>(type: "int", nullable: false),
-                    total_value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -106,6 +103,28 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_adjustment_item_product_product_id",
+                        column: x => x.product_id,
+                        principalTable: "product",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "movement",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_movement", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_movement_product_product_id",
                         column: x => x.product_id,
                         principalTable: "product",
                         principalColumn: "id",
@@ -174,6 +193,29 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "movement_item",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    amount = table.Column<int>(type: "int", nullable: false),
+                    movement_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_movement_item", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_movement_item_movement_movement_id",
+                        column: x => x.movement_id,
+                        principalTable: "movement",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_adjustment_item_adjustment_id",
                 table: "adjustment_item",
@@ -183,6 +225,16 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 name: "ix_adjustment_item_product_id",
                 table: "adjustment_item",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_movement_product_id",
+                table: "movement",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_movement_item_movement_id",
+                table: "movement_item",
+                column: "movement_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_output_item_output_id",
@@ -217,6 +269,9 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 name: "adjustment_item");
 
             migrationBuilder.DropTable(
+                name: "movement_item");
+
+            migrationBuilder.DropTable(
                 name: "output_item");
 
             migrationBuilder.DropTable(
@@ -226,13 +281,16 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 name: "adjustment");
 
             migrationBuilder.DropTable(
+                name: "movement");
+
+            migrationBuilder.DropTable(
                 name: "output");
 
             migrationBuilder.DropTable(
-                name: "product");
+                name: "purchase");
 
             migrationBuilder.DropTable(
-                name: "purchase");
+                name: "product");
         }
     }
 }

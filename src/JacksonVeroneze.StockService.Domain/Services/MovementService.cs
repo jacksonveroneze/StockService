@@ -12,6 +12,13 @@ namespace JacksonVeroneze.StockService.Domain.Services
         public MovementService(IMovementRepository repository)
             => _repository = repository;
 
-        public Task AddItemAsync(Movement movement, MovementItem item) => throw new System.NotImplementedException();
+        public async Task AddItemAsync(Movement movement, MovementItem item)
+        {
+            movement.AddItem(item);
+
+            _repository.Update(movement);
+
+            await _repository.UnitOfWork.CommitAsync();
+        }
     }
 }

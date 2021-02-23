@@ -33,7 +33,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCultureSetup()
-                .UseHealthChecks("/health")
+                .UseHealthChecksSetup()
+                .UseHealthChecksUISetup()
                 .UseMetricServer()
                 .UseHttpMetrics()
                 .UseSerilogRequestLogging()
@@ -42,7 +43,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseCors(CorsPolicyName)
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseGraphQLSetup();
+                .UseGraphQLSetup()
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             return app;
         }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JacksonVeroneze.StockService.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210219105012_Initial")]
+    [Migration("20210223110901_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Adjustment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -50,10 +49,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("state");
 
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_value");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
@@ -71,7 +66,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.AdjustmentItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -119,10 +113,83 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     b.ToTable("adjustment_item");
                 });
 
+            modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Movement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("product_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
+
+                    b.HasKey("Id")
+                        .HasName("pk_movement");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_movement_product_id");
+
+                    b.ToTable("movement");
+                });
+
+            modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.MovementItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int")
+                        .HasColumnName("amount");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<Guid>("MovementId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("movement_id");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
+
+                    b.HasKey("Id")
+                        .HasName("pk_movement_item");
+
+                    b.HasIndex("MovementId")
+                        .HasDatabaseName("ix_movement_item_movement_id");
+
+                    b.ToTable("movement_item");
+                });
+
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Output", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -148,10 +215,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("state");
 
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_value");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
@@ -169,7 +232,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.OutputItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -220,7 +282,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -263,7 +324,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Purchase", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -289,10 +349,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("state");
 
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("total_value");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
                         .HasColumnName("updated_at");
@@ -310,7 +366,6 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.PurchaseItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("id");
 
@@ -379,6 +434,30 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Movement", b =>
+                {
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Product", "Product")
+                        .WithMany("ItemsMovement")
+                        .HasForeignKey("ProductId")
+                        .HasConstraintName("fk_movement_product_product_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.MovementItem", b =>
+                {
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Movement", "Movement")
+                        .WithMany("Items")
+                        .HasForeignKey("MovementId")
+                        .HasConstraintName("fk_movement_item_movement_movement_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Movement");
+                });
+
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.OutputItem", b =>
                 {
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Output", "Output")
@@ -426,6 +505,11 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Movement", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Output", b =>
                 {
                     b.Navigation("Items");
@@ -434,6 +518,8 @@ namespace JacksonVeroneze.StockService.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Product", b =>
                 {
                     b.Navigation("ItemsAdjustment");
+
+                    b.Navigation("ItemsMovement");
 
                     b.Navigation("ItemsOutput");
 
