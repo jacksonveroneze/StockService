@@ -12,7 +12,6 @@ env:
 jobs:               
     GenetateDocker:
         runs-on: Ubuntu-20.04
-        needs: test
 
         steps:
             - name: Build and push
