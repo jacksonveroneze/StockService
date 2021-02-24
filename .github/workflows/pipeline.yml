@@ -143,6 +143,7 @@ jobs:
 
     GenetateDocker:
         runs-on: Ubuntu-20.04
+        needs: test
 
         steps:
             - uses: actions/checkout@v2
