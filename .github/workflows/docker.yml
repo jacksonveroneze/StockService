@@ -14,9 +14,13 @@ jobs:
         runs-on: Ubuntu-20.04
 
         steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - uses: wagoid/commitlint-github-action@v2
+            
             - name: Build and push
               run: |
-                cd ..
                 echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
                 docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
