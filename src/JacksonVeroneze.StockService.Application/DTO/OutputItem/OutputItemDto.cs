@@ -1,5 +1,4 @@
-using JacksonVeroneze.StockService.Application.DTO.Output;
-using JacksonVeroneze.StockService.Application.DTO.Product;
+using System;
 
 namespace JacksonVeroneze.StockService.Application.DTO.OutputItem
 {
@@ -9,8 +8,8 @@ namespace JacksonVeroneze.StockService.Application.DTO.OutputItem
 
         public decimal Value { get; set; }
 
-        public OutputDto Purchase { get; set; }
+        public Guid OutputId { get; set; }
 
-        public ProductDto Product { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

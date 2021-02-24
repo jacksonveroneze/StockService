@@ -31,8 +31,14 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<Output, OutputDto>();
             CreateMap<Purchase, PurchaseDto>();
 
-            CreateMap<AdjustmentItem, AdjustmentItemDto>();
-            CreateMap<OutputItem, OutputItemDto>();
+            CreateMap<AdjustmentItem, AdjustmentItemDto>()
+                .ForMember(x => x.AdjustmentId, f => f.MapFrom(x => x.Adjustment.Id))
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+
+            CreateMap<OutputItem, OutputItemDto>()
+                .ForMember(x => x.OutputId, f => f.MapFrom(x => x.Output.Id))
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+
             CreateMap<PurchaseItem, PurchaseItemDto>()
                 .ForMember(x => x.PurchaseId, f => f.MapFrom(x => x.Purchase.Id))
                 .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));

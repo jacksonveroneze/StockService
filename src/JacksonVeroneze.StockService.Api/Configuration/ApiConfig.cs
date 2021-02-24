@@ -20,7 +20,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddDatabaseConfiguration(configuration)
                 .AddAutoMediatRConfiguration()
                 .AddDependencyInjectionConfiguration()
-                .AddGraphQLConfiguration()
                 .AddSwaggerConfiguration()
                 .AddApplicationInsightsConfiguration(configuration)
                 .AddAuthenticationConfiguration(configuration)
@@ -42,7 +41,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseCors(CorsPolicyName)
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseGraphQLSetup()
                 .UseSwaggerSetup()
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

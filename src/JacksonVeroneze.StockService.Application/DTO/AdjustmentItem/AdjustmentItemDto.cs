@@ -1,5 +1,4 @@
-using JacksonVeroneze.StockService.Application.DTO.Adjustment;
-using JacksonVeroneze.StockService.Application.DTO.Product;
+using System;
 
 namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
 {
@@ -9,8 +8,8 @@ namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
 
         public decimal Value { get; set; }
 
-        public AdjustmentDto Adjustment { get; set; }
+        public Guid AdjustmentId { get; set; }
 
-        public ProductDto Product { get; set; }
+        public Guid ProductId { get; set; }
     }
 }
