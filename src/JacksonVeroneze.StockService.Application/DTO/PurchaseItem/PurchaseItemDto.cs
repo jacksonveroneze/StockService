@@ -1,6 +1,4 @@
 using System;
-using JacksonVeroneze.StockService.Application.DTO.Product;
-using JacksonVeroneze.StockService.Application.DTO.Purchase;
 
 namespace JacksonVeroneze.StockService.Application.DTO.PurchaseItem
 {
@@ -12,8 +10,8 @@ namespace JacksonVeroneze.StockService.Application.DTO.PurchaseItem
 
         public decimal Value { get; set; }
 
-        public PurchaseDto Purchase { get; set; }
+        public Guid PurchaseId { get; set; }
 
-        public ProductDto Product { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

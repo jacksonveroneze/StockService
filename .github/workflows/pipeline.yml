@@ -114,7 +114,7 @@ jobs:
 
                   ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
-    Deploy Azure:
+    DeployAzure:
         runs-on: Ubuntu-20.04
         needs: test
 
