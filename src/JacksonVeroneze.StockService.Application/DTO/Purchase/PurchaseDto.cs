@@ -11,8 +11,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Purchase
 
         public DateTime Date { get; set; }
 
-        public decimal TotalValue { get; set; }
-
         public PurchaseStateEnum State { get; set; }
     }
 }

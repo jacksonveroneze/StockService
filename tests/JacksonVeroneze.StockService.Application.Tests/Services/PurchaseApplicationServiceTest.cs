@@ -17,6 +17,7 @@ using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
@@ -60,7 +61,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             FactoryService();
 
             // Act
-            IList<PurchaseDto> listPurchaseDto = await _purchaseApplicationService.FindAllAsync();
+            IList<PurchaseDto> listPurchaseDto = await _purchaseApplicationService.FilterAsync(new Pagination(), new PurchaseFilter());
 
             // Assert
             listPurchaseDto.Should().NotBeNull();

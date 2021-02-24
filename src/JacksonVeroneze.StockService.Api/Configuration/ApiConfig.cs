@@ -1,6 +1,5 @@
 using JacksonVeroneze.StockService.Api.Middlewares;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
@@ -30,7 +29,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app, IWebHostEnvironment env)
+        public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app)
         {
             app.UseCultureSetup()
                 .UseHealthChecksSetup()
@@ -44,6 +43,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseCors(CorsPolicyName)
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseGraphQLSetup()
+                .UseSwaggerSetup()
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             return app;

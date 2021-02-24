@@ -82,7 +82,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         }
 
         public PurchaseItem FindItemById(Guid id)
-            => _items.FirstOrDefault(x => x.Id == id);
+            => Items.FirstOrDefault(x => x.Id == id);
 
         public void ValidateExistsItem(PurchaseItem item)
         {
@@ -97,10 +97,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         }
 
         private void CalculateTotalValue()
-            => TotalValue = _items.Sum(x => x.CalculteValue());
+            => TotalValue = Items.Sum(x => x.CalculteValue());
 
         private bool ExistsItem(PurchaseItem item)
-            => _items.Any(x => x.Id == item.Id);
+            => Items.Any(x => x.Id == item.Id);
 
         private void Validate()
         {

@@ -115,12 +115,18 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            return _mapper.Map<PurchaseItemDto>(purchase.FindItemById(id));
+            if (purchase is null)
+                throw new DomainException("Registro não encontrado.");
+
+            return _mapper.Map<PurchaseItemDto>(purchase.FindItemById(itemId));
         }
 
         public async Task<IList<PurchaseItemDto>> FindItensAsync(Guid id)
         {
             Purchase purchase = await _purchaseRepository.FindAsync(id);
+
+            if (purchase is null)
+                throw new DomainException("Registro não encontrado.");
 
             return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
         }
