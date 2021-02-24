@@ -139,3 +139,16 @@ jobs:
                   slot-name: 'production'
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
                   package: ${{env.DOTNET_ROOT}}/myapp
+                  
+
+    GenetateDocker:
+        runs-on: Ubuntu-20.04
+        needs: test
+
+        steps:
+            - name: Build and push
+              run: |
+                echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
+                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
+                
