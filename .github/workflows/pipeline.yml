@@ -57,9 +57,6 @@ jobs:
             - name: Build
               run: dotnet build --no-restore
 
-#            - name: Test
-#              run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
-
     sonar:
         name: Run Sonar
         runs-on: Ubuntu-20.04

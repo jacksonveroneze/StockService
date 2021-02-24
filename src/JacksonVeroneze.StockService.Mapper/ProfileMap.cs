@@ -17,8 +17,6 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<AddOrUpdateProductDto, Product>()
                 .ConstructUsing(x => new Product(x.Description));
 
-            CreateMap<Product, ProductDto>();
-
             CreateMap<AddOrUpdateAdjustmentDto, Adjustment>()
                 .ConstructUsing(x => new Adjustment(x.Description, x.Date));
 
@@ -28,6 +26,7 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<AddOrUpdatePurchaseDto, Purchase>()
                 .ConstructUsing(x => new Purchase(x.Description, x.Date));
 
+            CreateMap<Product, ProductDto>();
             CreateMap<Adjustment, AdjustmentDto>();
             CreateMap<Output, OutputDto>();
             CreateMap<Purchase, PurchaseDto>();
