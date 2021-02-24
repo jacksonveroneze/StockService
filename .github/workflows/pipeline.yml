@@ -114,7 +114,8 @@ jobs:
 
                   ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
-    DeployAzure:
+    deployAzure:
+        name: Deploy Azure
         runs-on: Ubuntu-20.04
         needs: test
 
@@ -141,7 +142,8 @@ jobs:
                   package: ${{env.DOTNET_ROOT}}/myapp
                   
 
-    GenetateDocker:
+    gnetateDocker:
+        name: Generate docker image
         runs-on: Ubuntu-20.04
         needs: test
 
@@ -153,5 +155,5 @@ jobs:
             - name: Build and push
               run: |
                 echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
-                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.1
+                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
+                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
