@@ -158,7 +158,7 @@ jobs:
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
 
     deployDigitalOcean:
-        name: deployDigitalOcean
+        name: Deploy Digitalocean
         runs-on: Ubuntu-20.04
         needs: genetateDocker
 
