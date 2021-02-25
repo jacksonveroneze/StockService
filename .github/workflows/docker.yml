@@ -17,8 +17,14 @@ jobs:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
-                          
-            - name: executing remote ssh commands using password
+
+            - name: Build and push
+              run: |
+                echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
+                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
+
+            - name: Update in DigitalOcen
               uses: appleboy/ssh-action@master
               with:
                 host: ${{ secrets.SSH_HOST }}
