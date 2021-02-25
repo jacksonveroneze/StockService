@@ -15,7 +15,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         {
             services.AddRouting(options => options.LowercaseUrls = true)
                 .AddCorsConfiguration(CorsPolicyName)
-                .HealthChecksConfiguration()
+                //.HealthChecksConfiguration()
                 .AddAutoMapperConfiguration()
                 .AddDatabaseConfiguration(configuration)
                 .AddAutoMediatRConfiguration()
@@ -31,8 +31,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app)
         {
             app.UseCultureSetup()
-                .UseHealthChecksSetup()
-                .UseHealthChecksUISetup()
+                //.UseHealthChecksSetup()
+                //.UseHealthChecksUISetup()
                 .UseMetricServer()
                 .UseHttpMetrics()
                 .UseSerilogRequestLogging()
