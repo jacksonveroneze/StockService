@@ -30,6 +30,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app)
         {
+            app.UseDeveloperExceptionPage();
+
             app.UseCultureSetup()
                 //.UseHealthChecksSetup()
                 //.UseHealthChecksUISetup()
@@ -40,7 +42,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseCors(CorsPolicyName)
-                .UseMiddleware<ErrorHandlingMiddleware>()
+                //.UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerSetup()
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
