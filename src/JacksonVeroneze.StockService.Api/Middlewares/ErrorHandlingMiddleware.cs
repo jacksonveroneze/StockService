@@ -1,9 +1,9 @@
 using System;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace JacksonVeroneze.StockService.Api.Middlewares
 {
@@ -26,7 +26,7 @@ namespace JacksonVeroneze.StockService.Api.Middlewares
             }
             catch (Exception e)
             {
-                string result = JsonConvert.SerializeObject(new {error = e.Message, trace = e.StackTrace});
+                string result = JsonSerializer.Serialize(new {error = e.Message, trace = e.StackTrace});
 
                 context.Response.ContentType = "application/json";
 
