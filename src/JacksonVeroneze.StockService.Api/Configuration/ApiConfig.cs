@@ -2,7 +2,6 @@ using JacksonVeroneze.StockService.Api.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Prometheus;
 using Serilog;
 
@@ -16,7 +15,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         {
             services.AddRouting(options => options.LowercaseUrls = true)
                 .AddCorsConfiguration(CorsPolicyName)
-                //.HealthChecksConfiguration()
+                .HealthChecksConfiguration()
                 .AddAutoMapperConfiguration()
                 .AddDatabaseConfiguration(configuration)
                 .AddAutoMediatRConfiguration()
@@ -31,11 +30,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app)
         {
-            //app.UseDeveloperExceptionPage();
-
             app.UseCultureSetup()
-                //.UseHealthChecksSetup()
-                //.UseHealthChecksUISetup()
+                .UseHealthChecksSetup()
                 .UseMetricServer()
                 .UseHttpMetrics()
                 .UseSerilogRequestLogging()

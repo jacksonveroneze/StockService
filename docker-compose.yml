@@ -11,6 +11,7 @@ services:
             - ASPNETCORE_URLS=http://+:80
             - DOTNET_RUNNING_IN_CONTAINER=true
             - ASPNETCORE_ENVIRONMENT=Docker
+            - STOCK_CONFIG_CONNECION_STRING=""
         healthcheck:
             test: [ "CMD", "curl --fail http://localhost:8080/healh || exit 1" ]
             interval: 10s
