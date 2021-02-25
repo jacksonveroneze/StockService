@@ -141,8 +141,7 @@ jobs:
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
                   package: ${{env.DOTNET_ROOT}}/myapp
                   
-
-    gnetateDocker:
+    genetateDocker:
         name: Generate docker image
         runs-on: Ubuntu-20.04
         needs: test
@@ -157,3 +156,23 @@ jobs:
                 echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
                 docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
+
+    deployDigitalOcean:
+        name: deployDigitalOcean
+        runs-on: Ubuntu-20.04
+        needs: genetateDocker
+
+        steps:
+            - name: Update in DigitalOcen
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.SSH_HOST }}
+                username: ${{ secrets.SSH_USERNAME }}
+                key: ${{ secrets.SSH_KEY }}
+                port: ${{ secrets.SSH_PORT }}
+                script: |
+                    docker-compose pull
+                    docker-compose up -d
+                
+                
+                
