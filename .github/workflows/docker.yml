@@ -26,6 +26,5 @@ jobs:
                 key: ${{ secrets.SSH_KEY }}
                 port: ${{ secrets.SSH_PORT }}
                 script: |
-                    echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
                     docker-compose pull
                     docker-compose up -d
