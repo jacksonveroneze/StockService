@@ -211,9 +211,11 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             AddOrUpdatePurchaseItemDto addOrUpdatePurchaseItemDto =
                 AddOrUpdatePurchaseItemDtoFaker.GenerateValidFaker().Generate();
 
+            throw new Exception("TODO");
+
             // Act
             ApplicationDataResult<PurchaseItemDto> result =
-                await _purchaseApplicationService.AddItemAsync(addOrUpdatePurchaseItemDto);
+                await _purchaseApplicationService.AddItemAsync(addOrUpdatePurchaseItemDto.PurchaseId, addOrUpdatePurchaseItemDto);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
