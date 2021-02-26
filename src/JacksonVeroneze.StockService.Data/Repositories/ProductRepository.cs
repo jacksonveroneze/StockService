@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Data.Queries;
 using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
@@ -17,13 +16,12 @@ namespace JacksonVeroneze.StockService.Data.Repositories
         {
         }
 
-        public Task<List<Product>> FilterAsync(ProductFilter filter)
+        public Task<List<Product>> FilterAsync(Pagination pagination, ProductFilter filter)
         {
-            Expression<Func<Product, bool>> expression =
-                x => x.Description.Contains(filter.Description);
-
             return _context.Set<Product>()
-                .Where(expression)
+                .AsNoTracking()
+                .Where(ProductQuery.GetQuery(filter))
+                .ConfigureSkipTakeFromPagination<Product>(pagination)
                 .ToListAsync();
         }
     }

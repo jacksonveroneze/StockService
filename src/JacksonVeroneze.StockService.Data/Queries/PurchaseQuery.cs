@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using JacksonVeroneze.StockService.Data.Util;
+using JacksonVeroneze.StockService.Domain;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 
@@ -14,6 +15,10 @@ namespace JacksonVeroneze.StockService.Data.Queries
 
             if (!string.IsNullOrEmpty(filter.Description))
                 expression = expression.And(x => x.Description.Contains(filter.Description));
+
+            if (filter.State.HasValue)
+                expression = expression.And(x => x.State == (PurchaseStateEnum)Enum.Parse(typeof(PurchaseStateEnum),
+                    filter.State.ToString()));
 
             if (filter.DateInitial.HasValue)
                 expression = expression.And(x => x.Date >= filter.DateInitial);

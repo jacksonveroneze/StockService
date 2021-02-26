@@ -42,7 +42,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             output.RemoveItem(item);
 
-            _repository.Remove(output);
+            _repository.Update(output);
 
             if (await _repository.UnitOfWork.CommitAsync())
                 await _busHandler.PublishDomainEvent(new OutputItemRemoved(item.Id));

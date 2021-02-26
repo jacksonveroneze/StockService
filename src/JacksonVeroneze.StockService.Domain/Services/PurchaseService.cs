@@ -42,7 +42,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             purchase.RemoveItem(item);
 
-            _repository.Remove(purchase);
+            _repository.Update(purchase);
 
             if (await _repository.UnitOfWork.CommitAsync())
                 await _busHandler.PublishDomainEvent(new PurchaseItemRemoved(item.Id));

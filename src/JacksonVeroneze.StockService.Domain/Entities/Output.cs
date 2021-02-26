@@ -60,7 +60,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
             ValidateExistsItem(item);
 
-            _items.Remove(item);
+            item.SetDeletedAt();
 
             CalculateTotalValue();
         }

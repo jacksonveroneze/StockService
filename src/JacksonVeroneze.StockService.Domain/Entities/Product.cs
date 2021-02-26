@@ -30,9 +30,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
-        public void UpdateDescription(string description)
+        public void Update(string description, bool isActive)
         {
             Description = description;
+            IsActive = isActive;
 
             Validate();
         }

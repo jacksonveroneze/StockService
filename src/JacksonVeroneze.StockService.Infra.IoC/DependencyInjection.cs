@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using JacksonVeroneze.StockService.Application.DTO.Product;
+using JacksonVeroneze.StockService.Application.DTO.Product.Validations;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.Purchase.Validations;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
@@ -39,6 +41,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IMovementService, MovementService>();
 
             // Validations
+            services.AddScoped<IValidator<AddOrUpdateProductDto>, AddOrUpdateProductDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseDto>, AddOrUpdatePurchaseDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseItemDto>, AddOrUpdatePurchaseItemDtoValidator>();
 

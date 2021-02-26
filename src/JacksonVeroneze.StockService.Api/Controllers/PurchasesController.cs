@@ -9,23 +9,18 @@ using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
     [ApiController]
     [Authorize]
     [Route("[controller]")]
-    public class PurchasesController : ControllerBase
+    public class PurchasesController : Controller
     {
-        private readonly ILogger<PurchasesController> _logger;
         private readonly IPurchaseApplicationService _applicationService;
 
-        public PurchasesController(ILogger<PurchasesController> logger, IPurchaseApplicationService applicationService)
-        {
-            _logger = logger;
-            _applicationService = applicationService;
-        }
+        public PurchasesController(IPurchaseApplicationService applicationService)
+            => _applicationService = applicationService;
 
         //
         // Summary:
@@ -34,7 +29,9 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<PurchaseDto>>> Filter([FromQuery] Pagination pagination, [FromQuery] PurchaseFilter filter)
+        public async Task<ActionResult<IEnumerable<PurchaseDto>>> Filter(
+            [FromQuery] Pagination pagination,
+            [FromQuery] PurchaseFilter filter)
             => Ok(await _applicationService.FilterAsync(pagination, filter));
 
         //
@@ -53,7 +50,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         //
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
         public async Task<ActionResult<PurchaseDto>> Add([FromBody] AddOrUpdatePurchaseDto purchaseDto)
         {
             ApplicationDataResult<PurchaseDto> result = await _applicationService.AddAsync(purchaseDto);
@@ -69,7 +66,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         //     /// Method responsible for action: Delete. ///
         //
         [HttpDelete("{id}")]
-        [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -83,7 +79,6 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         //     /// Method responsible for action: Close. ///
         //
         [HttpPut("{id}/close")]
-        [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<IActionResult> Close(Guid id)
         {
@@ -100,11 +95,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<IActionResult> FindItems(Guid id)
-        {
-            IList<PurchaseItemDto> result = await _applicationService.FindItensAsync(id);
-
-            return Ok(result);
-        }
+            => Ok(await _applicationService.FindItensAsync(id));
 
         //
         // Summary:
@@ -125,19 +116,54 @@ namespace JacksonVeroneze.StockService.Api.Controllers
 
         //
         // Summary:
-        //     /// Method responsible for action: Add. ///
+        //     /// Method responsible for action: AddItem. ///
         //
         [HttpPost("{id}/items")]
         [Produces(MediaTypeNames.Application.Json)]
-        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
-        public async Task<ActionResult<PurchaseDto>> AddItem([FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
+        public async Task<ActionResult<PurchaseDto>> AddItem(Guid id,
+            [FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
-            ApplicationDataResult<PurchaseItemDto> result = await _applicationService.AddItemAsync(purchaseItemDto);
+            ApplicationDataResult<PurchaseItemDto> result =
+                await _applicationService.AddItemAsync(id, purchaseItemDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
 
-            return CreatedAtAction(nameof(Find), new {id = result.Data.Id}, result.Data);
+            return CreatedAtAction(nameof(FindItem),
+                new {id = result.Data.PurchaseId, idItem = result.Data.Id}, result.Data);
+        }
+
+        //
+        // Summary:
+        //     /// Method responsible for action: AddItem. ///
+        //
+        [HttpPut("{id}/items/{idItem}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
+        public async Task<ActionResult<PurchaseDto>> UpdateItem(Guid id, Guid idItem,
+            [FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
+        {
+            ApplicationDataResult<PurchaseItemDto> result =
+                await _applicationService.UpdateItemAsync(id, idItem, purchaseItemDto);
+
+            if (!result.IsSuccess)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Data);
+        }
+
+        //
+        // Summary:
+        //     /// Method responsible for action: AddItem. ///
+        //
+        [HttpDelete("{id}/items/{idItem}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
+        public async Task<ActionResult> RemoveItem(Guid id, Guid idItem)
+        {
+            await _applicationService.RemoveItemAsync(id, idItem);
+
+            return NoContent();
         }
     }
 }

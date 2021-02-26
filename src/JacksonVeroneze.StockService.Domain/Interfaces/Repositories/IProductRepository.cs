@@ -8,6 +8,6 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<List<Product>> FilterAsync(ProductFilter filter);
+        Task<List<Product>> FilterAsync(Pagination pagination, ProductFilter filter);
     }
 }

@@ -28,9 +28,9 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 
         Task<IList<PurchaseItemDto>> FindItensAsync(Guid id);
 
-        Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(AddOrUpdatePurchaseItemDto data);
+        Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto data);
 
-        Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(AddOrUpdatePurchaseItemDto data);
+        Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, Guid idItem, AddOrUpdatePurchaseItemDto data);
 
         Task RemoveItemAsync(Guid id, Guid itemId);
     }

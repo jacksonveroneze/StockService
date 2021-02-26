@@ -9,7 +9,7 @@ on:
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-jobs:               
+jobs:
     GenetateDocker:
         runs-on: Ubuntu-20.04
 
@@ -21,8 +21,8 @@ jobs:
             - name: Build and push
               run: |
                 echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
-                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:master
+                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
 
             - name: Update in DigitalOcen
               uses: appleboy/ssh-action@master

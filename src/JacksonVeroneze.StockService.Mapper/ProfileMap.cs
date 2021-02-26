@@ -15,15 +15,19 @@ namespace JacksonVeroneze.StockService.Mapper
         public ProfileMapStock()
         {
             CreateMap<AddOrUpdateProductDto, Product>()
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
                 .ConstructUsing(x => new Product(x.Description));
 
             CreateMap<AddOrUpdateAdjustmentDto, Adjustment>()
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
                 .ConstructUsing(x => new Adjustment(x.Description, x.Date));
 
             CreateMap<AddOrUpdateOutputDto, Output>()
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
                 .ConstructUsing(x => new Output(x.Description, x.Date));
 
             CreateMap<AddOrUpdatePurchaseDto, Purchase>()
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
                 .ConstructUsing(x => new Purchase(x.Description, x.Date));
 
             CreateMap<Product, ProductDto>();

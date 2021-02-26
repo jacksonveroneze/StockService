@@ -41,8 +41,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         }
 
         public async Task<PurchaseDto> FindAsync(Guid id)
-            => _mapper.Map<PurchaseDto>(
-                await _purchaseRepository.FindAsync(id));
+            => _mapper.Map<PurchaseDto>(await _purchaseRepository.FindAsync(id));
 
         public async Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
             => _mapper.Map<List<PurchaseDto>>(
@@ -77,7 +76,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             purchase.Update(data.Description, data.Date);
 
@@ -94,7 +93,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             _purchaseRepository.Remove(purchase);
 
@@ -106,7 +105,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             await _purchaseService.CloseAsync(purchase);
         }
@@ -116,7 +115,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             return _mapper.Map<PurchaseItemDto>(purchase.FindItemById(itemId));
         }
@@ -126,12 +125,12 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(AddOrUpdatePurchaseItemDto data)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid id, AddOrUpdatePurchaseItemDto data)
         {
             ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
@@ -139,7 +138,7 @@ namespace JacksonVeroneze.StockService.Application.Services
                 return new ApplicationDataResult<PurchaseItemDto>(
                     validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Purchase purchase = await _purchaseRepository.FindAsync(data.PurchaseId);
+            Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             Product product = await _productRepository.FindAsync(data.ProductId);
 
@@ -151,7 +150,8 @@ namespace JacksonVeroneze.StockService.Application.Services
                 _mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
-        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(AddOrUpdatePurchaseItemDto data)
+        public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid id, Guid itemId,
+            AddOrUpdatePurchaseItemDto data)
         {
             ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
@@ -159,9 +159,16 @@ namespace JacksonVeroneze.StockService.Application.Services
                 return new ApplicationDataResult<PurchaseItemDto>(
                     validationResult.Errors.Select(x => x.ErrorMessage));
 
-            Purchase purchase = await _purchaseRepository.FindAsync(data.PurchaseId);
+            Purchase purchase = await _purchaseRepository.FindAsync(id);
 
-            PurchaseItem purchaseItem = _mapper.Map<PurchaseItem>(data);
+            PurchaseItem purchaseItem = purchase.FindItemById(itemId);
+
+            if (purchaseItem is null)
+                throw new DomainException(Messages.ItemNotFound);
+
+            Product product = await _productRepository.FindAsync(data.ProductId);
+
+            purchaseItem.Update(data.Amount, data.Value, product);
 
             await _purchaseService.UpdateItemAsync(purchase, purchaseItem);
 
@@ -174,12 +181,12 @@ namespace JacksonVeroneze.StockService.Application.Services
             Purchase purchase = await _purchaseRepository.FindAsync(id);
 
             if (purchase is null)
-                throw new DomainException("Registro pai não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
-            PurchaseItem purchaseItem = purchase.FindItemById(id);
+            PurchaseItem purchaseItem = purchase.FindItemById(itemId);
 
             if (purchaseItem is null)
-                throw new DomainException("Registro não encontrado.");
+                throw new DomainException(Messages.ItemNotFound);
 
             await _purchaseService.RemoveItemAsync(purchase, purchaseItem);
         }

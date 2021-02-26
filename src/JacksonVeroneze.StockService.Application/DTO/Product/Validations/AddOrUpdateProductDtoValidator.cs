@@ -7,7 +7,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Product.Validations
         public AddOrUpdateProductDtoValidator()
         {
             RuleFor(x => x.Description)
-                .NotEmpty()
                 .Length(1, 100);
         }
     }

@@ -6,13 +6,13 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 {
     public class Entity : EntityId
     {
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
-        public DateTime? UpdatedAt { get; set; } = null;
+        public DateTime? UpdatedAt { get; private set; } = null;
 
-        public DateTime? DeletedAt { get; set; } = null;
+        public DateTime? DeletedAt { get; private set; } = null;
 
-        public int Version { get; set; } = 1;
+        public int Version { get; private set; } = 1;
 
         private readonly List<Event> _notifications = new List<Event>();
 
@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
         public void ClearEvents()
             => _notifications.Clear();
 
-        public void IncrementVersion() => Version++;
+        public void SetDeletedAt() => DeletedAt = DateTime.Now;
 
         public override string ToString()
             => $"{GetType().Name}: Id: {Id}, CreatedAt: {CreatedAt}, " +
