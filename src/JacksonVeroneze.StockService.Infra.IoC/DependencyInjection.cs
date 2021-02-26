@@ -21,31 +21,46 @@ namespace JacksonVeroneze.StockService.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
-            // BusHandler
-            services.AddScoped<IBusHandler, BusHandler>();
+            RegisterServicesApplication(services);
+            RegisterServicesServices(services);
+            RegisterServicesRepositories(services);
+            RegisterServicesValidations(services);
+            RegisterServicesOthers(services);
+        }
 
-            // Application
+        private static void RegisterServicesApplication(IServiceCollection services)
+        {
             services.AddScoped<IProductApplicationService, ProductApplicationService>();
             services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
+        }
 
-            // Domain
+        private static void RegisterServicesServices(IServiceCollection services)
+        {
+            services.AddScoped<IAdjustmentService, AdjustmentService>();
+            services.AddScoped<IOutputService, OutputService>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IMovementService, MovementService>();
+        }
+
+        private static void RegisterServicesRepositories(IServiceCollection services)
+        {
             services.AddScoped<IAdjustmentRepository, AdjustmentRepository>();
             services.AddScoped<IOutputRepository, OutputRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IMovementRepository, MovementRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+        }
 
-            services.AddScoped<IAdjustmentService, AdjustmentService>();
-            services.AddScoped<IOutputService, OutputService>();
-            services.AddScoped<IPurchaseService, PurchaseService>();
-            services.AddScoped<IMovementService, MovementService>();
-
-            // Validations
+        private static void RegisterServicesValidations(IServiceCollection services)
+        {
             services.AddScoped<IValidator<AddOrUpdateProductDto>, AddOrUpdateProductDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseDto>, AddOrUpdatePurchaseDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseItemDto>, AddOrUpdatePurchaseItemDtoValidator>();
+        }
 
-            // Context
+        private static void RegisterServicesOthers(IServiceCollection services)
+        {
+            services.AddScoped<IBusHandler, BusHandler>();
             services.AddScoped<DatabaseContext>();
         }
     }

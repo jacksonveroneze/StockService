@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using JacksonVeroneze.StockService.Domain.Filters;
+using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Data.Util
 {

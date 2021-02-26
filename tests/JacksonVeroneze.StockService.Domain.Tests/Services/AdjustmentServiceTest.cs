@@ -8,6 +8,7 @@ using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
@@ -128,7 +129,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             _adjustmentService.CloseAsync(adjustment);
 
             // Assert
-            adjustment.State.Should().Be(AdjustmentStateEnum.Closed);
+            adjustment.State.Should().Be(AdjustmentState.Closed);
             adjustment.Items.Should().HaveCount(totalItens);
             adjustment.TotalValue.Should().Be(adjustmentItens.Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens + 1));

@@ -1,5 +1,6 @@
 using System;
 using JacksonVeroneze.StockService.Domain;
+using JacksonVeroneze.StockService.Domain.Enums;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Adjustment
 {
@@ -13,6 +14,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Adjustment
 
         public decimal TotalValue { get; set; }
 
-        public AdjustmentStateEnum State { get; set; }
+        public AdjustmentState State { get; set; }
     }
 }

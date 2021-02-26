@@ -1,4 +1,4 @@
-namespace JacksonVeroneze.StockService.Domain.Filters
+namespace JacksonVeroneze.StockService.Domain.Util
 {
     public class Pagination
     {

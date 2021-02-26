@@ -17,7 +17,9 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                     options
                         .UseSqlServer(connectionStringConf ??= connectionStringEnv)
                         .UseLazyLoadingProxies()
-                        .UseSnakeCaseNamingConvention());
+                        .UseSnakeCaseNamingConvention()
+                        .EnableDetailedErrors()
+                        .EnableSensitiveDataLogging());
         }
     }
 }

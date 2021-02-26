@@ -9,6 +9,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IApplicationBuilder UseCultureSetup(this IApplicationBuilder app)
         {
             CultureInfo[] supportedCultures = {new CultureInfo("pt-BR")};
+            
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("pt-BR", "pt-BR"),

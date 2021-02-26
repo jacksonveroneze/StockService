@@ -13,6 +13,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Docker
             - STOCK_CONFIG_CONNECION_STRING=
             - STOCK_CONFIG_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY=
+            - STOCK_CONFIG_URLS_ALLOW_CORS="*;"
         healthcheck:
             test: [ "CMD", "curl --fail http://api:8080/healh || exit 1" ]
             interval: 10s

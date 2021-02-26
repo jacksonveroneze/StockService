@@ -21,6 +21,7 @@ using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
+using JacksonVeroneze.StockService.Domain.Util;
 using JacksonVeroneze.StockService.Mapper;
 using Moq;
 using Xunit;

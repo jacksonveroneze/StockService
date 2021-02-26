@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
@@ -12,7 +13,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public DateTime Date { get; private set; }
 
-        public OutputStateEnum State { get; private set; } = OutputStateEnum.Open;
+        public OutputState State { get; private set; } = OutputState.Open;
 
         public decimal TotalValue { get; private set; }
 
@@ -60,17 +61,17 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
             ValidateExistsItem(item);
 
-            item.SetDeletedAt();
+            _items.Remove(item);
 
             CalculateTotalValue();
         }
 
         public void Close()
         {
-            if (State == OutputStateEnum.Closed)
+            if (State == OutputState.Closed)
                 throw new DomainException(Messages.RegisterClosed);
 
-            State = OutputStateEnum.Closed;
+            State = OutputState.Closed;
         }
 
         public OutputItem FindItemById(Guid id)
@@ -84,7 +85,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void ValidateOpenState()
         {
-            if (State == OutputStateEnum.Closed)
+            if (State == OutputState.Closed)
                 throw new DomainException(Messages.RegisterClosedNotMoviment);
         }
 

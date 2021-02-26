@@ -6,6 +6,7 @@ using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
+using JacksonVeroneze.StockService.Domain.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace JacksonVeroneze.StockService.Data.Repositories

@@ -14,6 +14,8 @@ using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
+using JacksonVeroneze.StockService.Domain.Util;
+using Messages = JacksonVeroneze.StockService.Application.Util.Messages;
 
 namespace JacksonVeroneze.StockService.Application.Services
 {

@@ -5,6 +5,7 @@ using FluentAssertions;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Enums;
 using Xunit;
 using UtilCommon = JacksonVeroneze.StockService.Common.Fakers.Util;
 
@@ -179,7 +180,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             purchase.Close();
 
             // Assert
-            purchase.State.Should().Be(PurchaseStateEnum.Closed);
+            purchase.State.Should().Be(PurchaseState.Closed);
         }
 
         [Fact(DisplayName = "DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado")]

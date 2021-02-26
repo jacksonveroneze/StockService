@@ -1,5 +1,6 @@
 using System;
 using JacksonVeroneze.StockService.Domain;
+using JacksonVeroneze.StockService.Domain.Enums;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Purchase
 {
@@ -11,6 +12,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Purchase
 
         public DateTime Date { get; set; }
 
-        public PurchaseStateEnum State { get; set; }
+        public PurchaseState State { get; set; }
     }
 }

@@ -39,8 +39,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
         public static IApplicationBuilder UseSwaggerSetup(this IApplicationBuilder app)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
-
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockService v1"));
 

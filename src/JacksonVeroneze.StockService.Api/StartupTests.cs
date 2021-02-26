@@ -6,12 +6,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace JacksonVeroneze.StockService.Api
 {
-    public class Startup
+    public class StartupTests
     {
         private IConfiguration Configuration { get; }
+
         private IHostEnvironment HostEnvironment { get; }
 
-        public Startup(IHostEnvironment hostEnvironment)
+        public StartupTests(IHostEnvironment hostEnvironment)
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(hostEnvironment.ContentRootPath)
@@ -25,9 +26,9 @@ namespace JacksonVeroneze.StockService.Api
         }
 
         public void ConfigureServices(IServiceCollection services)
-            => services.AddApiConfiguration(Configuration, HostEnvironment);
+            => services.AddApiConfigurationTests(Configuration, HostEnvironment);
 
         public void Configure(IApplicationBuilder app)
-            => app.UseApiConfiguration();
+            => app.UseApiConfigurationTests();
     }
 }

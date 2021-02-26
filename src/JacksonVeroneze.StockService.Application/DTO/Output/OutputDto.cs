@@ -1,5 +1,6 @@
 using System;
 using JacksonVeroneze.StockService.Domain;
+using JacksonVeroneze.StockService.Domain.Enums;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Output
 {
@@ -13,6 +14,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Output
 
         public decimal TotalValue { get; set; }
 
-        public OutputStateEnum State { get; set; }
+        public OutputState State { get; set; }
     }
 }
