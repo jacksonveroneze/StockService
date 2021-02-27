@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
@@ -68,9 +67,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (validationResult.IsValid is false)
                 return FactoryFromValidationResult<ProductDto>(validationResult);
 
-            Product result =
-                (await _productRepository.FilterAsync(new ProductFilter {Description = data.Description}))
-                .FirstOrDefault();
+            Product result = await _productRepository.FindAsync(new ProductFilter {Description = data.Description});
 
             if (result != null)
                 throw ExceptionsFactory.FactoryApplicationException(ErrorMessages.ProductFound);
@@ -104,9 +101,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (product is null)
                 throw ExceptionsFactory.FactoryNotFoundException<Product>(id);
 
-            Product result =
-                (await _productRepository.FilterAsync(new ProductFilter {Description = data.Description}))
-                .FirstOrDefault();
+            Product result = await _productRepository.FindAsync(new ProductFilter {Description = data.Description});
 
             if (result != null && result.Id != id)
                 throw ExceptionsFactory.FactoryApplicationException(ErrorMessages.ProductFound);

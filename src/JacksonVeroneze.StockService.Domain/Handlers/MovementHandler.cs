@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Domain.Entities;
@@ -80,8 +79,8 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 
         private async Task<Movement> SearchMovement(Product product)
         {
-            Movement movement = (await _movementRepository
-                .FilterAsync(new MovementFilter() {productId = product.Id})).FirstOrDefault();
+            Movement movement = await _movementRepository
+                .FindAsync(new MovementFilter() {productId = product.Id});
 
             if (movement != null)
                 return movement;

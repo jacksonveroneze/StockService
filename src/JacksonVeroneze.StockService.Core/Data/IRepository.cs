@@ -19,6 +19,8 @@ namespace JacksonVeroneze.StockService.Core.Data
 
         Task<T> FindAsync(Guid id);
 
+        Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>;
+
         Task<List<T>> FilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>;
 
         Task<List<T>> FilterAsync<TFilter>(Pagination pagination, TFilter filter) where TFilter : BaseFilter<T>;

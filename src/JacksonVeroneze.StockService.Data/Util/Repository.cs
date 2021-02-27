@@ -35,6 +35,10 @@ namespace JacksonVeroneze.StockService.Data.Util
         public Task<T> FindAsync(Guid id)
             => _context.Set<T>().SingleOrDefaultAsync(x => x.Id == id);
 
+        public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
+            => BuidQueryable(new Pagination(), filter)
+                .FirstOrDefaultAsync();
+
         public Task<List<T>> FilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)
                 .ToListAsync();
@@ -43,7 +47,8 @@ namespace JacksonVeroneze.StockService.Data.Util
             => BuidQueryable(pagination, filter)
                 .ToListAsync();
 
-        private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter) where TFilter : BaseFilter<T>
+        private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter)
+            where TFilter : BaseFilter<T>
         {
             return _context.Set<T>()
                 .AsNoTracking()
