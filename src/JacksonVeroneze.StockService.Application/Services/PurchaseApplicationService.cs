@@ -136,7 +136,13 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
+            if (purchase is null)
+                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
+
             Product product = await _productRepository.FindAsync(data.ProductId);
+
+            if (product is null)
+                throw ExceptionsFactory.FactoryNotFoundException<Product>(purchaseId);
 
             PurchaseItem purchaseItem = new(data.Amount, data.Value, purchase, product);
 
@@ -161,6 +167,9 @@ namespace JacksonVeroneze.StockService.Application.Services
                 throw ExceptionsFactory.FactoryNotFoundException<PurchaseItem>(purchaseItemId);
 
             Product product = await _productRepository.FindAsync(data.ProductId);
+
+            if (product is null)
+                throw ExceptionsFactory.FactoryNotFoundException<Product>(purchaseId);
 
             purchaseItem.Update(data.Amount, data.Value, product);
 

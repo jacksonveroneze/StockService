@@ -35,10 +35,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public void AddItem(PurchaseItem item)
         {
-            ValidateOpenState();
-
-            if (ExistsItem(item))
-                throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
+            ValidateDuplicatedItem(item);
+            ValidateDuplicatedProduct(item);
 
             _items.Add(item);
 
@@ -47,7 +45,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public void UpdateItem(PurchaseItem item)
         {
-            ValidateExistsItem(item);
+            ValidateDuplicatedItem(item);
+            ValidateDuplicatedProduct(item);
 
             PurchaseItem existItem = FindItemById(item.Id);
 
@@ -60,7 +59,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         {
             ValidateOpenState();
 
-            ValidateExistsItem(item);
+            ValidateIfNotExistsItem(item);
 
             _items.Remove(item);
 
@@ -83,13 +82,28 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
+        private void CalculateTotalValue()
+            => TotalValue = Items.Sum(x => x.CalculteValue());
+
         public PurchaseItem FindItemById(Guid id)
             => Items.FirstOrDefault(x => x.Id == id);
 
-        public void ValidateExistsItem(PurchaseItem item)
+        private void ValidateIfNotExistsItem(PurchaseItem item)
         {
             if (ExistsItem(item) is false)
                 throw ExceptionsFactory.FactoryNotFoundException<Purchase>(item.Id);
+        }
+
+        private void ValidateDuplicatedItem(PurchaseItem item)
+        {
+            if (ExistsItem(item) is true)
+                throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
+        }
+
+        private void ValidateDuplicatedProduct(PurchaseItem item)
+        {
+            if (ExistsProduct(item.Product) is true)
+                throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 
         private void ValidateOpenState()
@@ -98,8 +112,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 
-        private void CalculateTotalValue()
-            => TotalValue = Items.Sum(x => x.CalculteValue());
+        private bool ExistsProduct(Product product)
+            => Items.Any(x => x.Product.Id == product.Id);
 
         private bool ExistsItem(PurchaseItem item)
             => Items.Any(x => x.Id == item.Id);
