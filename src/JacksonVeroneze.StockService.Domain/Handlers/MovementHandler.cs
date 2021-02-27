@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
 using JacksonVeroneze.StockService.Domain.Events.Output;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using MediatR;
@@ -78,7 +80,8 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 
         private async Task<Movement> SearchMovement(Product product)
         {
-            Movement movement = await _movementRepository.FindByProductIdAsync(product.Id);
+            Movement movement = (await _movementRepository
+                .FilterAsync(new MovementFilter() {productId = product.Id})).FirstOrDefault();
 
             if (movement != null)
                 return movement;

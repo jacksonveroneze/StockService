@@ -1,8 +1,12 @@
 using System;
+using System.Linq.Expressions;
+using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Queries;
 
 namespace JacksonVeroneze.StockService.Domain.Filters
 {
-    public class AdjustmentFilter
+    public class AdjustmentFilter : BaseFilter<Adjustment>
     {
         public string Description { get; set; }
 
@@ -11,5 +15,8 @@ namespace JacksonVeroneze.StockService.Domain.Filters
         public DateTime? DateInitial { get; set; }
 
         public DateTime? DateEnd { get; set; }
+
+        public override Expression<Func<Adjustment, bool>> ToQuery()
+            => AdjustmentQuery.GetQuery(this);
     }
 }

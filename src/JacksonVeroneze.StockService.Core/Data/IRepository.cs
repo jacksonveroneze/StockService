@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 
@@ -20,8 +19,8 @@ namespace JacksonVeroneze.StockService.Core.Data
 
         Task<T> FindAsync(Guid id);
 
-        Task<List<T>> FilterAsync(Expression<Func<T, bool>> filter);
+        Task<List<T>> FilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>;
 
-        Task<List<T>> FilterAsync(Pagination pagination, Expression<Func<T, bool>> filter);
+        Task<List<T>> FilterAsync<TFilter>(Pagination pagination, TFilter filter) where TFilter : BaseFilter<T>;
     }
 }

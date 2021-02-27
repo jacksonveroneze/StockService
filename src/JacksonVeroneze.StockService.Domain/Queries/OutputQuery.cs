@@ -1,11 +1,11 @@
 using System;
 using System.Linq.Expressions;
-using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Filters;
+using JacksonVeroneze.StockService.Domain.Util;
 
-namespace JacksonVeroneze.StockService.Data.Queries
+namespace JacksonVeroneze.StockService.Domain.Queries
 {
     public static class OutputQuery
     {

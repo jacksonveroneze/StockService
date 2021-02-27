@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
@@ -11,7 +10,6 @@ namespace JacksonVeroneze.StockService.Data.Util
 {
     public class Repository<T> : IRepository<T> where T : Entity
     {
-        protected int LimitDefault = 30;
         public IUnitOfWork UnitOfWork { get; set; }
 
         protected readonly DatabaseContext _context;
@@ -37,19 +35,19 @@ namespace JacksonVeroneze.StockService.Data.Util
         public Task<T> FindAsync(Guid id)
             => _context.Set<T>().SingleOrDefaultAsync(x => x.Id == id);
 
-        public Task<List<T>> FilterAsync(Expression<Func<T, bool>> filter)
+        public Task<List<T>> FilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)
                 .ToListAsync();
 
-        public Task<List<T>> FilterAsync(Pagination pagination, Expression<Func<T, bool>> filter)
+        public Task<List<T>> FilterAsync<TFilter>(Pagination pagination, TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(pagination, filter)
                 .ToListAsync();
 
-        private IQueryable<T> BuidQueryable(Pagination pagination, Expression<Func<T, bool>> filter)
+        private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter) where TFilter : BaseFilter<T>
         {
             return _context.Set<T>()
                 .AsNoTracking()
-                .Where(filter)
+                .Where(filter.ToQuery())
                 .OrderByDescending(x => x.Id)
                 .ConfigureSkipTakeFromPagination(pagination);
         }

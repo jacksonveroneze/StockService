@@ -8,7 +8,6 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Bus;
-using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Data;
 using JacksonVeroneze.StockService.Data.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -33,6 +32,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         {
             services.AddScoped<IProductApplicationService, ProductApplicationService>();
             services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
+            services.AddScoped<IMovementApplicationService, MovementApplicationService>();
         }
 
         private static void RegisterServicesServices(IServiceCollection services)

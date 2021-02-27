@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace JacksonVeroneze.StockService.Data.Util
+namespace JacksonVeroneze.StockService.Domain.Util
 {
     public static class PredicateExpressionExtension
     {

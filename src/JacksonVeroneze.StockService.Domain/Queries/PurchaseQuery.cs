@@ -1,23 +1,23 @@
 using System;
 using System.Linq.Expressions;
-using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Filters;
+using JacksonVeroneze.StockService.Domain.Util;
 
-namespace JacksonVeroneze.StockService.Data.Queries
+namespace JacksonVeroneze.StockService.Domain.Queries
 {
-    public static class AdjustmentQuery
+    public static class PurchaseQuery
     {
-        public static Expression<Func<Adjustment, bool>> GetQuery(AdjustmentFilter filter)
+        public static Expression<Func<Purchase, bool>> GetQuery(PurchaseFilter filter)
         {
-            Expression<Func<Adjustment, bool>> expression = order => true;
+            Expression<Func<Purchase, bool>> expression = order => true;
 
             if (!string.IsNullOrEmpty(filter.Description))
                 expression = expression.And(x => x.Description.Contains(filter.Description));
 
             if (filter.State.HasValue)
-                expression = expression.And(x => x.State == (AdjustmentState)Enum.Parse(typeof(AdjustmentState),
+                expression = expression.And(x => x.State == (PurchaseState)Enum.Parse(typeof(PurchaseState),
                     filter.State.ToString()));
 
             if (filter.DateInitial.HasValue)

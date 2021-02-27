@@ -8,15 +8,10 @@ using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
-using JacksonVeroneze.StockService.Domain.Util;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
-    [ApiController]
-    [Authorize]
-    [Route("[controller]")]
     public class PurchasesController : Controller
     {
         private readonly IPurchaseApplicationService _applicationService;

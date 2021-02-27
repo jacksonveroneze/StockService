@@ -23,6 +23,12 @@ namespace JacksonVeroneze.StockService.Application.Services
         private readonly IProductRepository _productRepository;
         private readonly IValidator<AddOrUpdateProductDto> _validatorProduct;
 
+        /// <summary>
+        /// Method responsible for initialize service.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="productRepository"></param>
+        /// <param name="validatorProduct"></param>
         public ProductApplicationService(IMapper mapper, IProductRepository productRepository,
             IValidator<AddOrUpdateProductDto> validatorProduct)
         {
@@ -31,13 +37,30 @@ namespace JacksonVeroneze.StockService.Application.Services
             _validatorProduct = validatorProduct;
         }
 
+        /// <summary>
+        /// Method responsible for find data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ProductDto> FindAsync(Guid id)
             => _mapper.Map<ProductDto>(await _productRepository.FindAsync(id));
 
+        /// <summary>
+        /// Method responsible for filter data.
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public async Task<IList<ProductDto>> FilterAsync(Pagination pagination, ProductFilter filter)
             => _mapper.Map<List<ProductDto>>(
                 await _productRepository.FilterAsync(pagination, filter));
 
+        /// <summary>
+        /// Method responsible for add data.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="ApplicationException"></exception>
         public async Task<ApplicationDataResult<ProductDto>> AddASync(AddOrUpdateProductDto data)
         {
             ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
@@ -61,6 +84,14 @@ namespace JacksonVeroneze.StockService.Application.Services
             return FactoryResultFromData(_mapper.Map<ProductDto>(product));
         }
 
+        /// <summary>
+        /// Method responsible for update data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="Core.DomainObjects.Exceptions.NotFoundException"></exception>
+        /// <exception cref="ApplicationException"></exception>
         public async Task<ApplicationDataResult<ProductDto>> UpdateASync(Guid id, AddOrUpdateProductDto data)
         {
             ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
@@ -89,6 +120,12 @@ namespace JacksonVeroneze.StockService.Application.Services
             return FactoryResultFromData(_mapper.Map<ProductDto>(product));
         }
 
+        /// <summary>
+        /// Method responsible for remove data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Core.DomainObjects.Exceptions.NotFoundException"></exception>
         public async Task RemoveASync(Guid id)
         {
             Product product = await _productRepository.FindAsync(id);
