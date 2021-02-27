@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Util;
 using Microsoft.AspNetCore.Authorization;

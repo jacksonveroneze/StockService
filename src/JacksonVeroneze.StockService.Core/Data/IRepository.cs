@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 
@@ -13,10 +14,14 @@ namespace JacksonVeroneze.StockService.Core.Data
 
         void Update(T entity);
 
+        void Remove(T entity);
+
         Task<List<T>> FindAllAsync();
 
         Task<T> FindAsync(Guid id);
 
-        void Remove(T entity);
+        Task<List<T>> FilterAsync(Expression<Func<T, bool>> filter);
+
+        Task<List<T>> FilterAsync(Pagination pagination, Expression<Func<T, bool>> filter);
     }
 }

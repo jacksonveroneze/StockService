@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
@@ -10,12 +11,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
     public class AdjustmentService : IAdjustmentService
     {
         private readonly IAdjustmentRepository _repository;
-        private readonly IBusHandler _busHandler;
+        private readonly IBus _bus;
 
-        public AdjustmentService(IAdjustmentRepository repository, IBusHandler busHandler)
+        public AdjustmentService(IAdjustmentRepository repository, IBus bus)
         {
             _repository = repository;
-            _busHandler = busHandler;
+            _bus = bus;
         }
 
         public async Task AddItemAsync(Adjustment adjustment, AdjustmentItem item)
@@ -25,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(adjustment);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new AdjustmentItemAdded(item.Id));
+                await _bus.PublishDomainEvent(new AdjustmentItemAdded(item.Id));
         }
 
         public async Task UpdateItemAsync(Adjustment adjustment, AdjustmentItem item)
@@ -35,7 +36,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(adjustment);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new AdjustmentItemUpdated(item.Id));
+                await _bus.PublishDomainEvent(new AdjustmentItemUpdated(item.Id));
         }
 
         public async Task RemoveItemAsync(Adjustment adjustment, AdjustmentItem item)
@@ -45,7 +46,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(adjustment);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new AdjustmentItemRemoved(item.Id));
+                await _bus.PublishDomainEvent(new AdjustmentItemRemoved(item.Id));
         }
 
         public async Task CloseAsync(Adjustment adjustment)
@@ -54,8 +55,9 @@ namespace JacksonVeroneze.StockService.Domain.Services
 
             _repository.Update(adjustment);
 
-            if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new AdjustmentClosedEvent(adjustment.Id));
+            adjustment.AddEvent(new AdjustmentClosedEvent(adjustment.Id));
+
+            await _repository.UnitOfWork.CommitAsync();
         }
     }
 }

@@ -4,7 +4,7 @@ namespace JacksonVeroneze.StockService.Core.Messages
 {
     public abstract class Message
     {
-        public string MessageType { get; protected set; }
+        public string MessageType { get; private set; }
 
         public Guid AggregateId { get; protected set; }
 

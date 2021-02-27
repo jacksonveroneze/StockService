@@ -1,6 +1,6 @@
 using System;
 
-namespace JacksonVeroneze.StockService.Core.DomainObjects
+namespace JacksonVeroneze.StockService.Core.DomainObjects.Exceptions
 {
     public class DomainException : Exception
     {

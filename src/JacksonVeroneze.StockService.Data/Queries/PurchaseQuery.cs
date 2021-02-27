@@ -1,7 +1,6 @@
 using System;
 using System.Linq.Expressions;
 using JacksonVeroneze.StockService.Data.Util;
-using JacksonVeroneze.StockService.Domain;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Filters;

@@ -1,33 +1,20 @@
 using JacksonVeroneze.StockService.Api.Configuration;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace JacksonVeroneze.StockService.Api
 {
-    public class Startup
+    public class Startup : BaseStartup
     {
-        private IConfiguration Configuration { get; }
-        private IHostEnvironment HostEnvironment { get; }
-
-        public Startup(IHostEnvironment hostEnvironment)
+        public Startup(IHostEnvironment hostEnvironment) : base(hostEnvironment)
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables("STOCK_CONFIG_");
-
-            Configuration = builder.Build();
-
-            HostEnvironment = hostEnvironment;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
             => services.AddApiConfiguration(Configuration, HostEnvironment);
 
-        public void Configure(IApplicationBuilder app)
+        public override void Configure(IApplicationBuilder app)
             => app.UseApiConfiguration();
     }
 }

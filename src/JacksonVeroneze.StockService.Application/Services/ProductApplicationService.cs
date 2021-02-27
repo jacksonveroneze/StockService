@@ -8,16 +8,16 @@ using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
-using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Core;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
-using JacksonVeroneze.StockService.Domain.Util;
-using Messages = JacksonVeroneze.StockService.Application.Util.Messages;
+using ErrorMessages = JacksonVeroneze.StockService.Application.Util.ErrorMessages;
 
 namespace JacksonVeroneze.StockService.Application.Services
 {
-    public class ProductApplicationService : IProductApplicationService
+    public class ProductApplicationService : ApplicationService, IProductApplicationService
     {
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
@@ -43,8 +43,14 @@ namespace JacksonVeroneze.StockService.Application.Services
             ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
-                return new ApplicationDataResult<ProductDto>(
-                    validationResult.Errors.Select(x => x.ErrorMessage));
+                return FactoryFromValidationResult<ProductDto>(validationResult);
+
+            Product result =
+                (await _productRepository.FilterAsync(new ProductFilter {Description = data.Description}))
+                .FirstOrDefault();
+
+            if (result != null)
+                throw ExceptionsFactory.FactoryApplicationException(ErrorMessages.ProductFound);
 
             Product product = _mapper.Map<Product>(data);
 
@@ -52,7 +58,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _productRepository.UnitOfWork.CommitAsync();
 
-            return new ApplicationDataResult<ProductDto>(_mapper.Map<ProductDto>(product));
+            return FactoryResultFromData(_mapper.Map<ProductDto>(product));
         }
 
         public async Task<ApplicationDataResult<ProductDto>> UpdateASync(Guid id, AddOrUpdateProductDto data)
@@ -60,13 +66,19 @@ namespace JacksonVeroneze.StockService.Application.Services
             ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
 
             if (validationResult.IsValid is false)
-                return new ApplicationDataResult<ProductDto>(
-                    validationResult.Errors.Select(x => x.ErrorMessage));
+                return FactoryFromValidationResult<ProductDto>(validationResult);
 
             Product product = await _productRepository.FindAsync(id);
 
             if (product is null)
-                throw new DomainException(Messages.ItemNotFound);
+                throw ExceptionsFactory.FactoryNotFoundException<Product>(id);
+
+            Product result =
+                (await _productRepository.FilterAsync(new ProductFilter {Description = data.Description}))
+                .FirstOrDefault();
+
+            if (result != null && result.Id != id)
+                throw ExceptionsFactory.FactoryApplicationException(ErrorMessages.ProductFound);
 
             product.Update(data.Description, data.IsActive);
 
@@ -74,7 +86,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _productRepository.UnitOfWork.CommitAsync();
 
-            return new ApplicationDataResult<ProductDto>(_mapper.Map<ProductDto>(product));
+            return FactoryResultFromData(_mapper.Map<ProductDto>(product));
         }
 
         public async Task RemoveASync(Guid id)
@@ -82,7 +94,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             Product product = await _productRepository.FindAsync(id);
 
             if (product is null)
-                throw new DomainException(Messages.ItemNotFound);
+                throw ExceptionsFactory.FactoryNotFoundException<Product>(id);
 
             _productRepository.Remove(product);
 

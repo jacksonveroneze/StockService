@@ -11,10 +11,12 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
 using JacksonVeroneze.StockService.Domain.Filters;
@@ -36,7 +38,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
         private Mock<IUnitOfWork> _unitOfWork;
         private Mock<IPurchaseRepository> _purchaseRepositoryMock;
         private Mock<IProductRepository> _productRepositoryMock;
-        private Mock<IBusHandler> _busHandlerMock;
+        private Mock<IBus> _busHandlerMock;
 
         [Fact(DisplayName = "DeveBuscarORegistroERetornarODTOCorretamente")]
         [Trait("PurchaseApplicationService", "FindAsync")]
@@ -228,7 +230,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             _purchaseRepositoryMock = new Mock<IPurchaseRepository>();
             _productRepositoryMock = new Mock<IProductRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
-            _busHandlerMock = new Mock<IBusHandler>();
+            _busHandlerMock = new Mock<IBus>();
 
             _purchaseRepositoryMock.SetupProperty(x => x.UnitOfWork, _unitOfWork.Object);
 

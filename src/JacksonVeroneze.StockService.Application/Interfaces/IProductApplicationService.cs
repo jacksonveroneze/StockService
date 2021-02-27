@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Util;
 

@@ -1,16 +1,12 @@
 using JacksonVeroneze.StockService.Api.Util;
-using JacksonVeroneze.StockService.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-
 namespace JacksonVeroneze.StockService.Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -20,18 +16,12 @@ namespace JacksonVeroneze.StockService.Api
 
             IHost host = CreateHostBuilder(args).Build();
 
-            Log.Information("Migrations: {0}", "Performing migrations");
-
-            using IServiceScope scope = host.Services.CreateScope();
-
-            DatabaseContext db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-            db.Database.Migrate();
+            ExecuteMigrations.Execute(host);
 
             host.Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

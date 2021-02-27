@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Util;
@@ -37,7 +38,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateOpenState();
 
             if (ExistsItem(item))
-                throw new DomainException(Messages.ItemFound);
+                throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
 
             _items.Add(item);
 
@@ -69,7 +70,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public void Close()
         {
             if (State == AdjustmentState.Closed)
-                throw new DomainException(Messages.RegisterClosed);
+                throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosed);
 
             State = AdjustmentState.Closed;
         }
@@ -80,13 +81,13 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public void ValidateExistsItem(AdjustmentItem item)
         {
             if (ExistsItem(item) is false)
-                throw new DomainException(Messages.ItemNotFound);
+                throw ExceptionsFactory.FactoryNotFoundException<Adjustment>(item.Id);
         }
 
         private void ValidateOpenState()
         {
             if (State == AdjustmentState.Closed)
-                throw new DomainException(Messages.RegisterClosedNotMoviment);
+                throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 
         private void CalculateTotalValue()

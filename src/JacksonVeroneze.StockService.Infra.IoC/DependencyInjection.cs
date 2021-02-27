@@ -7,6 +7,7 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Data;
 using JacksonVeroneze.StockService.Data.Repositories;
@@ -60,7 +61,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
 
         private static void RegisterServicesOthers(IServiceCollection services)
         {
-            services.AddScoped<IBusHandler, BusHandler>();
+            services.AddScoped<IBus, Bus.Mediator.Bus>();
             services.AddScoped<DatabaseContext>();
         }
     }

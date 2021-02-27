@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Data.Util;
 using JacksonVeroneze.StockService.Domain.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -12,11 +12,11 @@ namespace JacksonVeroneze.StockService.Data
 {
     public class DatabaseContext : DbContext, IUnitOfWork
     {
-        private readonly IMediator _mediatorHandler;
+        private readonly IBus _bus;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, IMediator mediatorHandler)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IBus bus)
             : base(options)
-            => _mediatorHandler = mediatorHandler;
+            => _bus = bus;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,7 @@ namespace JacksonVeroneze.StockService.Data
             bool isSuccess = await base.SaveChangesAsync() > 0;
 
             if (isSuccess)
-                await _mediatorHandler.PublishEvents(this);
+                await _bus.PublishEvents(this);
 
             return isSuccess;
         }

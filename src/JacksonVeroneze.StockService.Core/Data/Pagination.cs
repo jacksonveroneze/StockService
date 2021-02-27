@@ -1,4 +1,4 @@
-namespace JacksonVeroneze.StockService.Domain.Util
+namespace JacksonVeroneze.StockService.Core.Data
 {
     public class Pagination
     {

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
@@ -24,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         //
         private Mock<IUnitOfWork> _unitOfWork;
         private Mock<IAdjustmentRepository> _adjustmentRepositoryMock;
-        private Mock<IBusHandler> _busHandlerMock;
+        private Mock<IBus> _busHandlerMock;
 
         [Fact(DisplayName = "DeveAdicionarOsItensQuandoEmEstadoValid")]
         [Trait("AdjustmentService", "AddItemAsync")]
@@ -164,7 +166,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         {
             _unitOfWork = new Mock<IUnitOfWork>();
             _adjustmentRepositoryMock = new Mock<IAdjustmentRepository>();
-            _busHandlerMock = new Mock<IBusHandler>();
+            _busHandlerMock = new Mock<IBus>();
 
             _adjustmentRepositoryMock.SetupProperty(x => x.UnitOfWork, _unitOfWork.Object);
 

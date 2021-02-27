@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Output;
@@ -10,12 +11,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
     public class OutputService : IOutputService
     {
         private readonly IOutputRepository _repository;
-        private readonly IBusHandler _busHandler;
+        private readonly IBus _bus;
 
-        public OutputService(IOutputRepository repository, IBusHandler busHandler)
+        public OutputService(IOutputRepository repository, IBus bus)
         {
             _repository = repository;
-            _busHandler = busHandler;
+            _bus = bus;
         }
 
         public async Task AddItemAsync(Output output, OutputItem item)
@@ -25,7 +26,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(output);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new OutputItemAdded(item.Id));
+                await _bus.PublishDomainEvent(new OutputItemAdded(item.Id));
         }
 
         public async Task UpdateItemAsync(Output output, OutputItem item)
@@ -35,7 +36,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(output);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new OutputItemUpdated(item.Id));
+                await _bus.PublishDomainEvent(new OutputItemUpdated(item.Id));
         }
 
         public async Task RemoveItemAsync(Output output, OutputItem item)
@@ -45,7 +46,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             _repository.Update(output);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new OutputItemRemoved(item.Id));
+                await _bus.PublishDomainEvent(new OutputItemRemoved(item.Id));
         }
 
         public async Task CloseAsync(Output output)
@@ -54,8 +55,9 @@ namespace JacksonVeroneze.StockService.Domain.Services
 
             _repository.Update(output);
 
-            if (await _repository.UnitOfWork.CommitAsync())
-                await _busHandler.PublishDomainEvent(new OutputClosedEvent(output.Id));
+            output.AddEvent(new OutputClosedEvent(output.Id));
+
+            await _repository.UnitOfWork.CommitAsync();
         }
     }
 }
