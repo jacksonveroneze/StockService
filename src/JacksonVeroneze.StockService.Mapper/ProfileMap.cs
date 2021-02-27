@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JacksonVeroneze.StockService.Application.DTO.Adjustment;
 using JacksonVeroneze.StockService.Application.DTO.AdjustmentItem;
+using JacksonVeroneze.StockService.Application.DTO.Movement;
 using JacksonVeroneze.StockService.Application.DTO.Output;
 using JacksonVeroneze.StockService.Application.DTO.OutputItem;
 using JacksonVeroneze.StockService.Application.DTO.Product;
@@ -39,6 +40,7 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<Adjustment, AdjustmentDto>();
             CreateMap<Output, OutputDto>();
             CreateMap<Purchase, PurchaseDto>();
+            CreateMap<Movement, MovementDto>();
 
             CreateMap<AdjustmentItem, AdjustmentItemDto>()
                 .ForMember(x => x.AdjustmentId, f => f.MapFrom(x => x.Adjustment.Id))

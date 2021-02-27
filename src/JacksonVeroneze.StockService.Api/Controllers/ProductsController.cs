@@ -11,17 +11,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
+    /// <summary>
+    /// Class responsible for controller
+    /// </summary>
     public class ProductsController : Controller
     {
         private readonly IProductApplicationService _applicationService;
 
+        /// <summary>
+        /// Method responsible for initialize controller.
+        /// </summary>
+        /// <param name="applicationService"></param>
         public ProductsController(IProductApplicationService applicationService)
             => _applicationService = applicationService;
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Filter. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Filter.
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -30,20 +39,22 @@ namespace JacksonVeroneze.StockService.Api.Controllers
             [FromQuery] ProductFilter filter)
             => Ok(await _applicationService.FilterAsync(pagination, filter));
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Find. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Find.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
         public async Task<ActionResult<ProductDto>> Find(Guid id)
             => Ok(await _applicationService.FindAsync(id));
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Add. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Add.
+        /// </summary>
+        /// <param name="productDto"></param>
+        /// <returns></returns>
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
@@ -57,10 +68,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers
             return CreatedAtAction(nameof(Find), new {id = result.Data.Id}, result.Data);
         }
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Update. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Update.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="purchaseDto"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
@@ -74,10 +87,11 @@ namespace JacksonVeroneze.StockService.Api.Controllers
             return Ok(result.Data);
         }
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Delete. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Delete.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)

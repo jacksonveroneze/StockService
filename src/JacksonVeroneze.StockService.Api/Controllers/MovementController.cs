@@ -9,17 +9,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
+    /// <summary>
+    /// Class responsible for controller
+    /// </summary>
     public class MovementController : Controller
     {
         private readonly IMovementApplicationService _applicationService;
 
+        /// <summary>
+        /// Method responsible for initialize controller.
+        /// </summary>
+        /// <param name="applicationService"></param>
         public MovementController(IMovementApplicationService applicationService)
             => _applicationService = applicationService;
 
-        //
-        // Summary:
-        //     /// Method responsible for action: Filter. ///
-        //
+        /// <summary>
+        /// Method responsible for action: Filter.
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]

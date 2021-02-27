@@ -12,10 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
 {
+    /// <summary>
+    /// Class responsible for controller
+    /// </summary>
     public class PurchasesController : Controller
     {
         private readonly IPurchaseApplicationService _applicationService;
 
+        /// <summary>
+        /// Method responsible for initialize controller.
+        /// </summary>
+        /// <param name="applicationService"></param>
         public PurchasesController(IPurchaseApplicationService applicationService)
             => _applicationService = applicationService;
 
