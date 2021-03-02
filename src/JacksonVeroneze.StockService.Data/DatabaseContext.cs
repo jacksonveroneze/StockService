@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Core.Data;
+using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Data.Util;
+using JacksonVeroneze.StockService.Domain;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Interfaces.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -13,10 +18,14 @@ namespace JacksonVeroneze.StockService.Data
     public class DatabaseContext : DbContext, IUnitOfWork
     {
         private readonly IBus _bus;
+        private readonly IUser _user;
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, IBus bus)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options, IBus bus, IUser user)
             : base(options)
-            => _bus = bus;
+        {
+            _bus = bus;
+            _user = user;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,15 +33,18 @@ namespace JacksonVeroneze.StockService.Data
 
             modelBuilder.Ignore<Event>();
 
-            modelBuilder.Entity<Adjustment>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<AdjustmentItem>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<Output>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<OutputItem>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<Purchase>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<PurchaseItem>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<Movement>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<MovementItem>().HasQueryFilter(x => x.DeletedAt == null);
-            modelBuilder.Entity<Product>().HasQueryFilter(x => x.DeletedAt == null);
+            //var claim = _user.GetClaimsIdentity().FirstOrDefault(x => x.Type == ClaimTypes.UserData);
+
+            var tentantId = Guid.NewGuid();
+
+            modelBuilder.AddFilter<AdjustmentItem>(tentantId);
+            modelBuilder.AddFilter<Output>(tentantId);
+            modelBuilder.AddFilter<OutputItem>(tentantId);
+            modelBuilder.AddFilter<Purchase>(tentantId);
+            modelBuilder.AddFilter<PurchaseItem>(tentantId);
+            modelBuilder.AddFilter<Movement>(tentantId);
+            modelBuilder.AddFilter<MovementItem>(tentantId);
+            modelBuilder.AddFilter<Product>(tentantId);
         }
 
         public async Task<bool> CommitAsync()
@@ -59,6 +71,17 @@ namespace JacksonVeroneze.StockService.Data
                 await _bus.PublishEvents(this);
 
             return isSuccess;
+        }
+    }
+
+    public static class AddGlobalFilterExtension
+    {
+        public static ModelBuilder AddFilter<T>(this ModelBuilder modelBuilder, Guid tenantId) where T : Entity
+        {
+            modelBuilder.Entity<T>()
+                .HasQueryFilter(x => x.DeletedAt == null && x.TenantId == tenantId);
+
+            return modelBuilder;
         }
     }
 }

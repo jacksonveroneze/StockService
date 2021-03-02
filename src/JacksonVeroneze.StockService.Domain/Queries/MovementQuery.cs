@@ -10,7 +10,7 @@ namespace JacksonVeroneze.StockService.Domain.Queries
     {
         public static Expression<Func<Movement, bool>> GetQuery(MovementFilter filter)
         {
-            Expression<Func<Movement, bool>> expression = order => true;
+            Expression<Func<Movement, bool>> expression = query => true;
 
 
             if (filter.productId.HasValue)

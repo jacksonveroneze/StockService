@@ -240,7 +240,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             _purchaseRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(PurchaseFaker.GenerateFaker().Generate()));
 
-            _purchaseRepositoryMock.Setup(x => x.FindAllAsync())
+            _purchaseRepositoryMock.Setup(x => x.FilterAsync(It.IsAny<PurchaseFilter>()))
                 .Returns(Task.FromResult(PurchaseFaker.GenerateFaker().Generate(100)));
 
             _purchaseRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Purchase>()))

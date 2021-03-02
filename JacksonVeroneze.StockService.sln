@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Common", "tests\JacksonVeroneze.StockService.Common\JacksonVeroneze.StockService.Common.csproj", "{84021ED4-2490-43A7-8FEE-C88256D22CB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Infra.Identity", "src\JacksonVeroneze.StockService.Infra.Identity\JacksonVeroneze.StockService.Infra.Identity.csproj", "{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -188,6 +190,18 @@ Global
 		{84021ED4-2490-43A7-8FEE-C88256D22CB8}.Release|x64.Build.0 = Release|Any CPU
 		{84021ED4-2490-43A7-8FEE-C88256D22CB8}.Release|x86.ActiveCfg = Release|Any CPU
 		{84021ED4-2490-43A7-8FEE-C88256D22CB8}.Release|x86.Build.0 = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|x64.Build.0 = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9AA921BC-3128-49E7-9E74-7277369F037B} = {680B2B70-0017-40A3-8DF9-F7BD5906C01B}
@@ -202,5 +216,6 @@ Global
 		{F557B4C3-D031-48B1-9736-CEABB00E49AD} = {E7814FF8-AAE4-49CA-A6DC-16AEBFBFA01C}
 		{19E80608-678F-4B14-9FA3-E281AC362349} = {E7814FF8-AAE4-49CA-A6DC-16AEBFBFA01C}
 		{84021ED4-2490-43A7-8FEE-C88256D22CB8} = {E7814FF8-AAE4-49CA-A6DC-16AEBFBFA01C}
+		{D2BC52AC-39F4-447C-9CB8-8B32C69C029D} = {680B2B70-0017-40A3-8DF9-F7BD5906C01B}
 	EndGlobalSection
 EndGlobal

@@ -9,10 +9,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public bool IsActive { get; private set; } = true;
 
-        private readonly List<PurchaseItem> _itemsPurchase = new List<PurchaseItem>();
-        private readonly List<AdjustmentItem> _itemsAdjustment = new List<AdjustmentItem>();
-        private readonly List<OutputItem> _itemsOutput = new List<OutputItem>();
-        private readonly List<Movement> _itemsMovement = new List<Movement>();
+        private readonly List<PurchaseItem> _itemsPurchase = new();
+        private readonly List<AdjustmentItem> _itemsAdjustment = new();
+        private readonly List<OutputItem> _itemsOutput = new();
+        private readonly List<Movement> _itemsMovement = new();
 
         public virtual IReadOnlyCollection<PurchaseItem> ItemsPurchase => _itemsPurchase;
         public virtual IReadOnlyCollection<AdjustmentItem> ItemsAdjustment => _itemsAdjustment;

@@ -33,6 +33,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.Version)
                 .IsRequired();
 
+            builder.Property(c => c.TenantId)
+                .IsRequired();
+
             builder.Ignore(x => x.TotalValue);
         }
     }

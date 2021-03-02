@@ -12,7 +12,7 @@ namespace JacksonVeroneze.StockService.Api
         {
             Log.Logger = Logger.FactoryLogger();
 
-            Log.Information("Application: {0}", "Starting up");
+            Log.Information($"Application: {0}", "Starting up");
 
             IHost host = CreateHostBuilder(args).Build();
 

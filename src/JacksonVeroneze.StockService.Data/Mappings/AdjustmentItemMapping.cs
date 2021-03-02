@@ -29,6 +29,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.Version)
                 .IsRequired();
 
+            builder.Property(c => c.TenantId)
+                .IsRequired();
+
             builder.HasOne(p => p.Adjustment)
                 .WithMany(b => b.Items)
                 .IsRequired()

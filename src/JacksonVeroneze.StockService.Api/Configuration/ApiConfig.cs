@@ -1,4 +1,3 @@
-using System.Text.Json;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +26,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddSwaggerConfiguration()
                 .AddApplicationInsightsConfiguration(configuration)
                 .AddAuthenticationConfiguration(configuration)
+                .AddAuthorizationConfiguration(configuration)
                 .AddControllers();
 
             return services;

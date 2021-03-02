@@ -7,6 +7,7 @@ using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers
@@ -56,11 +57,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="productDto"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize("product:create")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
         public async Task<ActionResult<ProductDto>> Add([FromBody] AddOrUpdateProductDto productDto)
         {
-            ApplicationDataResult<ProductDto> result = await _applicationService.AddASync(productDto);
+            ApplicationDataResult<ProductDto> result = await _applicationService.AddAsync(productDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -79,7 +81,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
         public async Task<ActionResult<ProductDto>> Update(Guid id, [FromBody] AddOrUpdateProductDto purchaseDto)
         {
-            ApplicationDataResult<ProductDto> result = await _applicationService.UpdateASync(id, purchaseDto);
+            ApplicationDataResult<ProductDto> result = await _applicationService.UpdateAsync(id, purchaseDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -96,7 +98,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {
-            await _applicationService.RemoveASync(id);
+            await _applicationService.RemoveAsync(id);
 
             return NoContent();
         }

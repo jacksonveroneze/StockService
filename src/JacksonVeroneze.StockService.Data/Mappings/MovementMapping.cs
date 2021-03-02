@@ -12,7 +12,7 @@ namespace JacksonVeroneze.StockService.Data.Mappings
 
             builder.Property(c => c.Id)
                 .ValueGeneratedNever();
-            
+
             builder.Property(c => c.CreatedAt)
                 .IsRequired();
 
@@ -21,6 +21,9 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.DeletedAt);
 
             builder.Property(c => c.Version)
+                .IsRequired();
+
+            builder.Property(c => c.TenantId)
                 .IsRequired();
 
             builder.HasOne(p => p.Product)

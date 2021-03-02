@@ -14,6 +14,8 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public int Version { get; private set; } = 1;
 
+        public Guid TenantId { get; set; }
+
         private readonly List<Event> _notifications = new List<Event>();
 
         public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();

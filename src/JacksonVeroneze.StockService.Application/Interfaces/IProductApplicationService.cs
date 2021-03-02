@@ -15,10 +15,10 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 
         Task<IList<ProductDto>> FilterAsync(Pagination pagination, ProductFilter filter);
 
-        Task<ApplicationDataResult<ProductDto>> AddASync(AddOrUpdateProductDto data);
+        Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto data);
 
-        Task<ApplicationDataResult<ProductDto>> UpdateASync(Guid id, AddOrUpdateProductDto data);
+        Task<ApplicationDataResult<ProductDto>> UpdateAsync(Guid id, AddOrUpdateProductDto data);
 
-        Task RemoveASync(Guid id);
+        Task RemoveAsync(Guid id);
     }
 }

@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Domain.Queries
     {
         public static Expression<Func<Output, bool>> GetQuery(OutputFilter filter)
         {
-            Expression<Func<Output, bool>> expression = order => true;
+            Expression<Func<Output, bool>> expression = query => true;
 
             if (!string.IsNullOrEmpty(filter.Description))
                 expression = expression.And(x => x.Description.Contains(filter.Description));

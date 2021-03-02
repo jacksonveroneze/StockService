@@ -29,11 +29,10 @@ namespace JacksonVeroneze.StockService.Data.Util
         public void Remove(T entity)
             => _context.Set<T>().Remove(entity);
 
-        public Task<List<T>> FindAllAsync()
-            => _context.Set<T>().AsNoTracking().ToListAsync();
-
         public Task<T> FindAsync(Guid id)
-            => _context.Set<T>().SingleOrDefaultAsync(x => x.Id == id);
+            => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
+                    context.Set<T>()
+                        .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)

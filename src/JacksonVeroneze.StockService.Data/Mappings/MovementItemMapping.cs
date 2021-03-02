@@ -26,10 +26,16 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.Property(c => c.Version)
                 .IsRequired();
 
+            builder.Property(c => c.TenantId)
+                .IsRequired();
+
             builder.HasOne(p => p.Movement)
                 .WithMany(b => b.Items)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(p => p.PurchaseItems)
+                .WithMany(p => p.MovementItems);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace JacksonVeroneze.StockService.Api
                 .SetBasePath(hostEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables("STOCK_CONFIG_");
+                .AddEnvironmentVariables("APP_CONFIG_");
 
             Configuration = builder.Build();
 

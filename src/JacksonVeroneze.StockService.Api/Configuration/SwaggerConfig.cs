@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {{new OpenApiSecurityScheme {Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}}, new string[] { }}});
@@ -40,7 +40,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IApplicationBuilder UseSwaggerSetup(this IApplicationBuilder app)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockService v1"));
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = String.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockService v1");
+            });
 
             return app;
         }

@@ -22,16 +22,20 @@ namespace JacksonVeroneze.StockService.Mapper
         private void MapDtoToEntity()
         {
             CreateMap<AddOrUpdateProductDto, Product>()
-                .ConstructUsing(x => new Product(x.Description));
+                .ConstructUsing(x => new Product(x.Description))
+                .ForMember(x => x.TenantId, b => b.Ignore());
 
             CreateMap<AddOrUpdateAdjustmentDto, Adjustment>()
-                .ConstructUsing(x => new Adjustment(x.Description, x.Date));
+                .ConstructUsing(x => new Adjustment(x.Description, x.Date))
+                .ForMember(x => x.TenantId, b => b.Ignore());
 
             CreateMap<AddOrUpdateOutputDto, Output>()
-                .ConstructUsing(x => new Output(x.Description, x.Date));
+                .ConstructUsing(x => new Output(x.Description, x.Date))
+                .ForMember(x => x.TenantId, b => b.Ignore());
 
             CreateMap<AddOrUpdatePurchaseDto, Purchase>()
-                .ConstructUsing(x => new Purchase(x.Description, x.Date));
+                .ConstructUsing(x => new Purchase(x.Description, x.Date))
+                .ForMember(x => x.TenantId, b => b.Ignore());
         }
 
         private void MapEntityToDto()
