@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using JacksonVeroneze.StockService.Core.Exceptions;
 
 namespace JacksonVeroneze.StockService.Core.DomainObjects
 {

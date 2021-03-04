@@ -7,7 +7,7 @@ using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JacksonVeroneze.StockService.Api.Controllers
+namespace JacksonVeroneze.StockService.Api.Controllers.v1
 {
     /// <summary>
     /// Class responsible for controller

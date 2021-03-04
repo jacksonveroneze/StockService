@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Product;
-using JacksonVeroneze.StockService.Core;
+using JacksonVeroneze.StockService.Core.Notifications;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 

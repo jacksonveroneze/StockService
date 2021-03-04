@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,7 @@ namespace JacksonVeroneze.StockService.Api.Util
 {
     public static class ExecuteMigrations
     {
-        public static void Execute(IHost host)
+        public static async Task Execute(IHost host)
         {
             Log.Information("Migrations: {0}", "Performing migrations");
 
@@ -17,7 +18,9 @@ namespace JacksonVeroneze.StockService.Api.Util
             DatabaseContext databaseContext =
                 scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
-            databaseContext.Database.Migrate();
+            //await databaseContext.Database.EnsureDeletedAsync();
+
+            await databaseContext.Database.MigrateAsync();
         }
     }
 }

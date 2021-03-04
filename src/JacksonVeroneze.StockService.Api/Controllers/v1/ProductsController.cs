@@ -10,7 +10,7 @@ using JacksonVeroneze.StockService.Domain.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JacksonVeroneze.StockService.Api.Controllers
+namespace JacksonVeroneze.StockService.Api.Controllers.v1
 {
     /// <summary>
     /// Class responsible for controller
@@ -33,6 +33,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize("products:filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IEnumerable<ProductDto>>> Filter(
@@ -46,6 +47,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize("products:find")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
         public async Task<ActionResult<ProductDto>> Find(Guid id)
@@ -57,7 +59,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="productDto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("product:create")]
+        [Authorize("products:create")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
         public async Task<ActionResult<ProductDto>> Add([FromBody] AddOrUpdateProductDto productDto)
@@ -77,6 +79,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="purchaseDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Authorize("products:update")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
         public async Task<ActionResult<ProductDto>> Update(Guid id, [FromBody] AddOrUpdateProductDto purchaseDto)
@@ -95,6 +98,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize("products:delete")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {

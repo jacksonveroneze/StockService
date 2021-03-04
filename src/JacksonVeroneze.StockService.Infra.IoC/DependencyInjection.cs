@@ -7,7 +7,6 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
-using JacksonVeroneze.StockService.Application.Validations;
 using JacksonVeroneze.StockService.Application.Validations.Product;
 using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Data;

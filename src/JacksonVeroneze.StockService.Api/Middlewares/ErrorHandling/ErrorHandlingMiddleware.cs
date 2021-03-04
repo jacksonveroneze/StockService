@@ -2,12 +2,10 @@ using System;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ApplicationException = JacksonVeroneze.StockService.Core.DomainObjects.Exceptions.ApplicationException;
 
 namespace JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling
 {
@@ -35,7 +33,7 @@ namespace JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling
             {
                 await FactoryResponse(context, e, HttpStatusCode.NotFound);
             }
-            catch (Exception e) when (e is DomainException || e is ApplicationException)
+            catch (Exception e) when (e is DomainException)
             {
                 await FactoryResponse(context, e, HttpStatusCode.BadRequest);
             }

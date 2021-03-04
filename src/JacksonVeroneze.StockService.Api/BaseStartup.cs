@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,6 @@ namespace JacksonVeroneze.StockService.Api
 
         public abstract void ConfigureServices(IServiceCollection services);
 
-        public abstract void Configure(IApplicationBuilder app);
+        public abstract void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider);
     }
 }

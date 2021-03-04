@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.DomainObjects;
+using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Util;
 

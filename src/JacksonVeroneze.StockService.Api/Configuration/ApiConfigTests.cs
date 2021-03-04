@@ -8,7 +8,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class ApiConfigTests
     {
-        private const string CorsPolicyName = "AllowAll";
+        private const string CorsPolicyName = "CorsPolicy";
 
         public static IServiceCollection AddApiConfigurationTests(this IServiceCollection services,
             IConfiguration configuration,
@@ -21,6 +21,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAutoMediatRConfiguration()
                 .AddDependencyInjectionConfiguration()
                 .AddAuthenticationConfiguration(configuration)
+                .AddVersioningConfigConfiguration()
                 .AddControllers();
 
             return services;

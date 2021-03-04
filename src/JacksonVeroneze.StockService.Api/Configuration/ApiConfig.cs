@@ -1,5 +1,7 @@
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,12 +29,14 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddApplicationInsightsConfiguration(configuration)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
+                .AddVersioningConfigConfiguration()
                 .AddControllers();
 
             return services;
         }
 
-        public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app)
+        public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app,
+            IApiVersionDescriptionProvider provider)
         {
             app.UseCultureSetup()
                 .UseCors(CorsPolicyName)
@@ -42,7 +46,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseSwaggerSetup()
+                .UseSwaggerSetup(provider)
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             return app;

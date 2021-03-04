@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,7 @@ namespace JacksonVeroneze.StockService.Api
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Log.Logger = Logger.FactoryLogger();
 
@@ -16,9 +17,9 @@ namespace JacksonVeroneze.StockService.Api
 
             IHost host = CreateHostBuilder(args).Build();
 
-            ExecuteMigrations.Execute(host);
+            await ExecuteMigrations.Execute(host);
 
-            host.Run();
+            await host.RunAsync();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

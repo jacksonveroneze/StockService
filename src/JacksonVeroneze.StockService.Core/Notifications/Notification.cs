@@ -1,4 +1,4 @@
-namespace JacksonVeroneze.StockService.Core
+namespace JacksonVeroneze.StockService.Core.Notifications
 {
     public class Notification
     {

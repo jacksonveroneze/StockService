@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Core;
+using JacksonVeroneze.StockService.Core.Notifications;
 
 namespace JacksonVeroneze.StockService.Application.Validations.Product
 {

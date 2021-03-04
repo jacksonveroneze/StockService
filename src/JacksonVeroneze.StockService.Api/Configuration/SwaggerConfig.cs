@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
@@ -31,19 +32,26 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                     Type = SecuritySchemeType.ApiKey,
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {{new OpenApiSecurityScheme {Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"}}, new string[] { }}});
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {{new OpenApiSecurityScheme {Reference = new OpenApiReference
+                        {Type = ReferenceType.SecurityScheme, Id = "Bearer"}}, new string[] { }}});
             });
 
             return services;
         }
 
-        public static IApplicationBuilder UseSwaggerSetup(this IApplicationBuilder app)
+        public static IApplicationBuilder UseSwaggerSetup(this IApplicationBuilder app,
+            IApiVersionDescriptionProvider provider)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.RoutePrefix = String.Empty;
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "StockService v1");
+
+                foreach (var description in provider.ApiVersionDescriptions)
+                    c.SwaggerEndpoint(
+                        $"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName.ToUpperInvariant());
             });
 
             return app;

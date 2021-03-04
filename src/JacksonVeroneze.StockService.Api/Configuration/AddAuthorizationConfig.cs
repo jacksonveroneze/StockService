@@ -11,9 +11,15 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddAuthorizationConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
+            string[] customPolices =
+            {
+                "products:filter", "products:find", "products:create", "products:update", "products:delete"
+            };
+
             services.AddAuthorization(options =>
             {
-                options.AddCustomPolicy("product:create", configuration["Auth:Authority"]);
+                foreach (string customPolice in customPolices)
+                    options.AddCustomPolicy(customPolice, configuration["Auth:Authority"]);
             });
 
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
@@ -23,13 +29,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             return services;
         }
 
-        private static AuthorizationOptions AddCustomPolicy(this AuthorizationOptions options, string policyName,
+        private static void AddCustomPolicy(this AuthorizationOptions options, string policyName,
             string authority)
         {
             options.AddPolicy(policyName,
                 policy => policy.Requirements.Add(new HasScopeRequirement(policyName, authority)));
-
-            return options;
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Core;
+using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -19,30 +20,6 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             _repository = repository;
             _bus = bus;
-        }
-
-        public async Task AddAsync(Product product)
-        {
-            Product result = await _repository.FindAsync(new ProductFilter {Description = product.Description});
-
-            if (result != null)
-                throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
-
-            await _repository.AddAsync(product);
-
-            await _repository.UnitOfWork.CommitAsync();
-        }
-
-        public async Task UpdateAsync(Product product)
-        {
-            Product result = await _repository.FindAsync(new ProductFilter {Description = product.Description});
-
-            if (result != null && result.Id != product.Id)
-                throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
-
-            _repository.Update(product);
-
-            await _repository.UnitOfWork.CommitAsync();
         }
 
         public async Task RemoveAsync(Product product)

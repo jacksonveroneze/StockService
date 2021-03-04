@@ -5,10 +5,6 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
 {
     public interface IProductService
     {
-        Task AddAsync(Product product);
-
-        Task UpdateAsync(Product product);
-
         Task RemoveAsync(Product product);
     }
 }
