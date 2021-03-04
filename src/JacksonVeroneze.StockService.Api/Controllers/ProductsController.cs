@@ -98,7 +98,10 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {
-            await _applicationService.RemoveAsync(id);
+            ApplicationDataResult<ProductDto> result = await _applicationService.RemoveAsync(id);
+
+            if (!result.IsSuccess)
+                return BadRequest(result.Errors);
 
             return NoContent();
         }

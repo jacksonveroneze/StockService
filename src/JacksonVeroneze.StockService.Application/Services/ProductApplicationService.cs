@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Application.Validations.Product;
 using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Entities;
@@ -21,7 +20,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
         private readonly IProductRepository _productRepository;
-        private readonly IValidator<AddOrUpdateProductDto> _validatorProduct;
+        private readonly IProductValidator _productValidator;
 
         /// <summary>
         /// Method responsible for initialize service.
@@ -29,94 +28,98 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <param name="mapper"></param>
         /// <param name="productService"></param>
         /// <param name="productRepository"></param>
-        /// <param name="validatorProduct"></param>
-        public ProductApplicationService(IMapper mapper, IProductService productService,
+        /// <param name="productValidator"></param>
+        public ProductApplicationService(IMapper mapper,
+            IProductService productService,
             IProductRepository productRepository,
-            IValidator<AddOrUpdateProductDto> validatorProduct)
+            IProductValidator productValidator)
         {
             _mapper = mapper;
             _productService = productService;
             _productRepository = productRepository;
-            _validatorProduct = validatorProduct;
+            _productValidator = productValidator;
         }
 
         /// <summary>
-        /// Method responsible for find data.
+        /// Method responsible for find productDto.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
-        public async Task<ProductDto> FindAsync(Guid id)
-            => _mapper.Map<ProductDto>(await _productRepository.FindAsync(id));
+        public async Task<ProductDto> FindAsync(Guid productId)
+            => _mapper.Map<ProductDto>(await _productRepository.FindAsync(productId));
 
         /// <summary>
-        /// Method responsible for filter data.
+        /// Method responsible for productFilter productDto.
         /// </summary>
         /// <param name="pagination"></param>
-        /// <param name="filter"></param>
+        /// <param name="productFilter"></param>
         /// <returns></returns>
-        public async Task<IList<ProductDto>> FilterAsync(Pagination pagination, ProductFilter filter)
+        public async Task<IList<ProductDto>> FilterAsync(Pagination pagination, ProductFilter productFilter)
             => _mapper.Map<List<ProductDto>>(
-                await _productRepository.FilterAsync(pagination, filter));
+                await _productRepository.FilterAsync(pagination, productFilter));
 
         /// <summary>
-        /// Method responsible for add data.
+        /// Method responsible for add productDto.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="productDto"></param>
         /// <returns></returns>
         /// <exception cref="ApplicationException"></exception>
-        public async Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto data)
+        public async Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto productDto)
         {
-            ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
+            NotificationContext result = await _productValidator.Validate(productDto);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<ProductDto>(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<ProductDto>.FactoryFromNotificationContext(result);
 
-            Product product = _mapper.Map<Product>(data);
+            Product product = _mapper.Map<Product>(productDto);
 
             await _productService.AddAsync(product);
 
-            return FactoryResultFromData(_mapper.Map<ProductDto>(product));
+            return ApplicationDataResult<ProductDto>.FactoryFromData(_mapper.Map<ProductDto>(product));
         }
 
         /// <summary>
-        /// Method responsible for update data.
+        /// Method responsible for update productDto.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="data"></param>
+        /// <param name="productId"></param>
+        /// <param name="productDto"></param>
         /// <returns></returns>
         /// <exception cref="Core.DomainObjects.Exceptions.NotFoundException"></exception>
         /// <exception cref="ApplicationException"></exception>
-        public async Task<ApplicationDataResult<ProductDto>> UpdateAsync(Guid id, AddOrUpdateProductDto data)
+        public async Task<ApplicationDataResult<ProductDto>> UpdateAsync(Guid productId, AddOrUpdateProductDto productDto)
         {
-            ValidationResult validationResult = await _validatorProduct.ValidateAsync(data);
+            NotificationContext result = await _productValidator.Validate(productId, productDto);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<ProductDto>(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<ProductDto>.FactoryFromNotificationContext(result);
 
-            Product product = await _productRepository.FindAsync(id);
+            Product product = await _productRepository.FindAsync(productId);
 
-            if (product is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Product>(id);
+            product.Update(productDto.Description, productDto.IsActive);
 
             await _productService.UpdateAsync(product);
 
-            return FactoryResultFromData(_mapper.Map<ProductDto>(product));
+            return ApplicationDataResult<ProductDto>.FactoryFromData(_mapper.Map<ProductDto>(product));
         }
 
         /// <summary>
-        /// Method responsible for remove data.
+        /// Method responsible for remove productDto.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="productId"></param>
         /// <returns></returns>
         /// <exception cref="Core.DomainObjects.Exceptions.NotFoundException"></exception>
-        public async Task RemoveAsync(Guid id)
+        public async Task<ApplicationDataResult<ProductDto>> RemoveAsync(Guid productId)
         {
-            Product product = await _productRepository.FindAsync(id);
+            NotificationContext result = await _productValidator.Validate(productId);
 
-            if (product is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Product>(id);
+            if (result.HasNotifications)
+                return ApplicationDataResult<ProductDto>.FactoryFromNotificationContext(result);
+
+            Product product = await _productRepository.FindAsync(productId);
 
             await _productService.RemoveAsync(product);
+
+            return ApplicationDataResult<ProductDto>.FactoryFromEmpty();
         }
     }
 }

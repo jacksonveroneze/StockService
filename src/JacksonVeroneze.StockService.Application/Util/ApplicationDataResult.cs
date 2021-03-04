@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JacksonVeroneze.StockService.Core;
 
 namespace JacksonVeroneze.StockService.Application.Util
 {
@@ -11,8 +12,21 @@ namespace JacksonVeroneze.StockService.Application.Util
 
         public bool IsSuccess => !Errors.Any();
 
-        public ApplicationDataResult(IEnumerable<string> errors) => Errors = errors;
+        private ApplicationDataResult(IEnumerable<string> errors) => Errors = errors;
 
-        public ApplicationDataResult(T data) => Data = data;
+        private ApplicationDataResult(T data) => Data = data;
+
+        public ApplicationDataResult()
+        {
+        }
+
+        public static ApplicationDataResult<T> FactoryFromNotificationContext(NotificationContext notificationContext)
+            => new(notificationContext.Notifications.Select(x => x.Message));
+
+        public static ApplicationDataResult<T> FactoryFromData(T data)
+            => new(data);
+
+        public static ApplicationDataResult<T> FactoryFromEmpty()
+            => new();
     }
 }

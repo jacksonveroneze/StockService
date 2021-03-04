@@ -51,8 +51,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<PurchaseDto>(validationResult);
+            // if (validationResult.IsValid is false)
+            //     return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(validationResult);
 
             Purchase purchase = _mapper.Map<Purchase>(data);
 
@@ -60,15 +60,15 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _purchaseRepository.UnitOfWork.CommitAsync();
 
-            return FactoryResultFromData(_mapper.Map<PurchaseDto>(purchase));
+            return ApplicationDataResult<PurchaseDto>.FactoryFromData(_mapper.Map<PurchaseDto>(purchase));
         }
 
         public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid purchaseId, AddOrUpdatePurchaseDto data)
         {
             ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<PurchaseDto>(validationResult);
+            // if (validationResult.IsValid is false)
+            //     return FactoryFromValidationResult<PurchaseDto>(validationResult);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
@@ -81,7 +81,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _purchaseRepository.UnitOfWork.CommitAsync();
 
-            return FactoryResultFromData(_mapper.Map<PurchaseDto>(purchase));
+            return ApplicationDataResult<PurchaseDto>.FactoryFromData(_mapper.Map<PurchaseDto>(purchase));
         }
 
         public async Task RemoveAsync(Guid purchaseId)
@@ -131,8 +131,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
+            // if (validationResult.IsValid is false)
+            //     return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
@@ -148,7 +148,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _purchaseService.AddItemAsync(purchase, purchaseItem);
 
-            return FactoryResultFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
+            return ApplicationDataResult<PurchaseItemDto>.FactoryFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
         public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid purchaseId, Guid purchaseItemId,
@@ -156,8 +156,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         {
             ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
 
-            if (validationResult.IsValid is false)
-                return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
+            // if (validationResult.IsValid is false)
+            //     return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
@@ -175,7 +175,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _purchaseService.UpdateItemAsync(purchase, purchaseItem);
 
-            return FactoryResultFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
+            return ApplicationDataResult<PurchaseItemDto>.FactoryFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
         public async Task RemoveItemAsync(Guid purchaseId, Guid purchaseItemId)

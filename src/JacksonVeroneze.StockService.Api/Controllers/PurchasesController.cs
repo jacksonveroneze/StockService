@@ -105,12 +105,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         // Summary:
         //     /// Method responsible for action: FindItem. ///
         //
-        [HttpGet("{id}/items/{idItem}")]
+        [HttpGet("{id}/items/{itemId}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<IActionResult> FindItem(Guid id, Guid idItem)
+        public async Task<IActionResult> FindItem(Guid id, Guid itemId)
         {
-            PurchaseItemDto result = await _applicationService.FindItemAsync(id, idItem);
+            PurchaseItemDto result = await _applicationService.FindItemAsync(id, itemId);
 
             if (result is null)
                 return NotFound();
@@ -135,21 +135,21 @@ namespace JacksonVeroneze.StockService.Api.Controllers
                 return BadRequest(result.Errors);
 
             return CreatedAtAction(nameof(FindItem),
-                new {id = result.Data.PurchaseId, idItem = result.Data.Id}, result.Data);
+                new {id = result.Data.PurchaseId, itemId = result.Data.Id}, result.Data);
         }
 
         //
         // Summary:
         //     /// Method responsible for action: AddItem. ///
         //
-        [HttpPut("{id}/items/{idItem}")]
+        [HttpPut("{id}/items/{itemId}")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
-        public async Task<ActionResult<PurchaseDto>> UpdateItem(Guid id, Guid idItem,
+        public async Task<ActionResult<PurchaseDto>> UpdateItem(Guid id, Guid itemId,
             [FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
             ApplicationDataResult<PurchaseItemDto> result =
-                await _applicationService.UpdateItemAsync(id, idItem, purchaseItemDto);
+                await _applicationService.UpdateItemAsync(id, itemId, purchaseItemDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -161,11 +161,11 @@ namespace JacksonVeroneze.StockService.Api.Controllers
         // Summary:
         //     /// Method responsible for action: AddItem. ///
         //
-        [HttpDelete("{id}/items/{idItem}")]
+        [HttpDelete("{id}/items/{itemId}")]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
-        public async Task<ActionResult> RemoveItem(Guid id, Guid idItem)
+        public async Task<ActionResult> RemoveItem(Guid id, Guid itemId)
         {
-            await _applicationService.RemoveItemAsync(id, idItem);
+            await _applicationService.RemoveItemAsync(id, itemId);
 
             return NoContent();
         }

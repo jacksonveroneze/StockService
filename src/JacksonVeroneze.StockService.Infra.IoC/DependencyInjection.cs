@@ -7,6 +7,8 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
+using JacksonVeroneze.StockService.Application.Validations;
+using JacksonVeroneze.StockService.Application.Validations.Product;
 using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Data;
 using JacksonVeroneze.StockService.Data.Repositories;
@@ -23,7 +25,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
-            RegisterServicesApplication(services);
+            RegisterApplicationServices(services);
             RegisterDomainServices(services);
             RegisterRepositories(services);
             RegisterServicesValidations(services);
@@ -31,7 +33,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
 
         }
 
-        private static void RegisterServicesApplication(IServiceCollection services)
+        private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddScoped<IProductApplicationService, ProductApplicationService>();
             services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
@@ -61,6 +63,9 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IValidator<AddOrUpdateProductDto>, AddOrUpdateProductDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseDto>, AddOrUpdatePurchaseDtoValidator>();
             services.AddScoped<IValidator<AddOrUpdatePurchaseItemDto>, AddOrUpdatePurchaseItemDtoValidator>();
+
+            services.AddScoped<IProductValidator, ProductValidator>();
+
         }
 
         private static void RegisterServicesOthers(IServiceCollection services)
