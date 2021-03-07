@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Application.DTO.Purchase;
-using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
+using JacksonVeroneze.StockService.Application.DTO.Output;
+using JacksonVeroneze.StockService.Application.DTO.OutputItem;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Core.Data;
@@ -16,15 +16,15 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
     /// <summary>
     /// Class responsible for controller
     /// </summary>
-    public class PurchasesController : Controller
+    public class OutputsController : Controller
     {
-        private readonly IPurchaseApplicationService _applicationService;
+        private readonly IOutputApplicationService _applicationService;
 
         /// <summary>
         /// Method responsible for initialize controller.
         /// </summary>
         /// <param name="applicationService"></param>
-        public PurchasesController(IPurchaseApplicationService applicationService)
+        public OutputsController(IOutputApplicationService applicationService)
             => _applicationService = applicationService;
 
         /// <summary>
@@ -34,12 +34,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
-        [Authorize("purchases:filter")]
+        [Authorize("outputs:filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<PurchaseDto>>> Filter(
+        public async Task<ActionResult<IEnumerable<OutputDto>>> Filter(
             [FromQuery] Pagination pagination,
-            [FromQuery] PurchaseFilter filter)
+            [FromQuery] OutputFilter filter)
             => Ok(await _applicationService.FilterAsync(pagination, filter));
 
         /// <summary>
@@ -48,24 +48,24 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        [Authorize("purchases:find")]
+        [Authorize("outputs:find")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
-        public async Task<ActionResult<PurchaseDto>> Find(Guid id)
+        public async Task<ActionResult<OutputDto>> Find(Guid id)
             => Ok(await _applicationService.FindAsync(id));
 
         /// <summary>
         /// Method responsible for action: Create.
         /// </summary>
-        /// <param name="purchaseDto"></param>
+        /// <param name="outputDto"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize("purchases:create")]
+        [Authorize("outputs:create")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
-        public async Task<ActionResult<PurchaseDto>> Create([FromBody] AddOrUpdatePurchaseDto purchaseDto)
+        public async Task<ActionResult<OutputDto>> Create([FromBody] AddOrUpdateOutputDto outputDto)
         {
-            ApplicationDataResult<PurchaseDto> result = await _applicationService.AddAsync(purchaseDto);
+            ApplicationDataResult<OutputDto> result = await _applicationService.AddAsync(outputDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -79,12 +79,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        [Authorize("purchases:delete")]
+        [Authorize("outputs:delete")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {
-            ApplicationDataResult<PurchaseDto> result = await _applicationService.RemoveAsync(id);
+            ApplicationDataResult<OutputDto> result = await _applicationService.RemoveAsync(id);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -98,12 +98,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut("{id}/close")]
-        [Authorize("purchases:close")]
+        [Authorize("outputs:close")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
         public async Task<IActionResult> Close(Guid id)
         {
-            ApplicationDataResult<PurchaseDto> result = await _applicationService.CloseAsync(id);
+            ApplicationDataResult<OutputDto> result = await _applicationService.CloseAsync(id);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -117,7 +117,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}/items")]
-        [Authorize("purchases:find-items")]
+        [Authorize("outputs:find-items")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<IActionResult> FindItems(Guid id)
@@ -130,12 +130,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="itemId"></param>
         /// <returns></returns>
         [HttpGet("{id}/items/{itemId}")]
-        [Authorize("purchases:find-item")]
+        [Authorize("outputs:find-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<IActionResult> FindItem(Guid id, Guid itemId)
         {
-            PurchaseItemDto result = await _applicationService.FindItemAsync(id, itemId);
+            OutputItemDto result = await _applicationService.FindItemAsync(id, itemId);
 
             if (result is null)
                 return NotFound();
@@ -147,23 +147,23 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// Method responsible for action: CreateItem.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="purchaseItemDto"></param>
+        /// <param name="outputItemDto"></param>
         /// <returns></returns>
         [HttpPost("{id}/items")]
-        [Authorize("purchases:create-item")]
+        [Authorize("outputs:create-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
-        public async Task<ActionResult<PurchaseDto>> CreateItem(Guid id,
-            [FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
+        public async Task<ActionResult<OutputDto>> CreateItem(Guid id,
+            [FromBody] AddOrUpdateOutputItemDto outputItemDto)
         {
-            ApplicationDataResult<PurchaseItemDto> result =
-                await _applicationService.AddItemAsync(id, purchaseItemDto);
+            ApplicationDataResult<OutputItemDto> result =
+                await _applicationService.AddItemAsync(id, outputItemDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
 
             return CreatedAtAction(nameof(FindItem),
-                new {id = result.Data.PurchaseId, itemId = result.Data.Id}, result.Data);
+                new {id = result.Data.OutputId, itemId = result.Data.Id}, result.Data);
         }
 
         /// <summary>
@@ -171,17 +171,17 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
-        /// <param name="purchaseItemDto"></param>
+        /// <param name="outputItemDto"></param>
         /// <returns></returns>
         [HttpPut("{id}/items/{itemId}")]
-        [Authorize("purchases:update-item")]
+        [Authorize("outputs:update-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
-        public async Task<ActionResult<PurchaseDto>> UpdateItem(Guid id, Guid itemId,
-            [FromBody] AddOrUpdatePurchaseItemDto purchaseItemDto)
+        public async Task<ActionResult<OutputDto>> UpdateItem(Guid id, Guid itemId,
+            [FromBody] AddOrUpdateOutputItemDto outputItemDto)
         {
-            ApplicationDataResult<PurchaseItemDto> result =
-                await _applicationService.UpdateItemAsync(id, itemId, purchaseItemDto);
+            ApplicationDataResult<OutputItemDto> result =
+                await _applicationService.UpdateItemAsync(id, itemId, outputItemDto);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);
@@ -196,12 +196,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="itemId"></param>
         /// <returns></returns>
         [HttpDelete("{id}/items/{itemId}")]
-        [Authorize("purchases:remove-item")]
+        [Authorize("outputs:remove-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> RemoveItem(Guid id, Guid itemId)
         {
-            ApplicationDataResult<PurchaseItemDto> result = await _applicationService.RemoveItemAsync(id, itemId);
+            ApplicationDataResult<OutputItemDto> result = await _applicationService.RemoveItemAsync(id, itemId);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Errors);

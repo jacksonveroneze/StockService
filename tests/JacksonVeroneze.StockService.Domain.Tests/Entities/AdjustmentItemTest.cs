@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
     public class AdjustmentItemTest
     {
         [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("AdjustmentItem", "Validate")]
+        [Trait("AdjustmentItem", "ValidateAsync")]
         public void AdjustmentItem_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act

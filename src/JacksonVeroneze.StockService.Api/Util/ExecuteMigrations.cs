@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Api.Util
             DatabaseContext databaseContext =
                 scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
-            //await databaseContext.Database.EnsureDeletedAsync();
+            await databaseContext.Database.EnsureDeletedAsync();
 
             await databaseContext.Database.MigrateAsync();
         }

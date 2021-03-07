@@ -77,12 +77,10 @@ namespace JacksonVeroneze.StockService.Data
 
     public static class AddGlobalFilterExtension
     {
-        public static ModelBuilder AddFilter<T>(this ModelBuilder modelBuilder, Guid tenantId) where T : Entity
+        public static void AddFilter<T>(this ModelBuilder modelBuilder, Guid tenantId) where T : Entity
         {
             modelBuilder.Entity<T>()
                 .HasQueryFilter(x => x.DeletedAt == null && x.TenantId == tenantId);
-
-            return modelBuilder;
         }
     }
 }

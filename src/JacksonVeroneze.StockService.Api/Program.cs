@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
@@ -13,11 +14,13 @@ namespace JacksonVeroneze.StockService.Api
         {
             Log.Logger = Logger.FactoryLogger();
 
-            Log.Information($"Application: {0}", "Starting up");
+            Log.Information("Application: {0}", "Starting up");
+            Log.Information("Params: {0}", args.Length);
 
             IHost host = CreateHostBuilder(args).Build();
 
-            await ExecuteMigrations.Execute(host);
+            if (args.Contains("c"))
+                await ExecuteMigrations.Execute(host);
 
             await host.RunAsync();
         }

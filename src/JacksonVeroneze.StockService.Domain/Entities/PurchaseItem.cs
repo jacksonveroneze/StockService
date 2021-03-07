@@ -13,7 +13,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public virtual Product Product { get; private set; }
 
-
         private readonly List<MovementItem> _movementItems = new();
 
         public virtual IReadOnlyCollection<MovementItem> MovementItems => _movementItems;

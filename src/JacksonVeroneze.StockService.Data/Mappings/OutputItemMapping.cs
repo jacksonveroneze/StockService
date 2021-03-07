@@ -35,7 +35,7 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.HasOne(p => p.Output)
                 .WithMany(b => b.Items)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(p => p.Product)
                 .WithMany(b => b.ItemsOutput)

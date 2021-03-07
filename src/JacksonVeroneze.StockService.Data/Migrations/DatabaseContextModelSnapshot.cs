@@ -19,6 +19,25 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AdjustmentItemMovementItem", b =>
+                {
+                    b.Property<Guid>("AdjustmentItemsId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("adjustment_items_id");
+
+                    b.Property<Guid>("MovementItemsId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("movement_items_id");
+
+                    b.HasKey("AdjustmentItemsId", "MovementItemsId")
+                        .HasName("pk_adjustment_item_movement_item");
+
+                    b.HasIndex("MovementItemsId")
+                        .HasDatabaseName("ix_adjustment_item_movement_item_movement_items_id");
+
+                    b.ToTable("adjustment_item_movement_item");
+                });
+
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Adjustment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -447,6 +466,25 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     b.ToTable("purchase_item");
                 });
 
+            modelBuilder.Entity("MovementItemOutputItem", b =>
+                {
+                    b.Property<Guid>("MovementItemsId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("movement_items_id");
+
+                    b.Property<Guid>("OutputItemsId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("output_items_id");
+
+                    b.HasKey("MovementItemsId", "OutputItemsId")
+                        .HasName("pk_movement_item_output_item");
+
+                    b.HasIndex("OutputItemsId")
+                        .HasDatabaseName("ix_movement_item_output_item_output_items_id");
+
+                    b.ToTable("movement_item_output_item");
+                });
+
             modelBuilder.Entity("MovementItemPurchaseItem", b =>
                 {
                     b.Property<Guid>("MovementItemsId")
@@ -466,13 +504,30 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                     b.ToTable("movement_item_purchase_item");
                 });
 
+            modelBuilder.Entity("AdjustmentItemMovementItem", b =>
+                {
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.AdjustmentItem", null)
+                        .WithMany()
+                        .HasForeignKey("AdjustmentItemsId")
+                        .HasConstraintName("fk_adjustment_item_movement_item_adjustment_item_adjustment_items_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.MovementItem", null)
+                        .WithMany()
+                        .HasForeignKey("MovementItemsId")
+                        .HasConstraintName("fk_adjustment_item_movement_item_movement_item_movement_items_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.AdjustmentItem", b =>
                 {
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Adjustment", "Adjustment")
                         .WithMany("Items")
                         .HasForeignKey("AdjustmentId")
                         .HasConstraintName("fk_adjustment_item_adjustment_adjustment_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Product", "Product")
@@ -517,7 +572,7 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("OutputId")
                         .HasConstraintName("fk_output_item_output_output_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Product", "Product")
@@ -545,12 +600,29 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("PurchaseId")
                         .HasConstraintName("fk_purchase_item_purchase_purchase_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");
 
                     b.Navigation("Purchase");
+                });
+
+            modelBuilder.Entity("MovementItemOutputItem", b =>
+                {
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.MovementItem", null)
+                        .WithMany()
+                        .HasForeignKey("MovementItemsId")
+                        .HasConstraintName("fk_movement_item_output_item_movement_item_movement_items_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JacksonVeroneze.StockService.Domain.Entities.OutputItem", null)
+                        .WithMany()
+                        .HasForeignKey("OutputItemsId")
+                        .HasConstraintName("fk_movement_item_output_item_output_item_output_items_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovementItemPurchaseItem", b =>

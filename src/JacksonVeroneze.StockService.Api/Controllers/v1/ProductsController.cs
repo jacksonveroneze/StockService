@@ -54,7 +54,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             => Ok(await _applicationService.FindAsync(id));
 
         /// <summary>
-        /// Method responsible for action: Add.
+        /// Method responsible for action: Create.
         /// </summary>
         /// <param name="productDto"></param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         [Authorize("products:create")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
-        public async Task<ActionResult<ProductDto>> Add([FromBody] AddOrUpdateProductDto productDto)
+        public async Task<ActionResult<ProductDto>> Create([FromBody] AddOrUpdateProductDto productDto)
         {
             ApplicationDataResult<ProductDto> result = await _applicationService.AddAsync(productDto);
 
@@ -99,6 +99,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <returns></returns>
         [HttpDelete("{id}")]
         [Authorize("products:delete")]
+        [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
         public async Task<ActionResult> Delete(Guid id)
         {

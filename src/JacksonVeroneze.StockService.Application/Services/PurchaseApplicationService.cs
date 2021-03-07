@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;
-using JacksonVeroneze.StockService.Core;
+using JacksonVeroneze.StockService.Application.Validations.Purchase;
+using JacksonVeroneze.StockService.Application.Validations.PurchaseItem;
 using JacksonVeroneze.StockService.Core.Data;
+using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Core.Exceptions;
+using JacksonVeroneze.StockService.Core.Notifications;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -24,38 +25,63 @@ namespace JacksonVeroneze.StockService.Application.Services
         private readonly IPurchaseService _purchaseService;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IValidator<AddOrUpdatePurchaseDto> _validatorPurchase;
-        private readonly IValidator<AddOrUpdatePurchaseItemDto> _validatorPurchaseItem;
+        private readonly IPurchaseValidator _purchaseValidator;
+        private readonly IPurchaseItemValidator _purchaseItemValidator;
 
+        /// <summary>
+        /// Method responsible for initialize service.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <param name="purchaseService"></param>
+        /// <param name="purchaseRepository"></param>
+        /// <param name="productRepository"></param>
+        /// <param name="purchaseValidator"></param>
+        /// <param name="purchaseItemValidator"></param>
         public PurchaseApplicationService(IMapper mapper, IPurchaseService purchaseService,
             IPurchaseRepository purchaseRepository,
             IProductRepository productRepository,
-            IValidator<AddOrUpdatePurchaseDto> validatorPurchase,
-            IValidator<AddOrUpdatePurchaseItemDto> validatorPurchaseItem)
+            IPurchaseValidator purchaseValidator,
+            IPurchaseItemValidator purchaseItemValidator)
         {
             _mapper = mapper;
             _purchaseService = purchaseService;
             _purchaseRepository = purchaseRepository;
             _productRepository = productRepository;
-            _validatorPurchase = validatorPurchase;
-            _validatorPurchaseItem = validatorPurchaseItem;
+            _purchaseValidator = purchaseValidator;
+            _purchaseItemValidator = purchaseItemValidator;
         }
 
+        /// <summary>
+        /// Method responsible for find purchase.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <returns></returns>
         public async Task<PurchaseDto> FindAsync(Guid purchaseId)
             => _mapper.Map<PurchaseDto>(await _purchaseRepository.FindAsync(purchaseId));
 
+        /// <summary>
+        /// Method responsible for find list of purchases.
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public async Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
             => _mapper.Map<List<PurchaseDto>>(
                 await _purchaseRepository.FilterAsync(pagination, filter));
 
-        public async Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data)
+        /// <summary>
+        /// Method responsible for add purchase.
+        /// </summary>
+        /// <param name="purchaseDto"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto purchaseDto)
         {
-            ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
+            NotificationContext result = await _purchaseValidator.ValidateCreateAsync(purchaseDto);
 
-            // if (validationResult.IsValid is false)
-            //     return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(result);
 
-            Purchase purchase = _mapper.Map<Purchase>(data);
+            Purchase purchase = _mapper.Map<Purchase>(purchaseDto);
 
             await _purchaseRepository.AddAsync(purchase);
 
@@ -64,19 +90,23 @@ namespace JacksonVeroneze.StockService.Application.Services
             return ApplicationDataResult<PurchaseDto>.FactoryFromData(_mapper.Map<PurchaseDto>(purchase));
         }
 
-        public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid purchaseId, AddOrUpdatePurchaseDto data)
+        /// <summary>
+        /// Method responsible for update purchase.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseDto"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid purchaseId,
+            AddOrUpdatePurchaseDto purchaseDto)
         {
-            ValidationResult validationResult = await _validatorPurchase.ValidateAsync(data);
+            NotificationContext result = await _purchaseValidator.ValidateUpdateAsync(purchaseId, purchaseDto);
 
-            // if (validationResult.IsValid is false)
-            //     return FactoryFromValidationResult<PurchaseDto>(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(result);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
-            if (purchase is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
-
-            purchase.Update(data.Description, data.Date);
+            purchase.Update(purchaseDto.Description, purchaseDto.Date);
 
             _purchaseRepository.Update(purchase);
 
@@ -85,28 +115,53 @@ namespace JacksonVeroneze.StockService.Application.Services
             return ApplicationDataResult<PurchaseDto>.FactoryFromData(_mapper.Map<PurchaseDto>(purchase));
         }
 
-        public async Task RemoveAsync(Guid purchaseId)
+        /// <summary>
+        /// Method responsible for remove purchase.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<PurchaseDto>> RemoveAsync(Guid purchaseId)
         {
-            Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
+            NotificationContext result = await _purchaseValidator.ValidateRemoveAsync(purchaseId);
 
-            if (purchase is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(result);
+
+            Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
             _purchaseRepository.Remove(purchase);
 
             await _purchaseRepository.UnitOfWork.CommitAsync();
+
+            return ApplicationDataResult<PurchaseDto>.FactoryFromEmpty();
         }
 
-        public async Task CloseAsync(Guid purchaseId)
+        /// <summary>
+        /// Method responsible for close purchase.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<PurchaseDto>> CloseAsync(Guid purchaseId)
         {
+            NotificationContext result = await _purchaseValidator.ValidateCloseAsync(purchaseId);
+
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseDto>.FactoryFromNotificationContext(result);
+
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
-            if (purchase is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
-
             await _purchaseService.CloseAsync(purchase);
+
+            return ApplicationDataResult<PurchaseDto>.FactoryFromEmpty();
         }
 
+        /// <summary>
+        /// Method responsible for find purchase item.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseItemId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<PurchaseItemDto> FindItemAsync(Guid purchaseId, Guid purchaseItemId)
         {
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
@@ -114,9 +169,15 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (purchase is null)
                 throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
 
-            return _mapper.Map<PurchaseItemDto>(purchase.FindItemById(purchaseItemId));
+            return _mapper.Map<PurchaseItemDto>(purchase.FindItem(purchaseItemId));
         }
 
+        /// <summary>
+        /// Method responsible for find purchase items.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<IList<PurchaseItemDto>> FindItensAsync(Guid purchaseId)
         {
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
@@ -127,71 +188,80 @@ namespace JacksonVeroneze.StockService.Application.Services
             return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
         }
 
+        /// <summary>
+        /// Method responsible for add purchaseItem.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseItemDto"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid purchaseId,
-            AddOrUpdatePurchaseItemDto data)
+            AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
-            ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
+            NotificationContext result = await _purchaseItemValidator.ValidateCreateAsync(purchaseItemDto);
 
-            // if (validationResult.IsValid is false)
-            //     return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseItemDto>.FactoryFromNotificationContext(result);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
-            if (purchase is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
+            Product product = await _productRepository.FindAsync(purchaseItemDto.ProductId);
 
-            Product product = await _productRepository.FindAsync(data.ProductId);
-
-            if (product is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Product>(purchaseId);
-
-            PurchaseItem purchaseItem = new(data.Amount, data.Value, purchase, product);
+            PurchaseItem purchaseItem = new(purchaseItemDto.Amount, purchaseItemDto.Value, purchase, product);
 
             await _purchaseService.AddItemAsync(purchase, purchaseItem);
 
             return ApplicationDataResult<PurchaseItemDto>.FactoryFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
+        /// <summary>
+        /// Method responsible for update purchaseItem.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseItemId"></param>
+        /// <param name="purchaseItemDto"></param>
+        /// <returns></returns>
         public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid purchaseId, Guid purchaseItemId,
-            AddOrUpdatePurchaseItemDto data)
+            AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
-            ValidationResult validationResult = await _validatorPurchaseItem.ValidateAsync(data);
+            NotificationContext result = await _purchaseItemValidator.ValidateUpdateAsync(purchaseId, purchaseItemId, purchaseItemDto);
 
-            // if (validationResult.IsValid is false)
-            //     return FactoryFromValidationResult<PurchaseItemDto>(validationResult);
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseItemDto>.FactoryFromNotificationContext(result);
 
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
-            PurchaseItem purchaseItem = purchase.FindItemById(purchaseItemId);
+            PurchaseItem purchaseItem = purchase.FindItem(purchaseItemId);
 
-            if (purchaseItem is null)
-                throw ExceptionsFactory.FactoryNotFoundException<PurchaseItem>(purchaseItemId);
+            Product product = await _productRepository.FindAsync(purchaseItemDto.ProductId);
 
-            Product product = await _productRepository.FindAsync(data.ProductId);
-
-            if (product is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Product>(purchaseId);
-
-            purchaseItem.Update(data.Amount, data.Value, product);
+            purchaseItem.Update(purchaseItemDto.Amount, purchaseItemDto.Value, product);
 
             await _purchaseService.UpdateItemAsync(purchase, purchaseItem);
 
             return ApplicationDataResult<PurchaseItemDto>.FactoryFromData(_mapper.Map<PurchaseItemDto>(purchaseItem));
         }
 
-        public async Task RemoveItemAsync(Guid purchaseId, Guid purchaseItemId)
+        /// <summary>
+        /// Method responsible for remove purchaseItem.
+        /// </summary>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseItemId"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<PurchaseItemDto>> RemoveItemAsync(Guid purchaseId, Guid purchaseItemId)
         {
+            NotificationContext result = await _purchaseItemValidator.ValidateRemoveAsync(purchaseId, purchaseItemId);
+
+            if (result.HasNotifications)
+                return ApplicationDataResult<PurchaseItemDto>.FactoryFromNotificationContext(result);
+
             Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
-            if (purchase is null)
-                throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
-
-            PurchaseItem purchaseItem = purchase.FindItemById(purchaseItemId);
-
-            if (purchaseItem is null)
-                throw ExceptionsFactory.FactoryNotFoundException<PurchaseItem>(purchaseItemId);
+            PurchaseItem purchaseItem = purchase.FindItem(purchaseItemId);
 
             await _purchaseService.RemoveItemAsync(purchase, purchaseItem);
+
+            return ApplicationDataResult<PurchaseItemDto>.FactoryFromEmpty();
         }
     }
 }

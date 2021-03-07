@@ -105,7 +105,7 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         column: x => x.adjustment_id,
                         principalTable: "adjustment",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_adjustment_item_product_product_id",
                         column: x => x.product_id,
@@ -160,7 +160,7 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         column: x => x.output_id,
                         principalTable: "output",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_output_item_product_product_id",
                         column: x => x.product_id,
@@ -198,7 +198,7 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         column: x => x.purchase_id,
                         principalTable: "purchase",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,6 +223,54 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                         principalTable: "movement",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "adjustment_item_movement_item",
+                columns: table => new
+                {
+                    adjustment_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    movement_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_adjustment_item_movement_item", x => new { x.adjustment_items_id, x.movement_items_id });
+                    table.ForeignKey(
+                        name: "fk_adjustment_item_movement_item_adjustment_item_adjustment_items_id",
+                        column: x => x.adjustment_items_id,
+                        principalTable: "adjustment_item",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_adjustment_item_movement_item_movement_item_movement_items_id",
+                        column: x => x.movement_items_id,
+                        principalTable: "movement_item",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "movement_item_output_item",
+                columns: table => new
+                {
+                    movement_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    output_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_movement_item_output_item", x => new { x.movement_items_id, x.output_items_id });
+                    table.ForeignKey(
+                        name: "fk_movement_item_output_item_movement_item_movement_items_id",
+                        column: x => x.movement_items_id,
+                        principalTable: "movement_item",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_movement_item_output_item_output_item_output_items_id",
+                        column: x => x.output_items_id,
+                        principalTable: "output_item",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,6 +308,11 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_adjustment_item_movement_item_movement_items_id",
+                table: "adjustment_item_movement_item",
+                column: "movement_items_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_movement_product_id",
                 table: "movement",
                 column: "product_id");
@@ -268,6 +321,11 @@ namespace JacksonVeroneze.StockService.Data.Migrations
                 name: "ix_movement_item_movement_id",
                 table: "movement_item",
                 column: "movement_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_movement_item_output_item_output_items_id",
+                table: "movement_item_output_item",
+                column: "output_items_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_movement_item_purchase_item_purchase_items_id",
@@ -304,22 +362,28 @@ namespace JacksonVeroneze.StockService.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "adjustment_item");
+                name: "adjustment_item_movement_item");
+
+            migrationBuilder.DropTable(
+                name: "movement_item_output_item");
 
             migrationBuilder.DropTable(
                 name: "movement_item_purchase_item");
 
             migrationBuilder.DropTable(
-                name: "output_item");
+                name: "adjustment_item");
 
             migrationBuilder.DropTable(
-                name: "adjustment");
+                name: "output_item");
 
             migrationBuilder.DropTable(
                 name: "movement_item");
 
             migrationBuilder.DropTable(
                 name: "purchase_item");
+
+            migrationBuilder.DropTable(
+                name: "adjustment");
 
             migrationBuilder.DropTable(
                 name: "output");

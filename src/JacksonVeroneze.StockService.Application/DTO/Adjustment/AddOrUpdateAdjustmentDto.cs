@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 using FluentValidation.Results;
-using JacksonVeroneze.StockService.Application.DTO.Adjustment.Validations;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Adjustment
 {
@@ -14,5 +14,18 @@ namespace JacksonVeroneze.StockService.Application.DTO.Adjustment
         public Task<ValidationResult> Validate()
             => new AddOrUpdateAdjustmentDtoValidator()
                 .ValidateAsync(this);
+
+        public class AddOrUpdateAdjustmentDtoValidator : AbstractValidator<AddOrUpdateAdjustmentDto>
+        {
+            public AddOrUpdateAdjustmentDtoValidator()
+            {
+                RuleFor(x => x.Description)
+                    .NotEmpty()
+                    .Length(1, 100);
+
+                RuleFor(x => x.Date)
+                    .NotNull();
+            }
+        }
     }
 }

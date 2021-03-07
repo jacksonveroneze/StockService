@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JacksonVeroneze.StockService.Bus;
-using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
@@ -105,7 +103,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Assert
             output.Items.Should().HaveCount(totalItens - 1);
             output.TotalValue.Should().Be(outputItens.Skip(1).Sum(x => x.CalculteValue()));
-            _outputRepositoryMock.Verify(x => x.Remove(It.IsAny<Output>()), Times.Once);
+            _outputRepositoryMock.Verify(x => x.Update(It.IsAny<Output>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<OutputItemRemoved>()), Times.Once);
         }

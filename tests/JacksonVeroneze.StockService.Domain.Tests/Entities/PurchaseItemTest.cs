@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
     public class PurchaseItemTest
     {
         [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("PurchaseItem", "Validate")]
+        [Trait("PurchaseItem", "ValidateAsync")]
         public void PurchaseItem_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act

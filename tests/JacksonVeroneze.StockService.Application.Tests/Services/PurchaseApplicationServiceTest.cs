@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using FluentValidation;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
-using JacksonVeroneze.StockService.Application.DTO.Purchase.Validations;
-using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
-using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Application.Util;
+using JacksonVeroneze.StockService.Application.Validations.Purchase;
+using JacksonVeroneze.StockService.Application.Validations.PurchaseItem;
 using JacksonVeroneze.StockService.Bus;
-using JacksonVeroneze.StockService.Bus.Mediator;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
@@ -23,7 +19,6 @@ using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
-using JacksonVeroneze.StockService.Domain.Util;
 using JacksonVeroneze.StockService.Mapper;
 using Moq;
 using Xunit;
@@ -64,7 +59,8 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             FactoryService();
 
             // Act
-            IList<PurchaseDto> listPurchaseDto = await _purchaseApplicationService.FilterAsync(new Pagination(), new PurchaseFilter());
+            IList<PurchaseDto> listPurchaseDto =
+                await _purchaseApplicationService.FilterAsync(new Pagination(), new PurchaseFilter());
 
             // Assert
             listPurchaseDto.Should().NotBeNull();
@@ -112,7 +108,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().HaveCount(3);
+            result.Errors.Should().HaveCount(2);
             result.Data.Should().BeNull();
 
             _purchaseRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Purchase>()), Times.Never);
@@ -122,7 +118,8 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
 
         [Fact(DisplayName = "DeveAtualizarCorretamenteORegistroQuandoEmEstadoValido")]
         [Trait("PurchaseApplicationService", "UpdateAsync")]
-        public async Task PurchaseApplicationService_UpdateAsync_DeveAtualizarCorretamenteORegistroQuandoEmEstadoValido()
+        public async Task
+            PurchaseApplicationService_UpdateAsync_DeveAtualizarCorretamenteORegistroQuandoEmEstadoValido()
         {
             // Arange
             ConfigureMock();
@@ -161,7 +158,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().HaveCount(3);
+            result.Errors.Should().HaveCount(2);
             result.Data.Should().BeNull();
 
             _purchaseRepositoryMock.Verify(x => x.Update(It.IsAny<Purchase>()), Times.Never);
@@ -202,29 +199,6 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             func.Should().NotThrow<DomainException>();
         }
 
-        [Fact(DisplayName = "DeveFecharCorretamenteORegistroQuandoEncontrarMesmo__")]
-        [Trait("PurchaseApplicationService", "AddItemAsync")]
-        public async Task PurchaseApplicationService_AddItemAsync_DeveFecharCorretamenteORegistroQuandoEncontrarMesmo__()
-        {
-            // Arange
-            ConfigureMock();
-            FactoryService();
-
-            AddOrUpdatePurchaseItemDto addOrUpdatePurchaseItemDto =
-                AddOrUpdatePurchaseItemDtoFaker.GenerateValidFaker().Generate();
-
-            throw new Exception("TODO");
-
-            // Act
-            ApplicationDataResult<PurchaseItemDto> result =
-                await _purchaseApplicationService.AddItemAsync(addOrUpdatePurchaseItemDto.PurchaseId, addOrUpdatePurchaseItemDto);
-
-            // Assert
-            result.IsSuccess.Should().BeTrue();
-            result.Errors.Should().BeEmpty();
-            result.Data.Should().NotBeNull();
-        }
-
         private void ConfigureMock()
         {
             _purchaseRepositoryMock = new Mock<IPurchaseRepository>();
@@ -240,7 +214,7 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             _purchaseRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(PurchaseFaker.GenerateFaker().Generate()));
 
-            _purchaseRepositoryMock.Setup(x => x.FilterAsync(It.IsAny<PurchaseFilter>()))
+            _purchaseRepositoryMock.Setup(x => x.FilterAsync(It.IsAny<Pagination>(), It.IsAny<PurchaseFilter>()))
                 .Returns(Task.FromResult(PurchaseFaker.GenerateFaker().Generate(100)));
 
             _purchaseRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Purchase>()))
@@ -250,13 +224,13 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
 
             _purchaseRepositoryMock.Setup(x => x.Remove(It.IsAny<Purchase>()));
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseItemAdded>(It.IsAny<PurchaseItemAdded>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent(It.IsAny<PurchaseItemAdded>()))
                 .Returns(Task.CompletedTask);
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseItemRemoved>(It.IsAny<PurchaseItemRemoved>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent(It.IsAny<PurchaseItemRemoved>()))
                 .Returns(Task.CompletedTask);
 
-            _busHandlerMock.Setup(x => x.PublishDomainEvent<PurchaseClosedEvent>(It.IsAny<PurchaseClosedEvent>()))
+            _busHandlerMock.Setup(x => x.PublishDomainEvent(It.IsAny<PurchaseClosedEvent>()))
                 .Returns(Task.CompletedTask);
 
             _productRepositoryMock.Setup(x => x.FindAsync(It.IsAny<Guid>()))
@@ -272,12 +246,13 @@ namespace JacksonVeroneze.StockService.Application.Tests.Services
             IPurchaseService purchaseService =
                 new PurchaseService(_purchaseRepositoryMock.Object, _busHandlerMock.Object);
 
-            IValidator<AddOrUpdatePurchaseDto> validatorPurchase = new AddOrUpdatePurchaseDtoValidator();
-            IValidator<AddOrUpdatePurchaseItemDto> validatorPurchaseItem = new AddOrUpdatePurchaseItemDtoValidator(_purchaseRepositoryMock.Object, _productRepositoryMock.Object);
+            IPurchaseValidator purchaseValidator = new PurchaseValidator(_purchaseRepositoryMock.Object);
+            IPurchaseItemValidator purchaseItemValidator =
+                new PurchaseItemValidator(_purchaseRepositoryMock.Object, _productRepositoryMock.Object);
 
             _purchaseApplicationService =
                 new PurchaseApplicationService(mapper, purchaseService, _purchaseRepositoryMock.Object,
-                    _productRepositoryMock.Object, validatorPurchase, validatorPurchaseItem);
+                    _productRepositoryMock.Object, purchaseValidator, purchaseItemValidator);
         }
     }
 }

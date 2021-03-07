@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Domain.Enums;
@@ -19,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public decimal TotalValue { get; private set; }
 
-        private readonly List<OutputItem> _items = new List<OutputItem>();
+        private readonly List<OutputItem> _items = new();
         public virtual IReadOnlyCollection<OutputItem> Items => _items;
 
         protected Output()
@@ -34,43 +33,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
-        public void AddItem(OutputItem item)
-        {
-            ValidateDuplicatedItem(item);
-            ValidateDuplicatedProduct(item);
-
-            _items.Add(item);
-
-            CalculateTotalValue();
-        }
-
-        public void UpdateItem(OutputItem item)
-        {
-            ValidateDuplicatedItem(item);
-            ValidateDuplicatedProduct(item);
-
-            OutputItem existItem = FindItemById(item.Id);
-
-            existItem.Update(item.Amount, item.Value, item.Product);
-
-            CalculateTotalValue();
-        }
-
-        public void RemoveItem(OutputItem item)
-        {
-            ValidateOpenState();
-
-            ValidateIfNotExistsItem(item);
-
-            _items.Remove(item);
-
-            CalculateTotalValue();
-        }
-
         public void Close()
         {
-            if (State == OutputState.Closed)
-                throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosed);
+            ValidateIsOpenState();
 
             State = OutputState.Closed;
         }
@@ -80,44 +45,86 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Description = description;
             Date = date;
 
+            ValidateIsOpenState();
             Validate();
         }
+
+        public void AddItem(OutputItem item)
+        {
+            ValidateIsOpenState();
+            ValidateIfExistsDuplicatedItem(item);
+            ValidateIfExistsItemByProduct(item);
+
+            _items.Add(item);
+
+            CalculateTotalValue();
+        }
+
+        public void UpdateItem(OutputItem item)
+        {
+            ValidateIsOpenState();
+            ValidateIfItemNotExist(item);
+            ValidateIfExistsItemByProduct(item);
+
+            OutputItem outputItem = FindItem(item.Id);
+
+            _items.Remove(outputItem);
+
+            _items.Add(item);
+
+            CalculateTotalValue();
+        }
+
+        public void RemoveItem(OutputItem item)
+        {
+            ValidateIsOpenState();
+
+            ValidateIfItemNotExist(item);
+
+            _items.Remove(item);
+
+            CalculateTotalValue();
+        }
+
+        public OutputItem FindItem(Guid id)
+            => Items.FirstOrDefault(x => x.Id == id);
 
         private void CalculateTotalValue()
             => TotalValue = Items.Sum(x => x.CalculteValue());
 
-        public OutputItem FindItemById(Guid id)
-            => Items.FirstOrDefault(x => x.Id == id);
-
-        private void ValidateIfNotExistsItem(OutputItem item)
+        private void ValidateIfItemNotExist(OutputItem item)
         {
-            if (ExistsItem(item) is false)
+            if (CheckIfExistsItemById(item.Id) is false)
                 throw ExceptionsFactory.FactoryNotFoundException<Output>(item.Id);
         }
 
-        private void ValidateDuplicatedItem(OutputItem item)
+        private void ValidateIfExistsDuplicatedItem(OutputItem item)
         {
-            if (ExistsItem(item) is true)
+            OutputItem existItem = FindItem(item.Id);
+
+            if (existItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
         }
 
-        private void ValidateDuplicatedProduct(OutputItem item)
+        private void ValidateIfExistsItemByProduct(OutputItem item)
         {
-            if (ExistsProduct(item.Product) is true)
+            OutputItem outputItem = FindItemByProductId(item.Product);
+
+            if (outputItem != null && outputItem.Id != item.Id)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 
-        private void ValidateOpenState()
+        private void ValidateIsOpenState()
         {
             if (State == OutputState.Closed)
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 
-        private bool ExistsProduct(Product product)
-            => Items.Any(x => x.Product.Id == product.Id);
+        private OutputItem FindItemByProductId(Product product)
+            => Items.FirstOrDefault(x => x.Product.Id == product.Id);
 
-        private bool ExistsItem(OutputItem item)
-            => Items.Any(x => x.Id == item.Id);
+        private bool CheckIfExistsItemById(Guid id)
+            => Items.Any(x => x.Id == id);
 
         private void Validate()
         {

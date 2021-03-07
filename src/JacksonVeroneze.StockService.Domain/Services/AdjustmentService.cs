@@ -7,17 +7,31 @@ using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
 namespace JacksonVeroneze.StockService.Domain.Services
 {
+    /// <summary>
+    /// Method responsible for service.
+    /// </summary>
     public class AdjustmentService : IAdjustmentService
     {
         private readonly IAdjustmentRepository _repository;
         private readonly IBus _bus;
 
+        /// <summary>
+        /// Method responsible for initialize service.
+        /// </summary>
+        /// <param name="repository"></param>
+        /// <param name="bus"></param>
         public AdjustmentService(IAdjustmentRepository repository, IBus bus)
         {
             _repository = repository;
             _bus = bus;
         }
 
+        /// <summary>
+        /// Method responsible for add item.
+        /// </summary>
+        /// <param name="adjustment"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task AddItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.AddItem(item);
@@ -28,6 +42,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _bus.PublishDomainEvent(new AdjustmentItemAdded(item.Id));
         }
 
+        /// <summary>
+        /// Method responsible for update item.
+        /// </summary>
+        /// <param name="adjustment"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task UpdateItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.UpdateItem(item);
@@ -38,6 +58,12 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _bus.PublishDomainEvent(new AdjustmentItemUpdated(item.Id));
         }
 
+        /// <summary>
+        /// Method responsible for remove item.
+        /// </summary>
+        /// <param name="adjustment"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public async Task RemoveItemAsync(Adjustment adjustment, AdjustmentItem item)
         {
             adjustment.RemoveItem(item);
@@ -48,15 +74,19 @@ namespace JacksonVeroneze.StockService.Domain.Services
                 await _bus.PublishDomainEvent(new AdjustmentItemRemoved(item.Id));
         }
 
+        /// <summary>
+        /// Method responsible for close.
+        /// </summary>
+        /// <param name="adjustment"></param>
+        /// <returns></returns>
         public async Task CloseAsync(Adjustment adjustment)
         {
             adjustment.Close();
 
             _repository.Update(adjustment);
 
-            adjustment.AddEvent(new AdjustmentClosedEvent(adjustment.Id));
-
-            await _repository.UnitOfWork.CommitAsync();
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _bus.PublishDomainEvent(new AdjustmentClosedEvent(adjustment.Id));
         }
     }
 }

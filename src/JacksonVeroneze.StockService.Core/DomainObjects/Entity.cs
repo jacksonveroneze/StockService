@@ -8,13 +8,13 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
     {
         public DateTime CreatedAt { get; private set; } = DateTime.Now;
 
-        public DateTime? UpdatedAt { get; private set; } = null;
+        public DateTime? UpdatedAt { get; private set; }
 
-        public DateTime? DeletedAt { get; private set; } = null;
+        public DateTime? DeletedAt { get; private set; }
 
         public int Version { get; private set; } = 1;
 
-        public Guid TenantId { get; set; }
+        public Guid TenantId { get; private set; }
 
         private readonly List<Event> _notifications = new List<Event>();
 
@@ -34,6 +34,11 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
             => _notifications.Clear();
 
         public void SetDeletedAt() => DeletedAt = DateTime.Now;
+
+        public Entity ShallowCopy()
+        {
+            return (Entity)this.MemberwiseClone();
+        }
 
         public override string ToString()
             => $"{GetType().Name}: Id: {Id}, CreatedAt: {CreatedAt}, " +

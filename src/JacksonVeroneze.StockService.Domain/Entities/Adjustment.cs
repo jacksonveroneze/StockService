@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Domain.Enums;
@@ -34,43 +33,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
-        public void AddItem(AdjustmentItem item)
-        {
-            ValidateDuplicatedItem(item);
-            ValidateDuplicatedProduct(item);
-
-            _items.Add(item);
-
-            CalculateTotalValue();
-        }
-
-        public void UpdateItem(AdjustmentItem item)
-        {
-            ValidateDuplicatedItem(item);
-            ValidateDuplicatedProduct(item);
-
-            AdjustmentItem existItem = FindItemById(item.Id);
-
-            existItem.Update(item.Amount, item.Value, item.Product);
-
-            CalculateTotalValue();
-        }
-
-        public void RemoveItem(AdjustmentItem item)
-        {
-            ValidateOpenState();
-
-            ValidateIfNotExistsItem(item);
-
-            _items.Remove(item);
-
-            CalculateTotalValue();
-        }
-
         public void Close()
         {
-            if (State == AdjustmentState.Closed)
-                throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosed);
+            ValidateIsOpenState();
 
             State = AdjustmentState.Closed;
         }
@@ -80,44 +45,86 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Description = description;
             Date = date;
 
+            ValidateIsOpenState();
             Validate();
         }
+
+        public void AddItem(AdjustmentItem item)
+        {
+            ValidateIsOpenState();
+            ValidateIfExistsDuplicatedItem(item);
+            ValidateIfExistsItemByProduct(item);
+
+            _items.Add(item);
+
+            CalculateTotalValue();
+        }
+
+        public void UpdateItem(AdjustmentItem item)
+        {
+            ValidateIsOpenState();
+            ValidateIfItemNotExist(item);
+            ValidateIfExistsItemByProduct(item);
+
+            AdjustmentItem adjustmentItem = FindItem(item.Id);
+
+            _items.Remove(adjustmentItem);
+
+            _items.Add(item);
+
+            CalculateTotalValue();
+        }
+
+        public void RemoveItem(AdjustmentItem item)
+        {
+            ValidateIsOpenState();
+
+            ValidateIfItemNotExist(item);
+
+            _items.Remove(item);
+
+            CalculateTotalValue();
+        }
+
+        public AdjustmentItem FindItem(Guid id)
+            => Items.FirstOrDefault(x => x.Id == id);
 
         private void CalculateTotalValue()
             => TotalValue = Items.Sum(x => x.CalculteValue());
 
-        public AdjustmentItem FindItemById(Guid id)
-            => Items.FirstOrDefault(x => x.Id == id);
-
-        private void ValidateIfNotExistsItem(AdjustmentItem item)
+        private void ValidateIfItemNotExist(AdjustmentItem item)
         {
-            if (ExistsItem(item) is false)
+            if (CheckIfExistsItemById(item.Id) is false)
                 throw ExceptionsFactory.FactoryNotFoundException<Adjustment>(item.Id);
         }
 
-        private void ValidateDuplicatedItem(AdjustmentItem item)
+        private void ValidateIfExistsDuplicatedItem(AdjustmentItem item)
         {
-            if (ExistsItem(item) is true)
+            AdjustmentItem existItem = FindItem(item.Id);
+
+            if (existItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
         }
 
-        private void ValidateDuplicatedProduct(AdjustmentItem item)
+        private void ValidateIfExistsItemByProduct(AdjustmentItem item)
         {
-            if (ExistsProduct(item.Product) is true)
+            AdjustmentItem adjustmentItem = FindItemByProductId(item.Product);
+
+            if (adjustmentItem != null && adjustmentItem.Id != item.Id)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 
-        private void ValidateOpenState()
+        private void ValidateIsOpenState()
         {
             if (State == AdjustmentState.Closed)
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 
-        private bool ExistsProduct(Product product)
-            => Items.Any(x => x.Product.Id == product.Id);
+        private AdjustmentItem FindItemByProductId(Product product)
+            => Items.FirstOrDefault(x => x.Product.Id == product.Id);
 
-        private bool ExistsItem(AdjustmentItem item)
-            => Items.Any(x => x.Id == item.Id);
+        private bool CheckIfExistsItemById(Guid id)
+            => Items.Any(x => x.Id == id);
 
         private void Validate()
         {

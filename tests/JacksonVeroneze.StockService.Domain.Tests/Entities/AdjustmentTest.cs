@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using JacksonVeroneze.StockService.Common.Fakers;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
@@ -15,7 +14,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
     public class AdjustmentTest
     {
         [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("Adjustment", "Validate")]
+        [Trait("Adjustment", "ValidateAsync")]
         public void Adjustment_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
@@ -82,6 +81,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
+
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente")]
         [Trait("Adjustment", "UpdateItemAsync")]
         public void Adjustment_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
@@ -93,6 +93,51 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             // Act
             Action act = () => adjustment.UpdateItem(adjustmentItem);
+
+            // Assert
+            act.Should().Throw<NotFoundException>();
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista")]
+        [Trait("Adjustment", "AddItem")]
+        public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista()
+        {
+            // Arange
+            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+
+            Product product = ProductFaker.GenerateFaker().Generate();
+
+            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.GenerateFaker(adjustment, product).Generate();
+            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.GenerateFaker(adjustment, product).Generate();
+
+            adjustment.AddItem(adjustmentItem1);
+
+            // Act
+            Action act = () => adjustment.AddItem(adjustmentItem2);
+
+            // Assert
+            act.Should().Throw<DomainException>();
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista")]
+        [Trait("Adjustment", "UpdateItem")]
+        public void Adjustment_UpdateItem_DeveGerarDomainExceptionQuandoAtualizarUmItemComProdutoQueJaExisteNaLista()
+        {
+            // Arange
+            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+
+            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+
+            adjustment.AddItem(adjustmentItem1);
+            adjustment.AddItem(adjustmentItem2);
+
+            AdjustmentItem adjustmentItem3 = (AdjustmentItem)adjustmentItem2.ShallowCopy();
+
+            adjustmentItem3.Update(adjustmentItem1.Amount, adjustmentItem1.Value, adjustmentItem1.Product);
+
+            // Act
+            Action act = () => adjustment.UpdateItem(adjustmentItem3);
 
             // Assert
             act.Should().Throw<DomainException>();
@@ -151,7 +196,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             Action act = () => adjustment.RemoveItem(itemsMock.Last());
 
             // Assert
-            act.Should().Throw<DomainException>();
+            act.Should().Throw<NotFoundException>();
         }
 
         [Fact(DisplayName = "DeveSomarCorretamenteValorTotal")]

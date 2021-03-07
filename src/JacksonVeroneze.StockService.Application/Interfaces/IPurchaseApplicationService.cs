@@ -6,7 +6,6 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Application.Util;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
-using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Application.Interfaces
 {
@@ -16,13 +15,13 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 
         Task<IList<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter);
 
-        Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto data);
+        Task<ApplicationDataResult<PurchaseDto>> AddAsync(AddOrUpdatePurchaseDto purchaseDto);
 
-        Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid purchaseId, AddOrUpdatePurchaseDto data);
+        Task<ApplicationDataResult<PurchaseDto>> UpdateAsync(Guid purchaseId, AddOrUpdatePurchaseDto purchaseDto);
 
-        Task RemoveAsync(Guid purchaseId);
+        Task<ApplicationDataResult<PurchaseDto>> RemoveAsync(Guid purchaseId);
 
-        Task CloseAsync(Guid purchaseId);
+        Task<ApplicationDataResult<PurchaseDto>> CloseAsync(Guid purchaseId);
 
         //
 
@@ -30,10 +29,12 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
 
         Task<IList<PurchaseItemDto>> FindItensAsync(Guid purchaseId);
 
-        Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid purchaseId, AddOrUpdatePurchaseItemDto data);
+        Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid purchaseId,
+            AddOrUpdatePurchaseItemDto purchaseItemDto);
 
-        Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid purchaseId, Guid purchaseItemId, AddOrUpdatePurchaseItemDto data);
+        Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid purchaseId, Guid purchaseItemId,
+            AddOrUpdatePurchaseItemDto purchaseItemDto);
 
-        Task RemoveItemAsync(Guid purchaseId, Guid purchaseItemId);
+        Task<ApplicationDataResult<PurchaseItemDto>> RemoveItemAsync(Guid purchaseId, Guid purchaseItemId);
     }
 }
