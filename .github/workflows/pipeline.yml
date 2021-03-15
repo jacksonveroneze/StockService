@@ -51,7 +51,7 @@ jobs:
               run: /usr/share/dotnet/dotnet restore
 
             - name: dotnet publish
-              run: /usr/share/dotnet/dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+              run: /usr/share/dotnet/dotnet publish -c Release
 
     test:
         name: Test
@@ -78,11 +78,6 @@ jobs:
               with:
                   java-version: 1.11
 
-            - name: Setup .NET Core
-              uses: actions/setup-dotnet@v1
-              with:
-                  dotnet-version: '5.0.x'
-
             - uses: actions/checkout@v2
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
@@ -106,10 +101,10 @@ jobs:
 
             - name: Install SonarCloud scanner
               if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-              run: dotnet tool update dotnet-sonarscanner --tool-path ~/.sonar/scanner
+              run: /usr/share/dotnet/dotnet tool update dotnet-sonarscanner --tool-path ~/.sonar/scanner
 
             - name: Install project dependencies
-              run: dotnet restore
+              run: /usr/share/dotnet/dotnet restore
 
             - name: Build and analyze
               env:
@@ -117,10 +112,10 @@ jobs:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               shell: pwsh
               run: |
-                  dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+                  /usr/share/dotnet/dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
                   ~/.sonar/scanner/dotnet-sonarscanner begin /k:jacksonveroneze_stock-service /o:jacksonveroneze /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /v:${{ github.run_id }} /d:sonar.cs.opencover.reportsPaths="./tests/JacksonVeroneze.StockService.Domain.Tests/coverage.opencover.xml, ./tests/JacksonVeroneze.StockService.Application.Tests/coverage.opencover.xml" /d:sonar.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**, ./tests/JacksonVeroneze.StockService.Application.Tests/**" /d:sonar.coverage.exclusions="./tests/JacksonVeroneze.StockService.Domain.Tests/**, ./tests/JacksonVeroneze.StockService.Application.Tests/**"
-                  dotnet build --configuration Release --no-restore
+                  /usr/share/dotnet/dotnet build --configuration Release --no-restore
 
                   ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
@@ -138,10 +133,10 @@ jobs:
                   dotnet-version: '5.0.x'
 
             - name: Build with dotnet
-              run: dotnet build --configuration Release
+              run: /usr/share/dotnet/dotnet build --configuration Release
 
             - name: dotnet publish
-              run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+              run: /usr/share/dotnet/dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
             - name: remove files
               run: |
