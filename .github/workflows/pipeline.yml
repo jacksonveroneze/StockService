@@ -23,6 +23,7 @@ jobs:
     install-dotnet:
         name: Install .NET
         runs-on: Ubuntu-20.04
+        needs: commitlint
 
         steps:
             - uses: actions/checkout@v2
@@ -41,7 +42,7 @@ jobs:
     build:
         name: Build
         runs-on: Ubuntu-20.04
-        needs: commitlint
+        needs: install-dotnet
 
         steps:
             - uses: actions/checkout@v2
@@ -50,7 +51,7 @@ jobs:
               run: /usr/share/dotnet/dotnet restore
 
             - name: dotnet publish
-              run: /usr/share/dotnet/dotnet publish --configuration Release --no-restore -o ${{env.DOTNET_ROOT}}/myapp
+              run: /usr/share/dotnet/dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
     test:
         name: Test
