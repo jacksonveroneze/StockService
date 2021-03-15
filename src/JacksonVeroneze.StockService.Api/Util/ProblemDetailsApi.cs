@@ -4,6 +4,7 @@ using System.Net;
 using JacksonVeroneze.StockService.Core.Notifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace JacksonVeroneze.StockService.Api.Util
 {
@@ -36,14 +37,15 @@ namespace JacksonVeroneze.StockService.Api.Util
             };
         }
 
-        public static ProblemDetailsApi Factory(HttpRequest request, HttpStatusCode statusCode, Exception e)
+        public static ProblemDetailsApi Factory(HttpRequest request, HttpStatusCode statusCode, Exception e,
+            IHostEnvironment hostEnvironment)
         {
             return new()
             {
                 Instance = request.HttpContext.Request.Path,
                 Title = e.Message,
                 Status = (int)statusCode,
-                Detail = e.StackTrace
+                Detail = hostEnvironment.IsDevelopment() ? e.StackTrace : string.Empty
             };
         }
     }

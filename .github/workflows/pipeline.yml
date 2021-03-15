@@ -32,6 +32,13 @@ jobs:
               with:
                   dotnet-version: '5.0.x'
 
+            - name: Cache .NET
+              uses: actions/cache@v1
+              with:
+                  path: /usr/share/dotnet
+                  key: ${{ runner.os }}-dotnet
+                  restore-keys: ${{ runner.os }}-dotnet
+
             - name: Restore dependencies
               run: dotnet restore
 
@@ -46,16 +53,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-            - name: Setup .NET
-              uses: actions/setup-dotnet@v1
-              with:
-                  dotnet-version: '5.0.x'
 
             - name: Restore dependencies
               run: dotnet restore
 
-            - name: Build
-              run: dotnet build --no-restore
+            - name: Test
+              run: /usr/share/dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
     sonar:
         name: Run Sonar
@@ -133,6 +136,11 @@ jobs:
             - name: dotnet publish
               run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+            - name: remove files
+              run: |
+                  - rm appsettings.json
+                  - rm appsettings.Development.json
+
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
               with:
@@ -173,6 +181,3 @@ jobs:
                 script: |
                     docker-compose pull
                     docker-compose up -d
-
-
-

@@ -16,16 +16,25 @@ namespace JacksonVeroneze.StockService.Core.Notifications
         public NotificationContext()
             => _notifications = new List<Notification>();
 
-        public void AddNotification(string key, string message)
-            => _notifications.Add(new Notification(key, message));
+        private NotificationContext Add(Notification notification)
+        {
+            _notifications.Add(notification);
 
-        public void AddNotification(Notification notification)
-            => _notifications.Add(notification);
+            return this;
+        }
 
-        public void AddNotifications(ValidationResult validationResult)
+        public NotificationContext AddNotification(string key, string message)
+            => Add(new Notification(key, message));
+
+        public NotificationContext AddNotification(Notification notification)
+            => Add(notification);
+
+        public NotificationContext AddNotifications(ValidationResult validationResult)
         {
             foreach (ValidationFailure error in validationResult.Errors)
                 AddNotification(error.PropertyName, error.ErrorMessage.Replace("'", String.Empty));
+
+            return this;
         }
     }
 }

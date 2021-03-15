@@ -8,3 +8,5 @@
 .vscode
 **/.toolstarget
 .idea
+**/appsettings.json
+**/appsettings.*.json

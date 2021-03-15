@@ -1,4 +1,4 @@
-using JacksonVeroneze.StockService.Api.Configuration.Authentication;
+using JacksonVeroneze.StockService.Api.Util.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

@@ -172,7 +172,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
 
             // Assert
             result.Should().NotBeNull();
-            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFound));
+            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
             response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
@@ -259,7 +259,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             // Assert
             result.Should().NotBeNull();
             result.Errors.Should().NotBeEmpty();
-            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFound));
+            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
             response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }

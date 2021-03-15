@@ -21,6 +21,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private readonly List<PurchaseItem> _items = new();
         public virtual IReadOnlyCollection<PurchaseItem> Items => _items;
 
+        public bool HasItems => Items.Any();
+
         protected Purchase()
         {
         }

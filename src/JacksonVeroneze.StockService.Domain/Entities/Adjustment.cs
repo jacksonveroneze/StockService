@@ -21,6 +21,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private readonly List<AdjustmentItem> _items = new();
         public virtual IReadOnlyCollection<AdjustmentItem> Items => _items;
 
+        public bool HasItems => Items.Any();
+
         protected Adjustment()
         {
         }

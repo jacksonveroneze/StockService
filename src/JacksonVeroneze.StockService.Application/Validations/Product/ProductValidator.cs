@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
     /// <summary>
     /// Class responsible for validator.
     /// </summary>
-    public class ProductValidator : IProductValidator
+    public class ProductValidator : Validator, IProductValidator
     {
         private readonly IProductRepository _productRepository;
 
@@ -31,19 +31,16 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
         {
             NotificationContext notificationContext = new();
 
-            ValidationResult validationResult = await productDto.Validate();
+            await ValidateDTOAsync(notificationContext, productDto);
 
-            notificationContext.AddNotifications(validationResult);
+            if (string.IsNullOrEmpty(productDto.Description)) return notificationContext;
 
-            if (string.IsNullOrEmpty(productDto.Description) is false)
-            {
-                Domain.Entities.Product result =
-                    await _productRepository.FindAsync(new ProductFilter {Description = productDto.Description});
+            Domain.Entities.Product result =
+                await _productRepository.FindAsync(new ProductFilter {Description = productDto.Description});
 
-                if (result != null)
-                    notificationContext.AddNotification(new Notification("product",
-                        ApplicationValidationMessages.ProductFound));
-            }
+            if (result != null)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Product), ApplicationValidationMessages.ProductFoundByDescription));
 
             return notificationContext;
         }
@@ -58,21 +55,22 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
         {
             NotificationContext notificationContext = new();
 
-            ValidationResult validationResult = await productDto.Validate();
+            await ValidateDTOAsync(notificationContext, productDto);
 
-            notificationContext.AddNotifications(validationResult);
+            Domain.Entities.Product product = await _productRepository.FindAsync(productId);
 
-            await ValidateIfExistsProduct(productId, notificationContext);
+            if (product is null)
+                return notificationContext.AddNotification(
+                    CreateNotification(nameof(Product), ApplicationValidationMessages.ProductNotFoundById));
 
-            if (string.IsNullOrEmpty(productDto.Description) is false)
-            {
-                Domain.Entities.Product result =
-                    await _productRepository.FindAsync(new ProductFilter {Description = productDto.Description});
+            if (string.IsNullOrEmpty(productDto.Description)) return notificationContext;
 
-                if (result != null && result.Id != productId)
-                    notificationContext.AddNotification(new Notification("product",
-                        "Produto já cadastrado com a descrição informada"));
-            }
+            Domain.Entities.Product result =
+                await _productRepository.FindAsync(new ProductFilter {Description = productDto.Description});
+
+            if (result != null && result.Id != productId)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Product), ApplicationValidationMessages.ProductFoundByDescription));
 
             return notificationContext;
         }
@@ -86,25 +84,30 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
         {
             NotificationContext notificationContext = new();
 
-            await ValidateIfExistsProduct(productId, notificationContext);
-
             Domain.Entities.Product product = await _productRepository.FindAsync(productId);
 
-            if (product != null && product.HasItems)
-                notificationContext.AddNotification(new Notification("product",
-                    "Este produto tem dependencias, portanto não pode ser removido."));
+            if (product is null)
+                return notificationContext.AddNotification(
+                    CreateNotification(nameof(Product), ApplicationValidationMessages.ProductNotFoundById));
+
+            if (product.HasItems)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Product), ApplicationValidationMessages.ProductHasItems));
 
             return notificationContext;
         }
 
-        private async Task ValidateIfExistsProduct(Guid productId,
-            NotificationContext notificationContext)
+        /// <summary>
+        /// Method responsible for validation.
+        /// </summary>
+        /// <param name="notificationContext"></param>
+        /// <param name="productDto"></param>
+        /// <returns></returns>
+        private async Task ValidateDTOAsync(NotificationContext notificationContext, AddOrUpdateProductDto productDto)
         {
-            Domain.Entities.Product product = await _productRepository.FindAsync(productId);
+            ValidationResult validationResult = await productDto.Validate();
 
-            if (product is null)
-                notificationContext.AddNotification(new Notification("product",
-                    "Produto näo encontrado com o código informado"));
+            notificationContext.AddNotifications(validationResult);
         }
     }
 }

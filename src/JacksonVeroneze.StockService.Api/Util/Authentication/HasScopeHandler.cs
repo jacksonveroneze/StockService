@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace JacksonVeroneze.StockService.Api.Configuration.Authentication
+namespace JacksonVeroneze.StockService.Api.Util.Authentication
 {
     public class HasScopeHandler : AuthorizationHandler<HasScopeRequirement>
     {

@@ -13,7 +13,7 @@ namespace JacksonVeroneze.StockService.Api
 
         protected IHostEnvironment HostEnvironment { get; }
 
-        public BaseStartup(IHostEnvironment hostEnvironment)
+        protected BaseStartup(IHostEnvironment hostEnvironment)
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(hostEnvironment.ContentRootPath)

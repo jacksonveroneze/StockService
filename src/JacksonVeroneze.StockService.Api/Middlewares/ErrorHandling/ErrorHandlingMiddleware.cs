@@ -48,17 +48,18 @@ namespace JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling
         private async Task FactoryResponse(HttpContext context, Exception e, HttpStatusCode statusCode)
         {
             ProblemDetails problemDetails =
-                FactoryProblemDetailsApi.Factory(context.Request, statusCode, e);
+                FactoryProblemDetailsApi.Factory(context.Request, statusCode, e, _hostEnvironment);
 
             JsonSerializerOptions serializeOptions = new()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
             };
 
-            string result = JsonSerializer.Serialize(problemDetails, serializeOptions);
-
             context.Response.ContentType = "application/problem+json";
-            context.Response.StatusCode = problemDetails.Status.Value;
+
+            context.Response.StatusCode = problemDetails.Status ??= 500;
+
+            string result = JsonSerializer.Serialize(problemDetails, serializeOptions);
 
             _logger.LogError(result);
 

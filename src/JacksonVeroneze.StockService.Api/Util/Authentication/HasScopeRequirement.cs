@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 
-namespace JacksonVeroneze.StockService.Api.Configuration.Authentication
+namespace JacksonVeroneze.StockService.Api.Util.Authentication
 {
     public class HasScopeRequirement : IAuthorizationRequirement
     {
