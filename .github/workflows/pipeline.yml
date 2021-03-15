@@ -20,10 +20,9 @@ jobs:
                   fetch-depth: 0
             - uses: wagoid/commitlint-github-action@v2
 
-    build:
-        name: Build
+    install-dotnet:
+        name: Install .NET
         runs-on: Ubuntu-20.04
-        needs: commitlint
 
         steps:
             - uses: actions/checkout@v2
@@ -39,12 +38,19 @@ jobs:
                   key: ${{ runner.os }}-dotnet
                   restore-keys: ${{ runner.os }}-dotnet
 
-            - name: Restore dependencies
-              run: dotnet restore
+    build:
+        name: Build
+        runs-on: Ubuntu-20.04
+        needs: commitlint
 
-            - name: Build
-              run: |
-                  dotnet build --configuration Release --no-restore
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Restore dependencies
+              run: /usr/share/dotnet/dotnet restore
+
+            - name: dotnet publish
+              run: /usr/share/dotnet/dotnet publish --configuration Release --no-restore -o ${{env.DOTNET_ROOT}}/myapp
 
     test:
         name: Test
@@ -58,7 +64,7 @@ jobs:
               run: dotnet restore
 
             - name: Test
-              run: /usr/share/dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+              run: /usr/share/dotnet/dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
     sonar:
         name: Run Sonar
