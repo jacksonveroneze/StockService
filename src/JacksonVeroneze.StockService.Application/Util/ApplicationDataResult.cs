@@ -1,28 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
-using JacksonVeroneze.StockService.Core;
 using JacksonVeroneze.StockService.Core.Notifications;
 
 namespace JacksonVeroneze.StockService.Application.Util
 {
     public class ApplicationDataResult<T>
     {
-        public IEnumerable<string> Errors { get; } = new List<string>();
+        public List<Notification> Errors { get; } = new();
 
         public T Data { get; }
 
-        public bool IsSuccess => !Errors.Any();
+        public readonly bool IsSuccess = true;
 
-        private ApplicationDataResult(IEnumerable<string> errors) => Errors = errors;
+        private ApplicationDataResult(List<Notification> errors)
+        {
+            Errors = errors;
+            IsSuccess = false;
+        }
 
         private ApplicationDataResult(T data) => Data = data;
 
-        public ApplicationDataResult()
+        private ApplicationDataResult()
         {
         }
 
         public static ApplicationDataResult<T> FactoryFromNotificationContext(NotificationContext notificationContext)
-            => new(notificationContext.Notifications.Select(x => x.Message));
+            => new(notificationContext.Notifications.ToList());
 
         public static ApplicationDataResult<T> FactoryFromData(T data)
             => new(data);

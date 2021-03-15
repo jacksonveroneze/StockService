@@ -17,6 +17,7 @@ namespace JacksonVeroneze.StockService.Data.Mappings
                 .IsRequired();
 
             builder.Property(c => c.Value)
+                .HasPrecision(10,2)
                 .IsRequired();
 
             builder.Property(c => c.CreatedAt)
@@ -35,7 +36,7 @@ namespace JacksonVeroneze.StockService.Data.Mappings
             builder.HasOne(p => p.Adjustment)
                 .WithMany(b => b.Items)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(p => p.Product)
                 .WithMany(b => b.ItemsAdjustment)

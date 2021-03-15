@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
@@ -18,6 +19,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public virtual IReadOnlyCollection<AdjustmentItem> ItemsAdjustment => _itemsAdjustment;
         public virtual IReadOnlyCollection<OutputItem> ItemsOutput => _itemsOutput;
         public virtual IReadOnlyCollection<Movement> ItemsMovement => _itemsMovement;
+
+        public bool HasItems =>
+            ItemsPurchase.Any() && ItemsAdjustment.Any() && ItemsOutput.Any() && ItemsMovement.Any();
 
         protected Product()
         {

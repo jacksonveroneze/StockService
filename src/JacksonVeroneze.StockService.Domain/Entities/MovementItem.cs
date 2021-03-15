@@ -9,8 +9,12 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public virtual Movement Movement { get; private set; }
 
+        private readonly List<AdjustmentItem> _adjustmentItems = new();
+        private readonly List<OutputItem> _outputItems = new();
         private readonly List<PurchaseItem> _purchaseItems = new();
 
+        public virtual IReadOnlyCollection<AdjustmentItem> AdjustmentItems => _adjustmentItems;
+        public virtual IReadOnlyCollection<OutputItem> OutputItems => _outputItems;
         public virtual IReadOnlyCollection<PurchaseItem> PurchaseItems => _purchaseItems;
 
         public MovementItem()

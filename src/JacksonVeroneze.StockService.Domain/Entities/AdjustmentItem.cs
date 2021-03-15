@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
@@ -11,6 +12,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public virtual Adjustment Adjustment { get; private set; }
 
         public virtual Product Product { get; private set; }
+
+        private readonly List<MovementItem> _movementItems = new();
+
+        public virtual IReadOnlyCollection<MovementItem> MovementItems => _movementItems;
 
         protected AdjustmentItem()
         {

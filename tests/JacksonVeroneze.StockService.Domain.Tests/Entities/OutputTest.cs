@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using JacksonVeroneze.StockService.Common.Fakers;
-using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
@@ -15,7 +14,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
     public class OutputTest
     {
         [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos")]
-        [Trait("Output", "Validate")]
+        [Trait("Output", "ValidateAsync")]
         public void Output_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
@@ -82,6 +81,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             act.Should().Throw<DomainException>();
         }
 
+
         [Fact(DisplayName = "DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente")]
         [Trait("Output", "UpdateItemAsync")]
         public void Output_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
@@ -93,6 +93,51 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             // Act
             Action act = () => output.UpdateItem(outputItem);
+
+            // Assert
+            act.Should().Throw<NotFoundException>();
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista")]
+        [Trait("Output", "AddItem")]
+        public void Output_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista()
+        {
+            // Arange
+            Output output = OutputFaker.GenerateFaker().Generate();
+
+            Product product = ProductFaker.GenerateFaker().Generate();
+
+            OutputItem outputItem1 = OutputItemFaker.GenerateFaker(output, product).Generate();
+            OutputItem outputItem2 = OutputItemFaker.GenerateFaker(output, product).Generate();
+
+            output.AddItem(outputItem1);
+
+            // Act
+            Action act = () => output.AddItem(outputItem2);
+
+            // Assert
+            act.Should().Throw<DomainException>();
+        }
+
+        [Fact(DisplayName = "DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista")]
+        [Trait("Output", "UpdateItem")]
+        public void Output_UpdateItem_DeveGerarDomainExceptionQuandoAtualizarUmItemComProdutoQueJaExisteNaLista()
+        {
+            // Arange
+            Output output = OutputFaker.GenerateFaker().Generate();
+
+            OutputItem outputItem1 = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem outputItem2 = OutputItemFaker.GenerateFaker(output).Generate();
+
+            output.AddItem(outputItem1);
+            output.AddItem(outputItem2);
+
+            OutputItem outputItem3 = (OutputItem)outputItem2.ShallowCopy();
+
+            outputItem3.Update(outputItem1.Amount, outputItem1.Value, outputItem1.Product);
+
+            // Act
+            Action act = () => output.UpdateItem(outputItem3);
 
             // Assert
             act.Should().Throw<DomainException>();
@@ -151,7 +196,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             Action act = () => output.RemoveItem(itemsMock.Last());
 
             // Assert
-            act.Should().Throw<DomainException>();
+            act.Should().Throw<NotFoundException>();
         }
 
         [Fact(DisplayName = "DeveSomarCorretamenteValorTotal")]

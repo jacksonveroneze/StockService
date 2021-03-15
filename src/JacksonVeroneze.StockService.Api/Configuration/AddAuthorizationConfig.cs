@@ -13,7 +13,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         {
             string[] customPolices =
             {
-                "products:filter", "products:find", "products:create", "products:update", "products:delete"
+                "products:filter", "products:find", "products:create", "products:update", "products:delete",
+                "purchases:filter", "purchases:find", "purchases:create", "purchases:delete", "purchases:close",
+                "purchases:find-items", "purchases:find-item", "purchases:create-item", "purchases:update-item",
+                "purchases:remove-item",
             };
 
             services.AddAuthorization(options =>
@@ -23,7 +26,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             });
 
             services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             return services;

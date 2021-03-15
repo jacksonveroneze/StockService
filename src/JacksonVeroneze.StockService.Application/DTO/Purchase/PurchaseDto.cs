@@ -1,5 +1,4 @@
 using System;
-using JacksonVeroneze.StockService.Domain;
 using JacksonVeroneze.StockService.Domain.Enums;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Purchase

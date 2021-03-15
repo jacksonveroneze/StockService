@@ -8,6 +8,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddApplicationInsightsConfiguration(this IServiceCollection services,
             IConfiguration configuration)
             => services.AddApplicationInsightsTelemetry(
-                configuration.GetValue<string>("APPLICATIONINSIGHTS_INSTRUMENTATIONKEY"));
+                configuration.GetValue<string>("ApplicationInsights_InstrumentationKey"));
     }
 }

@@ -2,8 +2,10 @@ using System;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Api.Util;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -45,23 +47,18 @@ namespace JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling
 
         private async Task FactoryResponse(HttpContext context, Exception e, HttpStatusCode statusCode)
         {
-            Error resultReturn = new Error
-            {
-                Status = (int)statusCode,
-                Message = e.Message,
-                Trace = (_hostEnvironment.IsDevelopment() ? e.StackTrace : string.Empty)
-            };
+            ProblemDetails problemDetails =
+                FactoryProblemDetailsApi.Factory(context.Request, statusCode, e);
 
             JsonSerializerOptions serializeOptions = new()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
             };
 
-            string result = JsonSerializer.Serialize(resultReturn, serializeOptions);
+            string result = JsonSerializer.Serialize(problemDetails, serializeOptions);
 
-            context.Response.ContentType = "application/json; charset=utf-8";
-
-            context.Response.StatusCode = (int)statusCode;
+            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = problemDetails.Status.Value;
 
             _logger.LogError(result);
 

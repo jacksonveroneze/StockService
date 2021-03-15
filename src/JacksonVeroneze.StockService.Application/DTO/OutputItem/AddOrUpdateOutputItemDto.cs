@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 using FluentValidation.Results;
-using JacksonVeroneze.StockService.Application.DTO.OutputItem.Validations;
 
 namespace JacksonVeroneze.StockService.Application.DTO.OutputItem
 {
@@ -16,5 +16,22 @@ namespace JacksonVeroneze.StockService.Application.DTO.OutputItem
         public Task<ValidationResult> Validate()
             => new AddOrUpdateOutputItemDtoValidator()
                 .ValidateAsync(this);
+
+        public class AddOrUpdateOutputItemDtoValidator : AbstractValidator<AddOrUpdateOutputItemDto>
+        {
+            public AddOrUpdateOutputItemDtoValidator()
+            {
+                RuleFor(x => x.Amount)
+                    .NotNull()
+                    .GreaterThan(0);
+
+                RuleFor(x => x.Value)
+                    .NotNull()
+                    .GreaterThan(0);
+
+                RuleFor(x => x.ProductId)
+                    .NotNull();
+            }
+        }
     }
 }

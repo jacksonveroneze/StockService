@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using FluentValidation;
 using FluentValidation.Results;
-using JacksonVeroneze.StockService.Application.DTO.Product.Validations;
 
 namespace JacksonVeroneze.StockService.Application.DTO.Product
 {
@@ -13,5 +13,14 @@ namespace JacksonVeroneze.StockService.Application.DTO.Product
         public Task<ValidationResult> Validate()
             => new AddOrUpdateProductDtoValidator()
                 .ValidateAsync(this);
+
+        private class AddOrUpdateProductDtoValidator : AbstractValidator<AddOrUpdateProductDto>
+        {
+            public AddOrUpdateProductDtoValidator()
+            {
+                RuleFor(x => x.Description)
+                    .Length(1, 100);
+            }
+        }
     }
 }

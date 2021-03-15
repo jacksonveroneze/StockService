@@ -31,8 +31,8 @@ namespace JacksonVeroneze.StockService.Data.Util
 
         public Task<T> FindAsync(Guid id)
             => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
-                    context.Set<T>()
-                        .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
+                context.Set<T>()
+                    .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)
@@ -46,13 +46,34 @@ namespace JacksonVeroneze.StockService.Data.Util
             => BuidQueryable(pagination, filter)
                 .ToListAsync();
 
+        public async Task<Pageable<T>> FilterPaginateAsync<TFilter>(Pagination pagination, TFilter filter)
+            where TFilter : BaseFilter<T>
+        {
+            IQueryable<T> query = _context.Set<T>()
+                .AsNoTracking()
+                .Where(filter.ToQuery());
+
+            int total = await query.CountAsync();
+
+            List<T> data = await BuidQueryable(pagination, filter)
+                .ToListAsync();
+
+            return new Pageable<T>
+            {
+                Data = data,
+                Total = total,
+                Pages = (int)Math.Ceiling(total / (decimal)(pagination.Take ??= 30)),
+                CurrentPage = pagination.Skip <= 0 ? 1 : pagination.Skip
+            };
+        }
+
         private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter)
             where TFilter : BaseFilter<T>
         {
             return _context.Set<T>()
                 .AsNoTracking()
                 .Where(filter.ToQuery())
-                .OrderByDescending(x => x.Id)
+                .OrderByDescending(x => x.CreatedAt)
                 .ConfigureSkipTakeFromPagination(pagination);
         }
     }

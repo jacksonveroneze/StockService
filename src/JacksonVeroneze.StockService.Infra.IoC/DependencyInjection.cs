@@ -1,13 +1,8 @@
-﻿using FluentValidation;
-using JacksonVeroneze.StockService.Application.DTO.Product;
-using JacksonVeroneze.StockService.Application.DTO.Product.Validations;
-using JacksonVeroneze.StockService.Application.DTO.Purchase;
-using JacksonVeroneze.StockService.Application.DTO.Purchase.Validations;
-using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
-using JacksonVeroneze.StockService.Application.DTO.PurchaseItem.Validations;
-using JacksonVeroneze.StockService.Application.Interfaces;
+﻿using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Application.Validations.Product;
+using JacksonVeroneze.StockService.Application.Validations.Purchase;
+using JacksonVeroneze.StockService.Application.Validations.PurchaseItem;
 using JacksonVeroneze.StockService.Bus;
 using JacksonVeroneze.StockService.Data;
 using JacksonVeroneze.StockService.Data.Repositories;
@@ -29,7 +24,6 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             RegisterRepositories(services);
             RegisterServicesValidations(services);
             RegisterServicesOthers(services);
-
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -45,7 +39,6 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IOutputService, OutputService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IMovementService, MovementService>();
-            services.AddScoped<IProductService, ProductService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
@@ -59,12 +52,9 @@ namespace JacksonVeroneze.StockService.Infra.IoC
 
         private static void RegisterServicesValidations(IServiceCollection services)
         {
-            services.AddScoped<IValidator<AddOrUpdateProductDto>, AddOrUpdateProductDtoValidator>();
-            services.AddScoped<IValidator<AddOrUpdatePurchaseDto>, AddOrUpdatePurchaseDtoValidator>();
-            services.AddScoped<IValidator<AddOrUpdatePurchaseItemDto>, AddOrUpdatePurchaseItemDtoValidator>();
-
             services.AddScoped<IProductValidator, ProductValidator>();
-
+            services.AddScoped<IPurchaseValidator, PurchaseValidator>();
+            services.AddScoped<IPurchaseItemValidator, PurchaseItemValidator>();
         }
 
         private static void RegisterServicesOthers(IServiceCollection services)

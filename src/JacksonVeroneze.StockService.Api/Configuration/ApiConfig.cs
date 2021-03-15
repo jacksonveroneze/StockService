@@ -1,6 +1,5 @@
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +21,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .HealthChecksConfiguration()
                 .AddAutoMapperConfiguration()
                 .AddAutoMapperConfigurationValid()
-                .AddDatabaseConfiguration(configuration)
                 .AddAutoMediatRConfiguration()
                 .AddDependencyInjectionConfiguration()
                 .AddSwaggerConfiguration()
@@ -30,7 +28,8 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
                 .AddVersioningConfigConfiguration()
-                .AddControllers();
+                .AddControllers()
+                .AddJsonOptionsSerializeConfiguration();
 
             return services;
         }

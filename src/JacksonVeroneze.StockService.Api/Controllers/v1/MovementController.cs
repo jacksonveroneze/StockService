@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
@@ -32,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> Filter(
+        public async Task<ActionResult<Pageable<ProductDto>>> Filter(
             [FromQuery] Pagination pagination,
             [FromQuery] MovementFilter filter)
             => Ok(await _applicationService.FilterAsync(pagination, filter));

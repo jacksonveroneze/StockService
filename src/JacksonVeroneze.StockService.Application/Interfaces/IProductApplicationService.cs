@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Util;
@@ -12,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
     {
         Task<ProductDto> FindAsync(Guid productId);
 
-        Task<IList<ProductDto>> FilterAsync(Pagination pagination, ProductFilter productFilter);
+        Task<Pageable<ProductDto>> FilterAsync(Pagination pagination, ProductFilter productFilter);
 
         Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto productDto);
 

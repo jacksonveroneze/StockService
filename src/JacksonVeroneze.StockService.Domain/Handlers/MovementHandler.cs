@@ -90,7 +90,7 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 
         private async Task<Movement> CreateMovement(Product product)
         {
-            Movement movement = new Movement(product);
+            Movement movement = new(product);
 
             await _movementRepository.AddAsync(movement);
 

@@ -34,6 +34,12 @@ namespace JacksonVeroneze.StockService.Data.Mappings
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasMany(p => p.AdjustmentItems)
+                .WithMany(p => p.MovementItems);
+
+            builder.HasMany(p => p.OutputItems)
+                .WithMany(p => p.MovementItems);
+
             builder.HasMany(p => p.PurchaseItems)
                 .WithMany(p => p.MovementItems);
         }

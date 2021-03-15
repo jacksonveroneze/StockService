@@ -1,3 +1,4 @@
+using JacksonVeroneze.StockService.Api.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +26,10 @@ namespace JacksonVeroneze.StockService.Api
             HostEnvironment = hostEnvironment;
         }
 
-        public abstract void ConfigureServices(IServiceCollection services);
+        public virtual void ConfigureServices(IServiceCollection services)
+            => services.AddApiConfiguration(Configuration, HostEnvironment);
 
-        public abstract void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider);
+        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+            => app.UseApiConfiguration(provider);
     }
 }
