@@ -8,6 +8,8 @@ on:
 
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    AUTHORIZATION_CLIENT_ID: ${{ secrets.AUTHORIZATION_CLIENT_ID }}
+    AUTHORIZATION_CLIENT_SECRET: ${{ secrets.AUTHORIZATION_CLIENT_SECRET }}
 
 jobs:
     commitlint:
@@ -126,11 +128,6 @@ jobs:
 
         steps:
             - uses: actions/checkout@master
-
-            - name: Set up .NET Core
-              uses: actions/setup-dotnet@v1
-              with:
-                  dotnet-version: '5.0.x'
 
             - name: Build with dotnet
               run: /usr/share/dotnet/dotnet build --configuration Release
