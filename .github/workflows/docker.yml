@@ -2,9 +2,6 @@ name: Docker
 
 on:
     workflow_dispatch:
-    pull_request:
-        types: [opened, reopened, synchronize]
-    push:
 
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,14 +20,3 @@ jobs:
                 echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
                 docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
-
-            - name: Update in DigitalOcen
-              uses: appleboy/ssh-action@master
-              with:
-                host: ${{ secrets.SSH_HOST }}
-                username: ${{ secrets.SSH_USERNAME }}
-                key: ${{ secrets.SSH_KEY }}
-                port: ${{ secrets.SSH_PORT }}
-                script: |
-                    docker-compose pull
-                    docker-compose up -d
