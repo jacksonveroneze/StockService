@@ -7,7 +7,6 @@ on:
 
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    TOKEN_REGISTRY_DIGITAL_OCEAN: ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }}
 
 jobs:
     genetate-publish:
@@ -26,6 +25,4 @@ jobs:
                 echo ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} | docker login https://registry.digitalocean.com -u ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} --password-stdin
 
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
-
-                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
-                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
