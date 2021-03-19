@@ -82,15 +82,15 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// Method responsible for action: Update.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="purchaseDto"></param>
+        /// <param name="productDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Authorize("products:update")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
-        public async Task<ActionResult<ProductDto>> Update(Guid id, [FromBody] AddOrUpdateProductDto purchaseDto)
+        public async Task<ActionResult<ProductDto>> Update(Guid id, [FromBody] AddOrUpdateProductDto productDto)
         {
-            ApplicationDataResult<ProductDto> result = await _applicationService.UpdateAsync(id, purchaseDto);
+            ApplicationDataResult<ProductDto> result = await _applicationService.UpdateAsync(id, productDto);
 
             if (!result.IsSuccess)
                 return BadRequest(FactoryBadRequest(result));

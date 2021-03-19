@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EFCoreSecondLevelCacheInterceptor;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace JacksonVeroneze.StockService.Data.Util
     {
         public IUnitOfWork UnitOfWork { get; set; }
 
-        protected readonly DatabaseContext _context;
+        private readonly DatabaseContext _context;
 
         protected Repository(DatabaseContext context)
         {
@@ -32,6 +33,7 @@ namespace JacksonVeroneze.StockService.Data.Util
         public Task<T> FindAsync(Guid id)
             => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
                 context.Set<T>()
+                    .Cacheable(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(5))
                     .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
@@ -50,7 +52,7 @@ namespace JacksonVeroneze.StockService.Data.Util
             where TFilter : BaseFilter<T>
         {
             IQueryable<T> query = _context.Set<T>()
-                .AsNoTracking()
+                .AsNoTrackingWithIdentityResolution()
                 .Where(filter.ToQuery());
 
             int total = await query.CountAsync();
@@ -71,7 +73,6 @@ namespace JacksonVeroneze.StockService.Data.Util
             where TFilter : BaseFilter<T>
         {
             return _context.Set<T>()
-                .AsNoTracking()
                 .Where(filter.ToQuery())
                 .OrderByDescending(x => x.CreatedAt)
                 .ConfigureSkipTakeFromPagination(pagination);

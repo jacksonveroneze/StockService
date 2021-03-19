@@ -21,7 +21,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         public virtual IReadOnlyCollection<Movement> ItemsMovement => _itemsMovement;
 
         public bool HasItems =>
-            ItemsPurchase.Any() && ItemsAdjustment.Any() && ItemsOutput.Any() && ItemsMovement.Any();
+            ItemsPurchase.Any() || ItemsAdjustment.Any() || ItemsOutput.Any() || ItemsMovement.Any();
 
         protected Product()
         {

@@ -47,7 +47,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
 
             DatabaseContext context = scopedServices.GetRequiredService<DatabaseContext>();
 
-            await context.Database.EnsureDeletedAsync();
+            //await context.Database.EnsureDeletedAsync();
 
             await context.Set<T>().AddAsync(entity);
 
@@ -62,7 +62,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
 
             DatabaseContext context = scopedServices.GetRequiredService<DatabaseContext>();
 
-            await context.Database.EnsureDeletedAsync();
+            //await context.Database.EnsureDeletedAsync();
 
             await context.Set<T>().AddRangeAsync(entity);
 

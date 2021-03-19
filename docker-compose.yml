@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
     api:
         container_name: api
@@ -16,13 +16,20 @@ services:
             - APP_CONFIG_ConnectionStrings__DefaultConnection=Server=database;Database=stock;User Id=SA;Password=localPass@word;
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
+            - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
+            - APP_CONFIG_Serilog__MinimumLevel__Override__Microsoft=Information
+            - APP_CONFIG_Serilog__MinimumLevel__Override__System=Information
         healthcheck:
-            test: [ "CMD", "curl --fail http://api:8080/healh || exit 1" ]
-            interval: 10s
-            retries: 20
+            test: curl --silent --fail http://api/health || exit 1
+            interval: 15s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
         links:
             - database
             - rabbitmq
+        depends_on:
+            -   database
         ports:
             - 8080:80
 
@@ -34,8 +41,10 @@ services:
             ACCEPT_EULA: Y
         healthcheck:
             test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-Usa", "-PlocalPass@word", "-Q", "select 1" ]
-            interval: 10s
-            retries: 20
+            interval: 15s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
         ports:
             - 1433:1433
 
@@ -46,9 +55,11 @@ services:
             - RABBITMQ_DEFAULT_USER=admin
             - RABBITMQ_DEFAULT_PASS=admin
         healthcheck:
-            test: [ "CMD", "curl --fail http://rabbitmq:15672 || exit 1" ]
-            interval: 10s
-            retries: 20
+            test: curl --silent --fail http://rabbitmq:15672 || exit 1
+            interval: 15s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
         volumes:
             - rabbitmq:/var/lib/rabbitmq
         ports:

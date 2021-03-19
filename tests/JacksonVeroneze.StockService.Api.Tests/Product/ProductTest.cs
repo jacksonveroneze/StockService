@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
+using JacksonVeroneze.StockService.Api.Controllers.v1;
 using JacksonVeroneze.StockService.Api.Tests.Configuration;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Validations;
@@ -23,10 +24,14 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         private readonly IntegrationTestsFixture<StartupTests> _testsFixture;
 
         public ProductTest(IntegrationTestsFixture<StartupTests> testsFixture)
-            => _testsFixture = testsFixture;
+        {
+            _testsFixture = testsFixture;
+
+            Task.Run(async () => await _testsFixture.ClearDatabase());
+        }
 
         [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente")]
-        [Trait("ProductController", "Filter")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Filter))]
         public async Task ProductController_Filter_DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente()
         {
             // Arrange
@@ -65,7 +70,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveBuscarCorretamentePeloIdQuandoOMesmoEstiverCadastrado")]
-        [Trait("ProductController", "Find")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Find))]
         public async Task ProductController_Find_DeveBuscarCorretamentePeloIdQuandoOMesmoEstiverCadastrado()
         {
             // Arrange
@@ -86,7 +91,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarStatusCode404QuandoNaoEstiverCadastrado")]
-        [Trait("ProductController", "Find")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Find))]
         public async Task ProductController_Find_DeveRetornarStatusCode404QuandoNaoEstiverCadastrado()
         {
             // Arrange && Act
@@ -102,7 +107,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveSalvarCorretamenteQuandoEmEstadoValido")]
-        [Trait("ProductController", "Create")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Create))]
         public async Task ProductController_Create_DeveSalvarCorretamenteQuandoEmEstadoValido()
         {
             await _testsFixture.ClearDatabase();
@@ -134,7 +139,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarSalvarEmEstadoInvalido")]
-        [Trait("ProductController", "Create")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Create))]
         public async Task ProductController_Create_DeveRetornarErro400QuandoTentarSalvarEmEstadoInvalido()
         {
             // Arrange
@@ -154,7 +159,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarSalvarUmItemJaCadastrado")]
-        [Trait("ProductController", "Create")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Create))]
         public async Task ProductController_Create_DeveRetornarErro400QuandoTentarSalvarUmItemJaCadastrado()
         {
             // Arrange
@@ -178,7 +183,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveAtualizarCorretamenteQuandoEmEstadoValido")]
-        [Trait("ProductController", "Update")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Update))]
         public async Task ProductController_Update_DeveAtualizarCorretamenteQuandoEmEstadoValido()
         {
             // Arrange
@@ -214,7 +219,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarEmEstadoInvalido")]
-        [Trait("ProductController", "Update")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Update))]
         public async Task ProductController_Update_DeveRetornarErro400QuandoTentarAtualizarEmEstadoInvalido()
         {
             // Arrange
@@ -239,7 +244,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarUmItemComDescricaoExistente")]
-        [Trait("ProductController", "Update")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Update))]
         public async Task ProductController_Update_DeveRetornarErro400QuandoTentarAtualizarUmItemComDescricaoExistente()
         {
             // Arrange
@@ -264,8 +269,29 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
+        [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarUmItemInexistente")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Update))]
+        public async Task ProductsController_Update_DeveRetornarErro400QuandoTentarAtualizarUmItemInexistente()
+        {
+            // Arrange
+            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateValidFaker().Generate();
+
+            // Act
+            HttpResponseMessage response =
+                await _testsFixture.Client.PutAsJsonAsync($"{_uriPart}/{Guid.NewGuid()}", productDto);
+
+            TestApiResponseOperations<ProductDto> result =
+                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+
+            // Assert
+            // Assert
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.Status.Should().Be(StatusCodes.Status400BadRequest);
+            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductNotFoundById));
+        }
+
         [Fact(DisplayName = "DeveRemoverCorretamenteQuandoEstiverCadastrado")]
-        [Trait("ProductController", "Delete")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Delete))]
         public async Task ProductController_Delete_DeveRemoverCorretamenteQuandoEstiverCadastrado()
         {
             // Arrange
@@ -283,12 +309,36 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         }
 
         [Fact(DisplayName = "DeveRetornarStatusCode404QuandoRemoverENaoEstiverCadastrado")]
-        [Trait("ProductController", "Delete")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Delete))]
         public async Task ProductController_Delete_DeveRetornarStatusCode404QuandoRemoverENaoEstiverCadastrado()
         {
             // Arrange && Act
             HttpResponseMessage response =
                 await _testsFixture.Client.DeleteAsync($"{_uriPart}/{Guid.NewGuid()}");
+
+            TestApiResponseOperations<ProductDto> result =
+                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+
+            // Assert
+            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.Status.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact(DisplayName = "DeveRetornarStatusCode400QuandoRemoverETiverDependentes")]
+        [Trait(nameof(ProductsController), nameof(ProductsController.Delete))]
+        public async Task ProductController_Delete_DeveRetornarStatusCode400QuandoRemoverETiverDependentes()
+        {
+            // Arrange
+            Domain.Entities.Product product = ProductFaker.GenerateFaker().Generate();
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Domain.Entities.PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase, product).Generate();
+
+            purchase.AddItem(purchaseItem);
+
+            await _testsFixture.MockInDatabase(purchase);
+
+            // Act
+            HttpResponseMessage response = await _testsFixture.Client.DeleteAsync($"{_uriPart}/{product.Id}");
 
             TestApiResponseOperations<ProductDto> result =
                 await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);

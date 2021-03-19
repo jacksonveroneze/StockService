@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: stock-service
+    namespace: stock-service
+    labels:
+        app: stock-service
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: stock-service
+    template:
+        metadata:
+            labels:
+                app: stock-service
+        spec:
+            containers:
+                - name: stock-service
+                  image: registry.digitalocean.com/registry-jacksonveroneze/stock-service:0.0.1
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 80
+                  env:
+                      - name: APP_CONFIG_ConnectionStrings__DefaultConnection
+                        valueFrom:
+                            secretKeyRef:
+                                name: db-credentials
+                                key: connectionString
+
+                      - name: APP_CONFIG_Auth__Authority
+                        valueFrom:
+                            configMapKeyRef:
+                                name: api-configmap
+                                key: APP_CONFIG_Auth__Authority
+
+                      - name: APP_CONFIG_Auth__Audience
+                        valueFrom:
+                            configMapKeyRef:
+                                name: api-configmap
+                                key: APP_CONFIG_Auth__Audience
+
+                      - name: APP_CONFIG_Urls_Allow_Cors
+                        valueFrom:
+                            configMapKeyRef:
+                                name: api-configmap
+                                key: APP_CONFIG_Urls_Allow_Cors
+                  resources:
+                      requests:
+                          cpu: "128m"
