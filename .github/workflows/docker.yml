@@ -25,8 +25,8 @@ jobs:
 
                 docker build . -t stock-service:$(echo ${GITHUB_REF:10})
                 
-                docker tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10}) stock-service:$(echo ${GITHUB_REF:10})
-                docker tag registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10}) stock-service:$(echo ${GITHUB_REF:10})
+                docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                docker tag stock-service:$(echo ${GITHUB_REF:10}) registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
                 
                 docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
                 docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
