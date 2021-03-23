@@ -3,14 +3,14 @@ using JacksonVeroneze.StockService.Application.Services;
 using JacksonVeroneze.StockService.Application.Validations.Product;
 using JacksonVeroneze.StockService.Application.Validations.Purchase;
 using JacksonVeroneze.StockService.Application.Validations.PurchaseItem;
-using JacksonVeroneze.StockService.Bus;
-using JacksonVeroneze.StockService.Data;
-using JacksonVeroneze.StockService.Data.Repositories;
+using JacksonVeroneze.StockService.Infra.Bus;
+using JacksonVeroneze.StockService.Infra.Data;
+using JacksonVeroneze.StockService.Infra.Data.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Identity;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
-using JacksonVeroneze.StockService.Infra.Identity;
+using JacksonVeroneze.StockService.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Infra.IoC

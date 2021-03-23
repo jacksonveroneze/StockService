@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Api.Tests.Configuration.AuthorizationToken;
 using JacksonVeroneze.StockService.Common.Integration;
-using JacksonVeroneze.StockService.Data;
+using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\JacksonVeroneze.StockService.Api\JacksonVeroneze.StockService.Api.csproj" />
-    <ProjectReference Include="..\..\src\JacksonVeroneze.StockService.Data\JacksonVeroneze.StockService.Data.csproj" />
+    <ProjectReference Include="..\..\src\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Common\JacksonVeroneze.StockService.Common.csproj" />
   </ItemGroup>
 

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Bus\JacksonVeroneze.StockService.Bus.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Core\JacksonVeroneze.StockService.Core.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Bus\JacksonVeroneze.StockService.Infra.Bus.csproj" />
   </ItemGroup>
 
 </Project>

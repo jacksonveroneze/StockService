@@ -8,7 +8,7 @@ using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
-    public class Purchase : Entity, IAggregateRoot
+    public class Purchase : EntityRoot, IAggregateRoot
     {
         public string Description { get; private set; }
 

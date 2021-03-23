@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Bus;
+using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;

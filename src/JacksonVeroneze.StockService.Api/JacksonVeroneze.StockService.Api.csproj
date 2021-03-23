@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JacksonVeroneze.StockService.Application\JacksonVeroneze.StockService.Application.csproj" />
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Data\JacksonVeroneze.StockService.Data.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.IoC\JacksonVeroneze.StockService.Infra.IoC.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Mapper\JacksonVeroneze.StockService.Mapper.csproj" />
   </ItemGroup>

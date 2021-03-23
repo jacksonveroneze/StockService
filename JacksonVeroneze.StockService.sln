@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E7814FF8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Domain.Tests", "tests\JacksonVeroneze.StockService.Domain.Tests\JacksonVeroneze.StockService.Domain.Tests.csproj", "{A9746081-FD90-4234-9A2F-431DFFEE1B8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Data", "src\JacksonVeroneze.StockService.Data\JacksonVeroneze.StockService.Data.csproj", "{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Infra.Data", "src\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj", "{DF96A2B2-9AF4-4B4C-8EAD-6C5FFDE8C8FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Api", "src\JacksonVeroneze.StockService.Api\JacksonVeroneze.StockService.Api.csproj", "{422D4D45-08CB-4D00-B34F-160DA56C7AD7}"
 EndProject
@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Mapper", "src\JacksonVeroneze.StockService.Mapper\JacksonVeroneze.StockService.Mapper.csproj", "{E970B703-1F54-4231-94DD-ECEF678A6ACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Bus", "src\JacksonVeroneze.StockService.Bus\JacksonVeroneze.StockService.Bus.csproj", "{7AA82B79-562B-46A1-BFEA-95416B678B05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Infra.Bus", "src\JacksonVeroneze.StockService.Infra.Bus\JacksonVeroneze.StockService.Infra.Bus.csproj", "{7AA82B79-562B-46A1-BFEA-95416B678B05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Application.Tests", "tests\JacksonVeroneze.StockService.Application.Tests\JacksonVeroneze.StockService.Application.Tests.csproj", "{F557B4C3-D031-48B1-9736-CEABB00E49AD}"
 EndProject
@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Common", "tests\JacksonVeroneze.StockService.Common\JacksonVeroneze.StockService.Common.csproj", "{84021ED4-2490-43A7-8FEE-C88256D22CB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Infra.Identity", "src\JacksonVeroneze.StockService.Infra.Identity\JacksonVeroneze.StockService.Infra.Identity.csproj", "{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacksonVeroneze.StockService.Identity", "src\JacksonVeroneze.StockService.Identity\JacksonVeroneze.StockService.Identity.csproj", "{D2BC52AC-39F4-447C-9CB8-8B32C69C029D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

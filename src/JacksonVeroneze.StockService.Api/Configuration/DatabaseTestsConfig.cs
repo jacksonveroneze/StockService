@@ -1,4 +1,4 @@
-using JacksonVeroneze.StockService.Data;
+using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

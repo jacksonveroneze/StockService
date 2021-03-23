@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Data;
+using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

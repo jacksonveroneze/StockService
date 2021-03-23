@@ -6,17 +6,17 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 {
     public class Entity : EntityId
     {
-        public DateTime CreatedAt { get; private set; } = DateTime.Now;
+        public DateTime CreatedAt { get; } = DateTime.Now;
 
         public DateTime? UpdatedAt { get; private set; }
 
         public DateTime? DeletedAt { get; private set; }
 
-        public int Version { get; private set; } = 1;
+        public int Version { get; } = 1;
 
         public Guid TenantId { get; private set; }
 
-        private readonly List<Event> _notifications = new List<Event>();
+        private readonly List<Event> _notifications = new();
 
         public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
 

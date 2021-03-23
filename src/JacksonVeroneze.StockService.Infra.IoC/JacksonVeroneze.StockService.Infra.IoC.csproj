@@ -6,9 +6,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JacksonVeroneze.StockService.Application\JacksonVeroneze.StockService.Application.csproj" />
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Data\JacksonVeroneze.StockService.Data.csproj" />
     <ProjectReference Include="..\JacksonVeroneze.StockService.Domain\JacksonVeroneze.StockService.Domain.csproj" />
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Identity\JacksonVeroneze.StockService.Infra.Identity.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Identity\JacksonVeroneze.StockService.Identity.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

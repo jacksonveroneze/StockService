@@ -3,7 +3,7 @@ using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
-    public class Movement : Entity, IAggregateRoot
+    public class Movement : EntityRoot, IAggregateRoot
     {
         public virtual Product Product { get; private set; }
 

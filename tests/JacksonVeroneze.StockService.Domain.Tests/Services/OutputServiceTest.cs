@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using JacksonVeroneze.StockService.Bus;
+using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
