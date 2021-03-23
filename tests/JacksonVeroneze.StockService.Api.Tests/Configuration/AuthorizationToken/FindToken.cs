@@ -7,7 +7,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration.AuthorizationToke
 {
     public static class FindToken
     {
-        public static async Task<ResponseToken> Find()
+        public static async Task<ResponseToken> FindAsync()
         {
             RequestToken requestToken = new()
             {

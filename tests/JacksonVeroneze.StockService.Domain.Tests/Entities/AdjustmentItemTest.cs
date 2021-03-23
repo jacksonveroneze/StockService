@@ -14,8 +14,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void AdjustmentItem_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             Func<AdjustmentItem> func1 = () => new AdjustmentItem(0, 1, adjustment, product);
             Func<AdjustmentItem> func2 = () => new AdjustmentItem(1, 0, adjustment, product);
@@ -30,8 +30,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void AdjustmentItem_CalculteValue_DeveCalculaCorretamenteOValorDoItem()
         {
             // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
 
@@ -47,9 +47,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void AdjustmentItem_Update_DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos()
         {
             // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
 
@@ -67,9 +67,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void AdjustmentItem_Update_DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos()
         {
             // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
 

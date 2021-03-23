@@ -216,7 +216,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Method responsible for action: RemoveItem.
+        /// Method responsible for action: DeleteItem.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>
@@ -225,7 +225,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         [Authorize("purchases:remove-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
-        public async Task<ActionResult> RemoveItem(Guid id, Guid itemId)
+        public async Task<ActionResult> DeleteItem(Guid id, Guid itemId)
         {
             ApplicationDataResult<PurchaseItemDto> result = await _applicationService.RemoveItemAsync(id, itemId);
 

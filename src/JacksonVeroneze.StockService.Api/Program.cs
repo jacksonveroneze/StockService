@@ -14,7 +14,7 @@ namespace JacksonVeroneze.StockService.Api
             Log.Logger = Logger.FactoryLogger();
 
             Log.Information($"Application: {0}", "Starting up");
-            Log.Information("Total params: {0}", args.Length);
+            Log.Information($"Total params: {0}", args.Length);
 
             IHost host = CreateHostBuilder(args).Build();
 
@@ -27,7 +27,7 @@ namespace JacksonVeroneze.StockService.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<StartupApi>();
                     webBuilder.UseSerilog()
                         .ConfigureLogging(logging =>
                         {

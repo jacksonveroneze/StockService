@@ -110,9 +110,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void ValidateIfExistsItemByProduct(OutputItem item)
         {
-            OutputItem outputItem = FindItemByProductId(item.Product);
+            OutputItem outputItem = Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
 
-            if (outputItem != null && outputItem.Id != item.Id)
+            if (outputItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 
@@ -121,9 +121,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             if (State == OutputState.Closed)
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
-
-        private OutputItem FindItemByProductId(Product product)
-            => Items.FirstOrDefault(x => x.Product.Id == product.Id);
 
         private bool CheckIfExistsItemById(Guid id)
             => Items.Any(x => x.Id == id);

@@ -110,9 +110,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void ValidateIfExistsItemByProduct(AdjustmentItem item)
         {
-            AdjustmentItem adjustmentItem = FindItemByProductId(item.Product);
+            AdjustmentItem adjustmentItem =
+                Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
 
-            if (adjustmentItem != null && adjustmentItem.Id != item.Id)
+            if (adjustmentItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 

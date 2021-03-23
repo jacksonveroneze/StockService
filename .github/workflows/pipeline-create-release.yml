@@ -1,8 +1,9 @@
 name: Pipeline
 
 on:
-    workflow_dispatch:
-
+    release:
+        types:
+            - created
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     AUTHORIZATION_CLIENT_ID: ${{ secrets.AUTHORIZATION_CLIENT_ID }}
@@ -11,7 +12,7 @@ env:
 jobs:
     commitlint:
         name: Commit Lint
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
 
         steps:
             - uses: actions/checkout@v2
@@ -21,7 +22,7 @@ jobs:
 
     install-dotnet:
         name: Install .NET
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: commitlint
 
         steps:
@@ -40,7 +41,7 @@ jobs:
 
     build:
         name: Build
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: install-dotnet
 
         steps:
@@ -54,7 +55,7 @@ jobs:
 
     test:
         name: Test
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: build
 
         steps:
@@ -68,7 +69,7 @@ jobs:
 
     sonar:
         name: Run Sonar
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: test
 
         steps:
@@ -120,7 +121,7 @@ jobs:
 
     deployAzure:
         name: Deploy Azure
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: test
 
         steps:
@@ -147,7 +148,7 @@ jobs:
 
     genetateDocker:
         name: Generate docker image
-        runs-on: Ubuntu-20.04
+        runs-on: ubuntu-20.04
         needs: test
 
         steps:
@@ -157,23 +158,13 @@ jobs:
 
             - name: Build and push
               run: |
-                echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-                docker build . --tag docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
-                docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+                  echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+                  echo ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} | docker login https://registry.digitalocean.com -u ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} --password-stdin
 
-    deployDigitalOcean:
-        name: Deploy Digitalocean
-        runs-on: Ubuntu-20.04
-        needs: genetateDocker
+                  docker build . -t stock-service:$(echo ${GITHUB_REF:10})
 
-        steps:
-            - name: Update in DigitalOcen
-              uses: appleboy/ssh-action@master
-              with:
-                host: ${{ secrets.SSH_HOST }}
-                username: ${{ secrets.SSH_USERNAME }}
-                key: ${{ secrets.SSH_KEY }}
-                port: ${{ secrets.SSH_PORT }}
-                script: |
-                    docker-compose pull
-                    docker-compose up -d
+                  docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                  docker tag stock-service:$(echo ${GITHUB_REF:10}) registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
+
+                  docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                  docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})

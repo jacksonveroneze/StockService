@@ -10,8 +10,7 @@ RUN dotnet publish app/JacksonVeroneze.StockService.Api/JacksonVeroneze.StockSer
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine
 
-RUN apk add icu-libs curl
-RUN apk add --update curl && \
+RUN apk add icu-libs curl && \
     rm -rf /var/cache/apk/*
 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false

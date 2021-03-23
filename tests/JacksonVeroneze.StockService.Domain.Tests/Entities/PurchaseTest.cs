@@ -33,10 +33,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_AddItem_DeveAdicionarOsItensCorretamenteQuandoValidos()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
             // Act
-            IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(10);
+            IList<PurchaseItem> itemsMock = PurchaseItemFaker.Generate(purchase, 10);
 
             foreach (PurchaseItem itemMock in itemsMock)
                 purchase.AddItem(itemMock);
@@ -50,9 +50,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            PurchaseItem item1 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem item1 = PurchaseItemFaker.Generate(purchase);
 
             purchase.AddItem(item1);
 
@@ -68,11 +68,11 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
             purchase.Close();
 
-            PurchaseItem item1 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem item1 = PurchaseItemFaker.Generate(purchase);
 
             // Act
             Action act = () => purchase.AddItem(item1);
@@ -87,9 +87,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem purchaseItem = PurchaseItemFaker.Generate(purchase);
 
             // Act
             Action act = () => purchase.UpdateItem(purchaseItem);
@@ -103,12 +103,12 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Product product = ProductFaker.Generate();
 
-            PurchaseItem purchaseItem1 = PurchaseItemFaker.GenerateFaker(purchase, product).Generate();
-            PurchaseItem purchaseItem2 = PurchaseItemFaker.GenerateFaker(purchase, product).Generate();
+            PurchaseItem purchaseItem1 = PurchaseItemFaker.Generate(purchase, product);
+            PurchaseItem purchaseItem2 = PurchaseItemFaker.Generate(purchase, product);
 
             purchase.AddItem(purchaseItem1);
 
@@ -124,10 +124,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_UpdateItem_DeveGerarDomainExceptionQuandoAtualizarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            PurchaseItem purchaseItem1 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
-            PurchaseItem purchaseItem2 = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem purchaseItem1 = PurchaseItemFaker.Generate(purchase);
+            PurchaseItem purchaseItem2 = PurchaseItemFaker.Generate(purchase);
 
             purchase.AddItem(purchaseItem1);
             purchase.AddItem(purchaseItem2);
@@ -148,9 +148,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_UpdateItem_DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase).Generate();
+            PurchaseItem purchaseItem = PurchaseItemFaker.Generate(purchase);
 
             purchase.AddItem(purchaseItem);
 
@@ -166,9 +166,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_RemoveItem_DeveRemoverCorretamenteQuandoItemExistir()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(2);
+            IList<PurchaseItem> itemsMock = PurchaseItemFaker.Generate(purchase, 2);
 
             purchase.AddItem(itemsMock.First());
             purchase.AddItem(itemsMock.Last());
@@ -186,9 +186,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_RemoveItem_DeveGerarDomainExceptionQuandoRemoverUmItemInexistente()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(2);
+            IList<PurchaseItem> itemsMock = PurchaseItemFaker.Generate(purchase, 2);
 
             purchase.AddItem(itemsMock.First());
 
@@ -204,9 +204,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_CalculateTotalValue_DeveSomarCorretamenteValorTotal()
         {
             // Arange && Act
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
-            IList<PurchaseItem> itemsMock = PurchaseItemFaker.GenerateFaker(purchase).Generate(10);
+            IList<PurchaseItem> itemsMock = PurchaseItemFaker.Generate(purchase, 10);
 
             foreach (PurchaseItem itemMock in itemsMock)
                 purchase.AddItem(itemMock);
@@ -220,7 +220,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_AddItem_DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
             // Act
             purchase.Close();
@@ -234,7 +234,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Purchase_RemoveItem_DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
             purchase.Close();
 

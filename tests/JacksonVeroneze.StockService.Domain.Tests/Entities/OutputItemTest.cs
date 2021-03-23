@@ -14,8 +14,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void OutputItem_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
-            Output output = OutputFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             Func<OutputItem> func1 = () => new OutputItem(0, 1, output, product);
             Func<OutputItem> func2 = () => new OutputItem(1, 0, output, product);
@@ -30,8 +30,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void OutputItem_CalculteValue_DeveCalculaCorretamenteOValorDoItem()
         {
             // Arange && Act
-            Output output = OutputFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             OutputItem item = new OutputItem(10, 2, output, product);
 
@@ -47,9 +47,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void OutputItem_Update_DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos()
         {
             // Arange && Act
-            Output output = OutputFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             OutputItem item = new OutputItem(10, 2, output, product);
 
@@ -67,9 +67,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void OutputItem_Update_DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos()
         {
             // Arange && Act
-            Output output = OutputFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             OutputItem item = new OutputItem(10, 2, output, product);
 

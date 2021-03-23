@@ -196,7 +196,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Method responsible for action: RemoveItem.
+        /// Method responsible for action: DeleteItem.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="itemId"></param>

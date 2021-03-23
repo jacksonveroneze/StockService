@@ -33,8 +33,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Output output = OutputFaker.GenerateFaker().Generate();
-            IList<OutputItem> outputItens = OutputItemFaker.GenerateFaker(output).Generate(totalItens);
+            Output output = OutputFaker.Generate();
+            IList<OutputItem> outputItens = OutputItemFaker.Generate(output, totalItens);
 
             ConfigureMock();
 
@@ -59,8 +59,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Output output = OutputFaker.GenerateFaker().Generate();
-            IList<OutputItem> outputItens = OutputItemFaker.GenerateFaker(output).Generate(totalItens);
+            Output output = OutputFaker.Generate();
+            IList<OutputItem> outputItens = OutputItemFaker.Generate(output, totalItens);
 
             ConfigureMock();
 
@@ -87,8 +87,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Output output = OutputFaker.GenerateFaker().Generate();
-            IList<OutputItem> outputItens = OutputItemFaker.GenerateFaker(output).Generate(totalItens);
+            Output output = OutputFaker.Generate();
+            IList<OutputItem> outputItens = OutputItemFaker.Generate(output, totalItens);
 
             ConfigureMock();
 
@@ -115,8 +115,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Output output = OutputFaker.GenerateFaker().Generate();
-            IList<OutputItem> outputItens = OutputItemFaker.GenerateFaker(output).Generate(totalItens);
+            Output output = OutputFaker.Generate();
+            IList<OutputItem> outputItens = OutputItemFaker.Generate(output, totalItens);
 
             ConfigureMock();
 
@@ -142,7 +142,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         public void OutputService_CloseAsync_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
             output.Close();
 

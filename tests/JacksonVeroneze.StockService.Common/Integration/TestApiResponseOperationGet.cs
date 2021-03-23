@@ -1,6 +1,6 @@
 namespace JacksonVeroneze.StockService.Common.Integration
 {
-    public sealed class TestApiResponseOperations<T> : TestApiResponseError where T : class
+    public sealed class TestApiResponseOperationGet<T> : TestApiResponseError
     {
         public T Content { get; set; }
     }

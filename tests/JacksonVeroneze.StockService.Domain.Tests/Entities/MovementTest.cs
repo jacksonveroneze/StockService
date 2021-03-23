@@ -16,8 +16,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             // Arange
             int totalItens = 10;
 
-            Movement movement = MovementFaker.GenerateFaker().Generate();
-            IList<MovementItem> itemsMock = MovementItemFaker.GenerateFaker(movement).Generate(totalItens);
+            Movement movement = MovementFaker.Generate().Generate();
+            IList<MovementItem> itemsMock = MovementItemFaker.Generate(movement).Generate(totalItens);
 
             // Act
             foreach (MovementItem itemMock in itemsMock)

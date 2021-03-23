@@ -33,8 +33,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.GenerateFaker(purchase).Generate(totalItens);
+            Purchase purchase = PurchaseFaker.Generate();
+            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.Generate(purchase, totalItens);
 
             ConfigureMock();
 
@@ -59,8 +59,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.GenerateFaker(purchase).Generate(totalItens);
+            Purchase purchase = PurchaseFaker.Generate();
+            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.Generate(purchase, totalItens);
 
             ConfigureMock();
 
@@ -87,8 +87,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.GenerateFaker(purchase).Generate(totalItens);
+            Purchase purchase = PurchaseFaker.Generate();
+            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.Generate(purchase, totalItens);
 
             ConfigureMock();
 
@@ -115,8 +115,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.GenerateFaker(purchase).Generate(totalItens);
+            Purchase purchase = PurchaseFaker.Generate();
+            IList<PurchaseItem> purchaseItens = PurchaseItemFaker.Generate(purchase, totalItens);
 
             ConfigureMock();
 
@@ -142,7 +142,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         public void PurchaseService_CloseAsync_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
 
             purchase.Close();
 

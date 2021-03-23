@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using JacksonVeroneze.StockService.Core.Notifications;
 
 namespace JacksonVeroneze.StockService.Common.Integration
@@ -16,5 +17,7 @@ namespace JacksonVeroneze.StockService.Common.Integration
         public string Instance { get; set; }
 
         public IEnumerable<Notification> Errors { get; set; }
+
+        public HttpResponseMessage HttpResponse { get; set; }
     }
 }

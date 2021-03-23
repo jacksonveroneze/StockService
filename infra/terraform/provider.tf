@@ -18,5 +18,5 @@ data "digitalocean_ssh_key" "terraform" {
   name = "Default"
 }
 
-terraform apply -var "do_token=$DO_TOKEN" -var "pvt_key=$HOME/.ssh/id_rsa"
-terraform plan -out=infra.out -var "do_token=$DO_TOKEN" -var "pvt_key=$HOME/.ssh/id_rsa"
+//terraform apply -var "do_token=$DO_TOKEN" -var "pvt_key=$HOME/.ssh/id_rsa"
+//terraform plan -out=infra.out -var "do_token=$DO_TOKEN" -var "pvt_key=$HOME/.ssh/id_rsa"

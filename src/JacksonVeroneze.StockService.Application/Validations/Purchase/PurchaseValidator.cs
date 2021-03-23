@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Purchase
         {
             NotificationContext notificationContext = new();
 
-            await ValidateDTOAsync(notificationContext, purchaseDto);
+            await ValidateDtoAsync(notificationContext, purchaseDto);
 
             return notificationContext;
         }
@@ -46,7 +46,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Purchase
         {
             NotificationContext notificationContext = new();
 
-            await ValidateDTOAsync(notificationContext, purchaseDto);
+            await ValidateDtoAsync(notificationContext, purchaseDto);
 
             Domain.Entities.Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
 
@@ -111,7 +111,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Purchase
         /// <param name="notificationContext"></param>
         /// <param name="purchaseDto"></param>
         /// <returns></returns>
-        private async Task ValidateDTOAsync(NotificationContext notificationContext, AddOrUpdatePurchaseDto purchaseDto)
+        private async Task ValidateDtoAsync(NotificationContext notificationContext, AddOrUpdatePurchaseDto purchaseDto)
         {
             ValidationResult validationResult = await purchaseDto.Validate();
 

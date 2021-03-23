@@ -3,9 +3,9 @@ using JacksonVeroneze.StockService.Domain.Entities;
 
 namespace JacksonVeroneze.StockService.Common.Fakers
 {
-    public class MovementItemFaker
+    public static class MovementItemFaker
     {
-        public static Faker<MovementItem> GenerateFaker(Movement movement)
+        public static Faker<MovementItem> Generate(Movement movement)
         {
             return new Faker<MovementItem>()
                 .CustomInstantiator(f =>

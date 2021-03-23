@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JacksonVeroneze.StockService.Api.Controllers.v1;
@@ -11,6 +9,7 @@ using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Validations;
 using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Common.Integration;
+using JacksonVeroneze.StockService.Core.Data;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
@@ -35,12 +34,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Filter_DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente()
         {
             // Arrange
-            int skip = 1;
-            int take = 5;
+            const int skip = 1;
+            const int take = 5;
 
-            IList<Domain.Entities.Product> products = ProductFaker
-                .GenerateFaker()
-                .Generate(30)
+            IList<Domain.Entities.Product> products = ProductFaker.Generate(30)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToList();
 
@@ -50,11 +47,9 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             await _testsFixture.MockInDatabase(products);
 
             // Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.GetAsync($"{_uriPart}?skip={skip}&take={take}&description=a&isActive=true");
-
-            TestApiResponsePageable<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponsePageable<ProductDto>>(response);
+            TestApiResponseOperationGet<Pageable<ProductDto>> result =
+                await _testsFixture.SendGetRequest<Pageable<ProductDto>>(
+                    $"{_uriPart}?skip={skip}&take={take}&description=a&isActive=true");
 
             // Assert
             IList<Domain.Entities.Product> productsFiltered =
@@ -63,10 +58,11 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             int total = products.Count(x => x.IsActive && x.Description.Contains("a"));
 
             result.Should().NotBeNull();
-            result.Total.Should().Be(total);
-            result.Pages.Should().Be((int)Math.Ceiling(total / (decimal)(take)));
-            result.CurrentPage.Should().Be(skip);
-            result.Data.Should().HaveCount(productsFiltered.Count);
+            result.Content.Total.Should().Be(total);
+            result.Content.Pages.Should().Be((int)Math.Ceiling(total / (decimal)(take)));
+            result.Content.CurrentPage.Should().Be(skip);
+            result.Content.Data.Should().HaveCount(productsFiltered.Count);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
 
         [Fact(DisplayName = "DeveBuscarCorretamentePeloIdQuandoOMesmoEstiverCadastrado")]
@@ -74,20 +70,20 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Find_DeveBuscarCorretamentePeloIdQuandoOMesmoEstiverCadastrado()
         {
             // Arrange
-            IList<Domain.Entities.Product> products = ProductFaker.GenerateFaker().Generate(10);
+            IList<Domain.Entities.Product> products = ProductFaker.Generate(10);
 
             Domain.Entities.Product product = products.First();
 
             await _testsFixture.MockInDatabase(products);
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.GetAsync($"{_uriPart}/{product.Id}");
-
-            ProductDto result = await _testsFixture.DeserializeObject<ProductDto>(response);
+            TestApiResponseOperationGet<ProductDto> result =
+                await _testsFixture.SendGetRequest<ProductDto>($"{_uriPart}/{product.Id}");
 
             // Assert
             result.Should().NotBeNull();
-            result.Id.Should().Be(product.Id);
+            result.Content.Id.Should().Be(product.Id);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
 
         [Fact(DisplayName = "DeveRetornarStatusCode404QuandoNaoEstiverCadastrado")]
@@ -95,14 +91,11 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Find_DeveRetornarStatusCode404QuandoNaoEstiverCadastrado()
         {
             // Arrange && Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.GetAsync($"{_uriPart}/{Guid.NewGuid()}");
-
-            TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+            TestApiResponseOperationGet<ProductDto> result =
+                await _testsFixture.SendGetRequest<ProductDto>($"{_uriPart}/{Guid.NewGuid()}");
 
             // Assert
-            response.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
             result.Status.Should().Be(StatusCodes.Status404NotFound);
         }
 
@@ -110,32 +103,27 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         [Trait(nameof(ProductsController), nameof(ProductsController.Create))]
         public async Task ProductController_Create_DeveSalvarCorretamenteQuandoEmEstadoValido()
         {
-            await _testsFixture.ClearDatabase();
-
             // Arrange
-            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateValidFaker().Generate();
+            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateValid();
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.PostAsJsonAsync($"{_uriPart}/", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPostRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/", productDto);
 
-            Uri location = response.Headers.Location;
-
-            HttpResponseMessage responseGet = await _testsFixture.Client.GetAsync(location);
-
-            ProductDto resultGet = await _testsFixture.DeserializeObject<ProductDto>(responseGet);
+            TestApiResponseOperationGet<ProductDto> responseGet =
+                await _testsFixture.SendGetRequest<ProductDto>(result.HttpResponse.Headers.Location?.ToString());
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.Description.Should().Be(productDto.Description);
-            result.Data.IsActive.Should().BeTrue();
+            result.Content.Description.Should().Be(productDto.Description);
+            result.Content.IsActive.Should().BeTrue();
             result.Errors.Should().BeEmpty();
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status201Created);
 
-            resultGet.Should().NotBeNull();
-            resultGet.Description.Should().Be(productDto.Description);
-            resultGet.IsActive.Should().BeTrue();
+            responseGet.Content.Should().NotBeNull();
+            responseGet.Content.Description.Should().Be(productDto.Description);
+            responseGet.Content.IsActive.Should().BeTrue();
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarSalvarEmEstadoInvalido")]
@@ -143,19 +131,18 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Create_DeveRetornarErro400QuandoTentarSalvarEmEstadoInvalido()
         {
             // Arrange
-            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateInvalidFaker().Generate();
+            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateInvalid();
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.PostAsJsonAsync($"{_uriPart}/", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPostRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/", productDto);
 
             // Assert
             result.Should().NotBeNull();
             result.Errors.Should().NotBeEmpty();
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarSalvarUmItemJaCadastrado")]
@@ -163,23 +150,23 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Create_DeveRetornarErro400QuandoTentarSalvarUmItemJaCadastrado()
         {
             // Arrange
-            Domain.Entities.Product product = ProductFaker.GenerateFaker().Generate();
+            Domain.Entities.Product product = ProductFaker.Generate();
 
             AddOrUpdateProductDto productDto = new() {Description = product.Description, IsActive = true};
 
             await _testsFixture.MockInDatabase(product);
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.PostAsJsonAsync($"{_uriPart}/", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPostRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/", productDto);
 
             // Assert
             result.Should().NotBeNull();
-            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
+            result.Errors.Should()
+                .Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Fact(DisplayName = "DeveAtualizarCorretamenteQuandoEmEstadoValido")]
@@ -187,7 +174,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Update_DeveAtualizarCorretamenteQuandoEmEstadoValido()
         {
             // Arrange
-            Domain.Entities.Product product = ProductFaker.GenerateFaker().Generate();
+            Domain.Entities.Product product = ProductFaker.Generate();
 
             await _testsFixture.MockInDatabase(product);
 
@@ -197,25 +184,23 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             };
 
             // Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.PutAsJsonAsync($"{_uriPart}/{product.Id}", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPutRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/{product.Id}", productDto);
 
-            HttpResponseMessage responseGet = await _testsFixture.Client.GetAsync($"{_uriPart}/{product.Id}");
-
-            ProductDto resultGet = await _testsFixture.DeserializeObject<ProductDto>(responseGet);
+            TestApiResponseOperationGet<ProductDto> responseGet =
+                await _testsFixture.SendGetRequest<ProductDto>($"{_uriPart}/{product.Id}");
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.Description.Should().Be(productDto.Description);
-            result.Data.IsActive.Should().BeTrue();
+            result.Content.Description.Should().Be(productDto.Description);
+            result.Content.IsActive.Should().BeTrue();
             result.Errors.Should().BeEmpty();
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
 
-            resultGet.Should().NotBeNull();
-            resultGet.Description.Should().Be(productDto.Description);
-            resultGet.IsActive.Should().BeTrue();
+            responseGet.Should().NotBeNull();
+            responseGet.Content.Description.Should().Be(productDto.Description);
+            responseGet.Content.IsActive.Should().BeTrue();
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarEmEstadoInvalido")]
@@ -223,24 +208,22 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Update_DeveRetornarErro400QuandoTentarAtualizarEmEstadoInvalido()
         {
             // Arrange
-            Domain.Entities.Product product = ProductFaker.GenerateFaker().Generate();
+            Domain.Entities.Product product = ProductFaker.Generate();
 
             await _testsFixture.MockInDatabase(product);
 
             AddOrUpdateProductDto productDto = new() {Description = string.Empty, IsActive = true};
 
             // Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.PutAsJsonAsync($"{_uriPart}/{product.Id}", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPutRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/{product.Id}", productDto);
 
             // Assert
             result.Should().NotBeNull();
             result.Errors.Should().NotBeEmpty();
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarUmItemComDescricaoExistente")]
@@ -248,25 +231,24 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Update_DeveRetornarErro400QuandoTentarAtualizarUmItemComDescricaoExistente()
         {
             // Arrange
-            IList<Domain.Entities.Product> products = ProductFaker.GenerateFaker().Generate(2);
+            IList<Domain.Entities.Product> products = ProductFaker.Generate(2);
 
             await _testsFixture.MockInDatabase(products);
 
             AddOrUpdateProductDto productDto = new() {Description = products.First().Description, IsActive = true};
 
             // Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.PutAsJsonAsync($"{_uriPart}/{products.Last().Id}", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPutRequest<AddOrUpdateProductDto, ProductDto>(
+                    $"{_uriPart}/{products.Last().Id}", productDto);
 
             // Assert
             result.Should().NotBeNull();
             result.Errors.Should().NotBeEmpty();
-            result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
+            result.Errors.Should()
+                .Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductFoundByDescription));
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarUmItemInexistente")]
@@ -274,18 +256,15 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductsController_Update_DeveRetornarErro400QuandoTentarAtualizarUmItemInexistente()
         {
             // Arrange
-            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateValidFaker().Generate();
+            AddOrUpdateProductDto productDto = AddOrUpdateProductDtoFaker.GenerateValid();
 
             // Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.PutAsJsonAsync($"{_uriPart}/{Guid.NewGuid()}", productDto);
-
             TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+                await _testsFixture.SendPutRequest<AddOrUpdateProductDto, ProductDto>($"{_uriPart}/{Guid.NewGuid()}",
+                    productDto);
 
             // Assert
-            // Assert
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
             result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.ProductNotFoundById));
         }
@@ -295,17 +274,16 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Delete_DeveRemoverCorretamenteQuandoEstiverCadastrado()
         {
             // Arrange
-            IList<Domain.Entities.Product> products = ProductFaker.GenerateFaker().Generate(10);
+            Domain.Entities.Product product = ProductFaker.Generate();
 
-            Domain.Entities.Product product = products.First();
-
-            await _testsFixture.MockInDatabase(products);
+            await _testsFixture.MockInDatabase(product);
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.DeleteAsync($"{_uriPart}/{product.Id}");
+            TestApiResponseBase result =
+                await _testsFixture.SendDeleteRequest($"{_uriPart}/{product.Id}");
 
             // Assert
-            response.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status204NoContent);
         }
 
         [Fact(DisplayName = "DeveRetornarStatusCode404QuandoRemoverENaoEstiverCadastrado")]
@@ -313,14 +291,11 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Delete_DeveRetornarStatusCode404QuandoRemoverENaoEstiverCadastrado()
         {
             // Arrange && Act
-            HttpResponseMessage response =
-                await _testsFixture.Client.DeleteAsync($"{_uriPart}/{Guid.NewGuid()}");
-
-            TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+            TestApiResponseBase result =
+                await _testsFixture.SendDeleteRequest($"{_uriPart}/{Guid.NewGuid()}");
 
             // Assert
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
         }
 
@@ -329,22 +304,17 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         public async Task ProductController_Delete_DeveRetornarStatusCode400QuandoRemoverETiverDependentes()
         {
             // Arrange
-            Domain.Entities.Product product = ProductFaker.GenerateFaker().Generate();
-            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            Domain.Entities.PurchaseItem purchaseItem = PurchaseItemFaker.GenerateFaker(purchase, product).Generate();
-
-            purchase.AddItem(purchaseItem);
+            Domain.Entities.Product product = ProductFaker.Generate();
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItem(product);
 
             await _testsFixture.MockInDatabase(purchase);
 
             // Act
-            HttpResponseMessage response = await _testsFixture.Client.DeleteAsync($"{_uriPart}/{product.Id}");
-
-            TestApiResponseOperations<ProductDto> result =
-                await _testsFixture.DeserializeObject<TestApiResponseOperations<ProductDto>>(response);
+            TestApiResponseBase result =
+                await _testsFixture.SendDeleteRequest($"{_uriPart}/{product.Id}");
 
             // Assert
-            response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
         }
     }

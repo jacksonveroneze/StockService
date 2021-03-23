@@ -13,10 +13,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         }
 
         public static IApplicationBuilder UseHealthChecksSetup(this IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/health");
-
-            return app;
-        }
+            => app.UseHealthChecks("/health");
     }
 }

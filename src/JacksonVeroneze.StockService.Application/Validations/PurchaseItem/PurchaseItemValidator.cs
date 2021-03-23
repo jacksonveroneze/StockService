@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Core.Notifications;
+using JacksonVeroneze.StockService.Domain.Enums;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
@@ -10,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
     /// <summary>
     /// Class responsible for validator.
     /// </summary>
-    public class PurchaseItemValidator : IPurchaseItemValidator
+    public class PurchaseItemValidator : Validator, IPurchaseItemValidator
     {
         private readonly IProductRepository _productRepository;
         private readonly IPurchaseRepository _purchaseRepository;
@@ -29,13 +30,15 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
         /// <summary>
         /// Method responsible for validation.
         /// </summary>
+        /// <param name="purchaseId"></param>
         /// <param name="purchaseItemDto"></param>
         /// <returns></returns>
-        public async Task<NotificationContext> ValidateCreateAsync(AddOrUpdatePurchaseItemDto purchaseItemDto)
+        public async Task<NotificationContext> ValidateCreateAsync(Guid purchaseId, AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
             NotificationContext notificationContext = new();
 
-            await ValidatePurchaseItemDto(notificationContext, purchaseItemDto);
+            await ValidateDefaultActionsAsync(notificationContext, purchaseId, default);
+            await ValidateDtoAsync(notificationContext, purchaseItemDto);
 
             return notificationContext;
         }
@@ -52,11 +55,14 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
         {
             NotificationContext notificationContext = new();
 
+            await ValidateDefaultActionsAsync(notificationContext, purchaseId, purchaseItemId);
+            await ValidateDtoAsync(notificationContext, purchaseItemDto);
+
             return notificationContext;
         }
 
         /// <summary>
-        /// Method responsible for validation.
+        ///  Method responsible for validation.
         /// </summary>
         /// <param name="purchaseId"></param>
         /// <param name="purchaseItemId"></param>
@@ -65,44 +71,66 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
         {
             NotificationContext notificationContext = new();
 
-            await ValidateIfExistPurchase(notificationContext, purchaseId);
-            await ValidateIfExistPurchaseItem(notificationContext, purchaseId, purchaseItemId);
+            await ValidateDefaultActionsAsync(notificationContext, purchaseId, purchaseItemId);
 
             return notificationContext;
         }
 
-        private async Task ValidateIfExistPurchase(NotificationContext notificationContext, Guid purchaseId)
-        {
-            Domain.Entities.Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
-
-            if (purchase is null)
-                notificationContext.AddNotification(new Notification("purchase", "Compra näo encontrado"));
-        }
-
-        private async Task ValidateIfExistPurchaseItem(NotificationContext notificationContext, Guid purchaseId, Guid purchaseItemId)
-        {
-            Domain.Entities.Purchase product = await _purchaseRepository.FindAsync(purchaseId);
-
-            if (product.FindItem(purchaseItemId) is null)
-                notificationContext.AddNotification(new Notification("purchaseItem", "Item da compra näo encontrado"));
-        }
-
-        private async Task ValidateIfExistsProduct(NotificationContext notificationContext, Guid productId)
-        {
-            Domain.Entities.Product product = await _productRepository.FindAsync(productId);
-
-            if (product is null)
-                notificationContext.AddNotification(new Notification("product", "O produto informado não foi encontrado"));
-        }
-
-        private async Task ValidatePurchaseItemDto(NotificationContext notificationContext,
+        /// <summary>
+        /// Method responsible for validation.
+        /// </summary>
+        /// <param name="notificationContext"></param>
+        /// <param name="purchaseItemDto"></param>
+        /// <returns></returns>
+        private async Task ValidateDtoAsync(NotificationContext notificationContext,
             AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
             ValidationResult validationResult = await purchaseItemDto.Validate();
 
-            await ValidateIfExistsProduct(notificationContext, purchaseItemDto.ProductId);
-
             notificationContext.AddNotifications(validationResult);
+
+            Domain.Entities.Product product = await _productRepository.FindAsync(purchaseItemDto.ProductId);
+
+            if (product is null)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Purchase), ApplicationValidationMessages.ProductNotFoundById));
+        }
+
+        /// <summary>
+        /// Method responsible for validation.
+        /// </summary>
+        /// <param name="notificationContext"></param>
+        /// <param name="purchaseId"></param>
+        /// <param name="purchaseItemId"></param>
+        /// <returns></returns>
+        private async Task ValidateDefaultActionsAsync(NotificationContext notificationContext, Guid purchaseId,
+            Guid? purchaseItemId)
+        {
+            Domain.Entities.Purchase purchase = await _purchaseRepository.FindAsync(purchaseId);
+
+            if (purchase is null)
+            {
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Purchase), ApplicationValidationMessages.PurchaseNotFoundById));
+
+                return;
+            }
+
+            if (purchase.State == PurchaseState.Closed)
+            {
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Purchase), ApplicationValidationMessages.PurchaseIsClosed));
+
+                return;
+            }
+
+            if (purchaseItemId.HasValue is false) return;
+
+            Domain.Entities.PurchaseItem purchaseItem = purchase.FindItem(purchaseItemId.Value);
+
+            if (purchaseItem is null)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Purchase), ApplicationValidationMessages.PurchaseItemNotFoundById));
         }
     }
 }

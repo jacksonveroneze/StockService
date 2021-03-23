@@ -33,10 +33,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_AddItem_DeveAdicionarOsItensCorretamenteQuandoValidos()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
             // Act
-            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(10);
+            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.Generate(adjustment, 10);
 
             foreach (AdjustmentItem itemMock in itemsMock)
                 adjustment.AddItem(itemMock);
@@ -50,9 +50,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            AdjustmentItem item1 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem item1 = AdjustmentItemFaker.Generate(adjustment);
 
             adjustment.AddItem(item1);
 
@@ -68,11 +68,11 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
             adjustment.Close();
 
-            AdjustmentItem item1 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem item1 = AdjustmentItemFaker.Generate(adjustment);
 
             // Act
             Action act = () => adjustment.AddItem(item1);
@@ -87,9 +87,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            AdjustmentItem adjustmentItem = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem adjustmentItem = AdjustmentItemFaker.Generate(adjustment);
 
             // Act
             Action act = () => adjustment.UpdateItem(adjustmentItem);
@@ -103,12 +103,12 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Product product = ProductFaker.Generate();
 
-            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.GenerateFaker(adjustment, product).Generate();
-            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.GenerateFaker(adjustment, product).Generate();
+            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.Generate(adjustment, product);
+            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.Generate(adjustment, product);
 
             adjustment.AddItem(adjustmentItem1);
 
@@ -124,10 +124,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_UpdateItem_DeveGerarDomainExceptionQuandoAtualizarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
-            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem adjustmentItem1 = AdjustmentItemFaker.Generate(adjustment);
+            AdjustmentItem adjustmentItem2 = AdjustmentItemFaker.Generate(adjustment);
 
             adjustment.AddItem(adjustmentItem1);
             adjustment.AddItem(adjustmentItem2);
@@ -148,9 +148,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_UpdateItem_DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            AdjustmentItem adjustmentItem = AdjustmentItemFaker.GenerateFaker(adjustment).Generate();
+            AdjustmentItem adjustmentItem = AdjustmentItemFaker.Generate(adjustment);
 
             adjustment.AddItem(adjustmentItem);
 
@@ -166,9 +166,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_RemoveItem_DeveRemoverCorretamenteQuandoItemExistir()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(2);
+            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.Generate(adjustment, 2);
 
             adjustment.AddItem(itemsMock.First());
             adjustment.AddItem(itemsMock.Last());
@@ -186,9 +186,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_RemoveItem_DeveGerarDomainExceptionQuandoRemoverUmItemInexistente()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(2);
+            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.Generate(adjustment, 2);
 
             adjustment.AddItem(itemsMock.First());
 
@@ -204,9 +204,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_CalculateTotalValue_DeveSomarCorretamenteValorTotal()
         {
             // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
-            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(10);
+            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.Generate(adjustment, 10);
 
             foreach (AdjustmentItem itemMock in itemsMock)
                 adjustment.AddItem(itemMock);
@@ -220,7 +220,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_AddItem_DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
             // Act
             adjustment.Close();
@@ -234,7 +234,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Adjustment_RemoveItem_DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
             adjustment.Close();
 

@@ -14,8 +14,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void PurchaseItem_Validate_DeveRetornarDomainExceptionAoTentarCriarComValoresInvalidos()
         {
             // Arange && Act
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             Func<PurchaseItem> func1 = () => new PurchaseItem(0, 1, purchase, product);
             Func<PurchaseItem> func2 = () => new PurchaseItem(1, 0, purchase, product);
@@ -30,8 +30,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void PurchaseItem_CalculteValue_DeveCalculaCorretamenteOValorDoItem()
         {
             // Arange && Act
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
+            Product product = ProductFaker.Generate();
 
             PurchaseItem item = new PurchaseItem(10, 2, purchase, product);
 
@@ -47,9 +47,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void PurchaseItem_Update_DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos()
         {
             // Arange && Act
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             PurchaseItem item = new PurchaseItem(10, 2, purchase, product);
 
@@ -67,9 +67,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void PurchaseItem_Update_DeveAtualizarCorretamenteOItemQuandoInformadoValoresValidos()
         {
             // Arange && Act
-            Purchase purchase = PurchaseFaker.GenerateFaker().Generate();
-            Product product = ProductFaker.GenerateFaker().Generate();
-            Product newProduct = ProductFaker.GenerateFaker().Generate();
+            Purchase purchase = PurchaseFaker.Generate();
+            Product product = ProductFaker.Generate();
+            Product newProduct = ProductFaker.Generate();
 
             PurchaseItem item = new PurchaseItem(10, 2, purchase, product);
 

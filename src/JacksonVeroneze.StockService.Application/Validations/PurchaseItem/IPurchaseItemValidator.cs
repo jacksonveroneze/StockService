@@ -7,7 +7,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
 {
     public interface IPurchaseItemValidator
     {
-        Task<NotificationContext> ValidateCreateAsync(AddOrUpdatePurchaseItemDto purchaseItemDto);
+        Task<NotificationContext> ValidateCreateAsync(Guid purchaseId, AddOrUpdatePurchaseItemDto purchaseItemDto);
 
         Task<NotificationContext> ValidateUpdateAsync(Guid purchaseId, Guid purchaseItemId,
             AddOrUpdatePurchaseItemDto purchaseItemDto);

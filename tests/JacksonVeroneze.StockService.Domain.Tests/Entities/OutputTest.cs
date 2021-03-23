@@ -33,10 +33,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_AddItem_DeveAdicionarOsItensCorretamenteQuandoValidos()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
             // Act
-            IList<OutputItem> itemsMock = OutputItemFaker.GenerateFaker(output).Generate(10);
+            IList<OutputItem> itemsMock = OutputItemFaker.Generate(output, 10);
 
             foreach (OutputItem itemMock in itemsMock)
                 output.AddItem(itemMock);
@@ -50,9 +50,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEOMesmoJaExistir()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            OutputItem item1 = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem item1 = OutputItemFaker.Generate(output);
 
             output.AddItem(item1);
 
@@ -68,11 +68,11 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemEEstiverFechado()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
             output.Close();
 
-            OutputItem item1 = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem item1 = OutputItemFaker.Generate(output);
 
             // Act
             Action act = () => output.AddItem(item1);
@@ -87,9 +87,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_UpdateItem_DeveGerarDomainExceptionQuandoTentarAtualizarUmItemInexistente()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            OutputItem outputItem = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem outputItem = OutputItemFaker.Generate(output);
 
             // Act
             Action act = () => output.UpdateItem(outputItem);
@@ -103,12 +103,12 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_AddItem_DeveGerarDomainExceptionQuandoAdicionarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            Product product = ProductFaker.GenerateFaker().Generate();
+            Product product = ProductFaker.Generate();
 
-            OutputItem outputItem1 = OutputItemFaker.GenerateFaker(output, product).Generate();
-            OutputItem outputItem2 = OutputItemFaker.GenerateFaker(output, product).Generate();
+            OutputItem outputItem1 = OutputItemFaker.Generate(output, product);
+            OutputItem outputItem2 = OutputItemFaker.Generate(output, product);
 
             output.AddItem(outputItem1);
 
@@ -124,10 +124,10 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_UpdateItem_DeveGerarDomainExceptionQuandoAtualizarUmItemComProdutoQueJaExisteNaLista()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            OutputItem outputItem1 = OutputItemFaker.GenerateFaker(output).Generate();
-            OutputItem outputItem2 = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem outputItem1 = OutputItemFaker.Generate(output);
+            OutputItem outputItem2 = OutputItemFaker.Generate(output);
 
             output.AddItem(outputItem1);
             output.AddItem(outputItem2);
@@ -148,9 +148,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_UpdateItem_DeveAtualizarCorretamenteUmItemQuandoOMesmoExistir()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            OutputItem outputItem = OutputItemFaker.GenerateFaker(output).Generate();
+            OutputItem outputItem = OutputItemFaker.Generate(output);
 
             output.AddItem(outputItem);
 
@@ -166,9 +166,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_RemoveItem_DeveRemoverCorretamenteQuandoItemExistir()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            IList<OutputItem> itemsMock = OutputItemFaker.GenerateFaker(output).Generate(2);
+            IList<OutputItem> itemsMock = OutputItemFaker.Generate(output, 2);
 
             output.AddItem(itemsMock.First());
             output.AddItem(itemsMock.Last());
@@ -186,9 +186,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_RemoveItem_DeveGerarDomainExceptionQuandoRemoverUmItemInexistente()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            IList<OutputItem> itemsMock = OutputItemFaker.GenerateFaker(output).Generate(2);
+            IList<OutputItem> itemsMock = OutputItemFaker.Generate(output, 2);
 
             output.AddItem(itemsMock.First());
 
@@ -204,9 +204,9 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_CalculateTotalValue_DeveSomarCorretamenteValorTotal()
         {
             // Arange && Act
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
-            IList<OutputItem> itemsMock = OutputItemFaker.GenerateFaker(output).Generate(10);
+            IList<OutputItem> itemsMock = OutputItemFaker.Generate(output, 10);
 
             foreach (OutputItem itemMock in itemsMock)
                 output.AddItem(itemMock);
@@ -220,7 +220,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_AddItem_DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
             // Act
             output.Close();
@@ -234,7 +234,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         public void Output_RemoveItem_DeveGerarDomainExceptionAoFecharORegistroQueEstaFechado()
         {
             // Arange
-            Output output = OutputFaker.GenerateFaker().Generate();
+            Output output = OutputFaker.Generate();
 
             output.Close();
 

@@ -33,8 +33,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(totalItens);
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.Generate(adjustment, totalItens);
 
             ConfigureMock();
 
@@ -59,8 +59,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(totalItens);
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.Generate(adjustment, totalItens);
 
             ConfigureMock();
 
@@ -87,8 +87,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(totalItens);
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.Generate(adjustment, totalItens);
 
             ConfigureMock();
 
@@ -115,8 +115,8 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Arange
             int totalItens = 5;
 
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
-            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.GenerateFaker(adjustment).Generate(totalItens);
+            Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<AdjustmentItem> adjustmentItens = AdjustmentItemFaker.Generate(adjustment, totalItens);
 
             ConfigureMock();
 
@@ -142,7 +142,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
         public void AdjustmentService_Close_DeveGerarDomainExceptionQuandoQuandoEstiverFechadoETentarFecharNovamente()
         {
             // Arange
-            Adjustment adjustment = AdjustmentFaker.GenerateFaker().Generate();
+            Adjustment adjustment = AdjustmentFaker.Generate();
 
             adjustment.Close();
 

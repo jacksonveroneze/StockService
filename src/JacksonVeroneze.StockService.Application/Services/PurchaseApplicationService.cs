@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using JacksonVeroneze.StockService.Application.DTO.Purchase;
@@ -67,11 +66,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <param name="filter"></param>
         /// <returns></returns>
         public async Task<Pageable<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
-        {
-            var data = await _purchaseRepository.FilterAsync(pagination, filter);
-
-            return _mapper.Map<Pageable<PurchaseDto>>(data.ToList());
-        }
+            => _mapper.Map<Pageable<PurchaseDto>>(
+                await _purchaseRepository.FilterAsync(pagination, filter));
 
         /// <summary>
         /// Method responsible for add purchase.
@@ -202,7 +198,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         public async Task<ApplicationDataResult<PurchaseItemDto>> AddItemAsync(Guid purchaseId,
             AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
-            NotificationContext result = await _purchaseItemValidator.ValidateCreateAsync(purchaseItemDto);
+            NotificationContext result = await _purchaseItemValidator.ValidateCreateAsync(purchaseId, purchaseItemDto);
 
             if (result.HasNotifications)
                 return ApplicationDataResult<PurchaseItemDto>.FactoryFromNotificationContext(result);
@@ -228,7 +224,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         public async Task<ApplicationDataResult<PurchaseItemDto>> UpdateItemAsync(Guid purchaseId, Guid purchaseItemId,
             AddOrUpdatePurchaseItemDto purchaseItemDto)
         {
-            NotificationContext result = await _purchaseItemValidator.ValidateUpdateAsync(purchaseId, purchaseItemId, purchaseItemDto);
+            NotificationContext result =
+                await _purchaseItemValidator.ValidateUpdateAsync(purchaseId, purchaseItemId, purchaseItemDto);
 
             if (result.HasNotifications)
                 return ApplicationDataResult<PurchaseItemDto>.FactoryFromNotificationContext(result);

@@ -33,7 +33,7 @@ namespace JacksonVeroneze.StockService.Data.Util
         public Task<T> FindAsync(Guid id)
             => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
                 context.Set<T>()
-                    .Cacheable(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(5))
+                    //.Cacheable(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(5))
                     .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
