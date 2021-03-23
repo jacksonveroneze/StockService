@@ -4,7 +4,7 @@ using JacksonVeroneze.StockService.Core.Exceptions;
 
 namespace JacksonVeroneze.StockService.Core.DomainObjects
 {
-    public static class Validacoes
+    public static class Guards
     {
         public static void ValidarSeIgual(object object1, object object2, string mensagem)
         {

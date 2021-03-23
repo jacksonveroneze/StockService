@@ -63,7 +63,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
 
             await context.Set<T>().AddAsync(entity);
 
-            await context.SaveChangesAsync();
+            await context.CommitAsync();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
 
             await context.Set<T>().AddRangeAsync(entity);
 
-            await context.SaveChangesAsync();
+            await context.CommitAsync();
         }
 
         /// <summary>

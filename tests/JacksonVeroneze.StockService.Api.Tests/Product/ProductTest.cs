@@ -116,8 +116,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Description.Should().Be(productDto.Description);
-            result.Content.IsActive.Should().BeTrue();
+            result.Data.Description.Should().Be(productDto.Description);
+            result.Data.IsActive.Should().BeTrue();
             result.Errors.Should().BeEmpty();
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status201Created);
 
@@ -193,8 +193,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Description.Should().Be(productDto.Description);
-            result.Content.IsActive.Should().BeTrue();
+            result.Data.Description.Should().Be(productDto.Description);
+            result.Data.IsActive.Should().BeTrue();
             result.Errors.Should().BeEmpty();
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
 

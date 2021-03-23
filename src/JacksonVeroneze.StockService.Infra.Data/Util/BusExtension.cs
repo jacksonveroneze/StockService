@@ -12,8 +12,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
     {
         public static async Task PublishEvents(this IBus bus, DatabaseContext dbContext)
         {
-            IList<EntityEntry<Entity>> domainEntities = dbContext.ChangeTracker
-                .Entries<Entity>()
+            IList<EntityEntry<EntityRoot>> domainEntities = dbContext.ChangeTracker
+                .Entries<EntityRoot>()
                 .Where(x => x.Entity.Notifications != null && x.Entity.Notifications.Any())
                 .ToList();
 

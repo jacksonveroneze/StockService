@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using JacksonVeroneze.StockService.Core.Messages;
 
 namespace JacksonVeroneze.StockService.Core.DomainObjects
 {
-    public class Entity : EntityId
+    public abstract class Entity : EntityId
     {
         public DateTime CreatedAt { get; } = DateTime.Now;
 
@@ -16,32 +14,11 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public Guid TenantId { get; private set; }
 
-        private readonly List<Event> _notifications = new();
-
-        public IReadOnlyCollection<Event> Notifications => _notifications?.AsReadOnly();
-
-        protected Entity()
-        {
-        }
-
-        public void AddEvent(Event evento)
-            => _notifications.Add(evento);
-
-        public void RemoveEvent(Event evento)
-            => _notifications.Remove(evento);
-
-        public void ClearEvents()
-            => _notifications.Clear();
-
-        public void SetDeletedAt() => DeletedAt = DateTime.Now;
-
         public Entity ShallowCopy()
-        {
-            return (Entity)this.MemberwiseClone();
-        }
+            => (Entity)MemberwiseClone();
 
         public override string ToString()
             => $"{GetType().Name}: Id: {Id}, CreatedAt: {CreatedAt}, " +
-               $"UpdatedAt: {UpdatedAt}, DeletedAt: {DeletedAt}, Version: {Version}";
+               $"UpdatedAt: {UpdatedAt}, DeletedAt: {DeletedAt}, Version: {Version}, TenantId: {TenantId}";
     }
 }

@@ -48,8 +48,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void Validate()
         {
-            Validacoes.ValidarSeVazio(Description, "A descrição não pode estar vazia");
-            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição não pode estar vazia");
+            Guards.ValidarSeVazio(Description, "A descrição não pode estar vazia");
+            Guards.ValidarTamanho(Description, 1, 100, "A descrição não pode estar vazia");
         }
     }
 }

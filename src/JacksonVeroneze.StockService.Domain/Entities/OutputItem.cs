@@ -44,8 +44,8 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void Validate()
         {
-            Validacoes.ValidarSeMenorQue(Amount, 1, "A quantidade deve ser maior que zero");
-            Validacoes.ValidarSeMenorQue(Value, 1, "O Valor deve ser maior que zero");
+            Guards.ValidarSeMenorQue(Amount, 1, "A quantidade deve ser maior que zero");
+            Guards.ValidarSeMenorQue(Value, 1, "O Valor deve ser maior que zero");
         }
     }
 }

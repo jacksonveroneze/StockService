@@ -116,7 +116,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Description.Should().Be(purchaseDto.Description);
+            result.Data.Description.Should().Be(purchaseDto.Description);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
@@ -160,11 +160,11 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Description.Should().Be(purchaseDto.Description);
+            result.Data.Description.Should().Be(purchaseDto.Description);
             result.Errors.Should().BeEmpty();
 
             result.Should().NotBeNull();
-            result.Content.Description.Should().Be(purchaseDto.Description);
+            result.Data.Description.Should().Be(purchaseDto.Description);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarEmEstadoInvalido")]
@@ -396,8 +396,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Amount.Should().Be(purchaseItemDto.Amount);
-            result.Content.Value.Should().Be(purchaseItemDto.Value);
+            result.Data.Amount.Should().Be(purchaseItemDto.Amount);
+            result.Data.Value.Should().Be(purchaseItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
@@ -533,8 +533,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             // Assert
             result.Should().NotBeNull();
-            result.Content.Amount.Should().Be(purchaseItemDto.Amount);
-            result.Content.Value.Should().Be(purchaseItemDto.Value);
+            result.Data.Amount.Should().Be(purchaseItemDto.Amount);
+            result.Data.Value.Should().Be(purchaseItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();

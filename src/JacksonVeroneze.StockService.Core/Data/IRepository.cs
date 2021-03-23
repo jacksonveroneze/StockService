@@ -5,7 +5,7 @@ using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Core.Data
 {
-    public interface IRepository<T> where T : Entity
+    public interface IRepository<T> where T : EntityRoot
     {
         public IUnitOfWork UnitOfWork { get; set; }
 

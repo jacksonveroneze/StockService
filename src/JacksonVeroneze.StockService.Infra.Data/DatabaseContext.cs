@@ -79,11 +79,8 @@ namespace JacksonVeroneze.StockService.Infra.Data
     {
         public static void AddFilter<T>(this ModelBuilder modelBuilder, Guid tenantId) where T : Entity
         {
-            // modelBuilder.Entity<T>()
-            //     .HasQueryFilter(x => x.DeletedAt == null && x.TenantId == tenantId);
-
             modelBuilder.Entity<T>()
-                .HasQueryFilter(x => x.DeletedAt == null);
+                .HasQueryFilter(x => x.DeletedAt == null && x.TenantId == tenantId);
         }
     }
 }

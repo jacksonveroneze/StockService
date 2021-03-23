@@ -6,7 +6,7 @@ namespace JacksonVeroneze.StockService.Application.Util
 {
     public class ApplicationDataResult<T>
     {
-        public List<Notification> Errors { get; } = new();
+        public List<Notification> Errors { get; }
 
         public T Data { get; }
 

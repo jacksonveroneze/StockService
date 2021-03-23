@@ -17,11 +17,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddDbContext<DatabaseContext>((serviceProvider, options) =>
                     options
                         .UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                            sqlServerOptionsBuilder =>
+                            optionsBuilder =>
                             {
-                                sqlServerOptionsBuilder
+                                optionsBuilder
                                     .CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds)
-                                    .EnableRetryOnFailure();
+                                    .EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
                             })
                         .AddEfSecondLevelCacheInterceptor(serviceProvider)
                         .UseLazyLoadingProxies()
@@ -35,12 +35,12 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
         private static IServiceCollection AddEfSecondLevelCacheConfiguration(this IServiceCollection services)
         {
-            const string providerName1 = "InMemory";
+            const string providerName = "InMemory";
 
             services.AddSingleton(typeof(ICacheManager<>), typeof(BaseCacheManager<>));
 
             services.AddEFSecondLevelCache(options =>
-                options.UseEasyCachingCoreProvider(providerName1).DisableLogging()
+                options.UseEasyCachingCoreProvider(providerName).DisableLogging()
             );
 
             services.AddEasyCaching(options =>
@@ -58,7 +58,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                     config.EnableLogging = false;
                     config.LockMs = 5000;
                     config.SleepMs = 300;
-                }, providerName1);
+                }, providerName);
             });
 
             return services;

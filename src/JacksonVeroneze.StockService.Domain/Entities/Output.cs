@@ -127,9 +127,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void Validate()
         {
-            Validacoes.ValidarSeVazio(Description, "A descrição não pode estar vazia");
-            Validacoes.ValidarTamanho(Description, 1, 100, "A descrição deve ter entre 1 e 100 caracteres");
-            Validacoes.ValidarSeMaiorQue(Date, DateTime.Now, "A data não pode ser superior a data atual");
+            Guards.ValidarSeVazio(Description, "A descrição não pode estar vazia");
+            Guards.ValidarTamanho(Description, 1, 100, "A descrição deve ter entre 1 e 100 caracteres");
+            Guards.ValidarSeMaiorQue(Date, DateTime.Now, "A data não pode ser superior a data atual");
         }
     }
 }
