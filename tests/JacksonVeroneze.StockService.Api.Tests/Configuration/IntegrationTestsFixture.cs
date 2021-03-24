@@ -165,7 +165,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// <typeparam name="TResponseType"></typeparam>
         /// <returns></returns>
         public async Task<TestApiResponseOperations<TResponseType>> SendPutRequest<TInputType, TResponseType>(
-            string url, TInputType dto = null) where TInputType : class where TResponseType : class
+            string url, TInputType dto) where TInputType : class where TResponseType : class
         {
             HttpResponseMessage resultHttp = await _client.PutAsJsonAsync(url, dto);
 

@@ -16,7 +16,7 @@ namespace JacksonVeroneze.StockService.Common.Integration
 
         public string Instance { get; set; }
 
-        public IEnumerable<Notification> Errors { get; set; }
+        public IEnumerable<Notification> Errors { get; set; } = new List<Notification>();
 
         public HttpResponseMessage HttpResponse { get; set; }
     }
