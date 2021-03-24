@@ -2,7 +2,7 @@ version: "3.8"
 services:
     api:
         container_name: api
-        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:0.0.1
         tty: true
         build:
             context: .
