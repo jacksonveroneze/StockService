@@ -13,12 +13,11 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
     {
         Task<AdjustmentDto> FindAsync(Guid adjustmentId);
 
-        Task<IList<AdjustmentDto>> FilterAsync(Pagination pagination, AdjustmentFilter filter);
+        Task<Pageable<AdjustmentDto>> FilterAsync(Pagination pagination, AdjustmentFilter filter);
 
         Task<ApplicationDataResult<AdjustmentDto>> AddAsync(AddOrUpdateAdjustmentDto adjustmentDto);
 
-        Task<ApplicationDataResult<AdjustmentDto>> UpdateAsync(Guid adjustmentId,
-            AddOrUpdateAdjustmentDto adjustmentDto);
+        Task<ApplicationDataResult<AdjustmentDto>> UpdateAsync(Guid adjustmentId, AddOrUpdateAdjustmentDto adjustmentDto);
 
         Task<ApplicationDataResult<AdjustmentDto>> RemoveAsync(Guid adjustmentId);
 

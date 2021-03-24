@@ -28,9 +28,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
                 RuleFor(x => x.Value)
                     .NotNull()
                     .GreaterThan(0);
-
-                RuleFor(x => x.ProductId)
-                    .NotNull();
             }
         }
     }

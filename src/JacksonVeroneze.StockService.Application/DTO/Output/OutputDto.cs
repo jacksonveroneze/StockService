@@ -11,8 +11,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Output
 
         public DateTime Date { get; set; }
 
-        public decimal TotalValue { get; set; }
-
         public OutputState State { get; set; }
     }
 }

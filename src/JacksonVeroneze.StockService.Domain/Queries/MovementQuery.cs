@@ -13,8 +13,8 @@ namespace JacksonVeroneze.StockService.Domain.Queries
             Expression<Func<Movement, bool>> expression = query => true;
 
 
-            if (filter.productId.HasValue)
-                expression = expression.And(x => x.Product.Id == filter.productId.Value);
+            if (filter.ProductId.HasValue)
+                expression = expression.And(x => x.Product.Id == filter.ProductId.Value);
 
             return expression;
         }

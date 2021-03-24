@@ -55,7 +55,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             AdjustmentDto adjustmentDto = await _applicationService.FindAsync(id);
 
             if (adjustmentDto is null)
-                return NotFound();
+                return NotFound(FactoryNotFound());
 
             return Ok(adjustmentDto);
         }
@@ -74,9 +74,29 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             ApplicationDataResult<AdjustmentDto> result = await _applicationService.AddAsync(adjustmentDto);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
-            return CreatedAtAction(nameof(Find), new {id = result.Data.Id}, result.Data);
+            return CreatedAtAction(nameof(Find), new {id = result.Data.Id}, result);
+        }
+
+        /// <summary>
+        /// Method responsible for action: Update.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="adjustmentDto"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        [Authorize("adjustments:update")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
+        public async Task<ActionResult<AdjustmentDto>> Update(Guid id, [FromBody] AddOrUpdateAdjustmentDto adjustmentDto)
+        {
+            ApplicationDataResult<AdjustmentDto> result = await _applicationService.UpdateAsync(id, adjustmentDto);
+
+            if (!result.IsSuccess)
+                return BadRequest(FactoryBadRequest(result));
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -93,7 +113,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             ApplicationDataResult<AdjustmentDto> result = await _applicationService.RemoveAsync(id);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
             return NoContent();
         }
@@ -112,7 +132,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             ApplicationDataResult<AdjustmentDto> result = await _applicationService.CloseAsync(id);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
             return NoContent();
         }
@@ -144,7 +164,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
             AdjustmentItemDto result = await _applicationService.FindItemAsync(id, itemId);
 
             if (result is null)
-                return NotFound();
+                return NotFound(FactoryNotFound());
 
             return Ok(result);
         }
@@ -166,10 +186,10 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
                 await _applicationService.AddItemAsync(id, adjustmentItemDto);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
             return CreatedAtAction(nameof(FindItem),
-                new {id = result.Data.AdjustmentId, itemId = result.Data.Id}, result.Data);
+                new {id = result.Data.AdjustmentId, itemId = result.Data.Id}, result);
         }
 
         /// <summary>
@@ -190,9 +210,9 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
                 await _applicationService.UpdateItemAsync(id, itemId, adjustmentItemDto);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         /// <summary>
@@ -205,12 +225,12 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         [Authorize("adjustments:remove-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
-        public async Task<ActionResult> RemoveItem(Guid id, Guid itemId)
+        public async Task<ActionResult> DeleteItem(Guid id, Guid itemId)
         {
             ApplicationDataResult<AdjustmentItemDto> result = await _applicationService.RemoveItemAsync(id, itemId);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(FactoryBadRequest(result));
 
             return NoContent();
         }

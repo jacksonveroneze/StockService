@@ -10,3 +10,5 @@
 .idea
 **/appsettings.json
 **/appsettings.*.json
+node_modules
+infra

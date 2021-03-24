@@ -20,11 +20,11 @@ namespace JacksonVeroneze.StockService.Application.DTO.Output
             public AddOrUpdateOutputDtoValidator()
             {
                 RuleFor(x => x.Description)
-                    .NotEmpty()
                     .Length(1, 100);
 
                 RuleFor(x => x.Date)
-                    .NotNull();
+                    .NotNull()
+                    .LessThan(DateTime.Now);
             }
         }
     }

@@ -68,9 +68,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateIfItemNotExist(item);
             ValidateIfExistsItemByProduct(item);
 
-            AdjustmentItem adjustmentItem = FindItem(item.Id);
+            AdjustmentItem purchaseItem = FindItem(item.Id);
 
-            _items.Remove(adjustmentItem);
+            _items.Remove(purchaseItem);
 
             _items.Add(item);
 
@@ -110,10 +110,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void ValidateIfExistsItemByProduct(AdjustmentItem item)
         {
-            AdjustmentItem adjustmentItem =
-                Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
+            AdjustmentItem purchaseItem = Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
 
-            if (adjustmentItem != null)
+            if (purchaseItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
         }
 
@@ -122,9 +121,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             if (State == AdjustmentState.Closed)
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
-
-        private AdjustmentItem FindItemByProductId(Product product)
-            => Items.FirstOrDefault(x => x.Product.Id == product.Id);
 
         private bool CheckIfExistsItemById(Guid id)
             => Items.Any(x => x.Id == id);

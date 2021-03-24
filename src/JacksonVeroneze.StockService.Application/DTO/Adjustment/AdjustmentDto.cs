@@ -11,8 +11,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.Adjustment
 
         public DateTime Date { get; set; }
 
-        public decimal TotalValue { get; set; }
-
         public AdjustmentState State { get; set; }
     }
 }

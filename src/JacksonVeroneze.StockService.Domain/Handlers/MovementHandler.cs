@@ -80,7 +80,7 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
         private async Task<Movement> SearchMovement(Product product)
         {
             Movement movement = await _movementRepository
-                .FindAsync(new MovementFilter() {productId = product.Id});
+                .FindAsync(new MovementFilter() {ProductId = product.Id});
 
             if (movement != null)
                 return movement;

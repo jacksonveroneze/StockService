@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
     /// <summary>
     /// Class responsible for validator.
     /// </summary>
-    public class PurchaseItemValidator : Validator, IPurchaseItemValidator
+    public class PurchaseItemBaseValidator : BaseValidator, IPurchaseItemValidator
     {
         private readonly IProductRepository _productRepository;
         private readonly IPurchaseRepository _purchaseRepository;
@@ -21,7 +21,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.PurchaseItem
         /// </summary>
         /// <param name="productRepository"></param>
         /// <param name="productRepository1"></param>
-        public PurchaseItemValidator(IPurchaseRepository productRepository, IProductRepository productRepository1)
+        public PurchaseItemBaseValidator(IPurchaseRepository productRepository, IProductRepository productRepository1)
         {
             _purchaseRepository = productRepository;
             _productRepository = productRepository1;

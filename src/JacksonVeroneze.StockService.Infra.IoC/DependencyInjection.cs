@@ -1,5 +1,9 @@
 ﻿using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Services;
+using JacksonVeroneze.StockService.Application.Validations.Adjustment;
+using JacksonVeroneze.StockService.Application.Validations.AdjustmentItem;
+using JacksonVeroneze.StockService.Application.Validations.Output;
+using JacksonVeroneze.StockService.Application.Validations.OutputItem;
 using JacksonVeroneze.StockService.Application.Validations.Product;
 using JacksonVeroneze.StockService.Application.Validations.Purchase;
 using JacksonVeroneze.StockService.Application.Validations.PurchaseItem;
@@ -29,8 +33,10 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddScoped<IProductApplicationService, ProductApplicationService>();
-            services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
             services.AddScoped<IMovementApplicationService, MovementApplicationService>();
+            services.AddScoped<IAdjustmentApplicationService, AdjustmentApplicationService>();
+            services.AddScoped<IOutputApplicationService, OutputApplicationService>();
+            services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
         }
 
         private static void RegisterDomainServices(IServiceCollection services)
@@ -52,9 +58,15 @@ namespace JacksonVeroneze.StockService.Infra.IoC
 
         private static void RegisterServicesValidations(IServiceCollection services)
         {
-            services.AddScoped<IProductValidator, ProductValidator>();
+            services.AddScoped<IProductValidator, ProductBaseValidator>();
+            //
+            services.AddScoped<IAdjustmentValidator, AdjustmentValidator>();
+            services.AddScoped<IOutputValidator, OutputValidator>();
             services.AddScoped<IPurchaseValidator, PurchaseValidator>();
-            services.AddScoped<IPurchaseItemValidator, PurchaseItemValidator>();
+            //
+            services.AddScoped<IAdjustmentItemValidator, AdjustmentItemValidator>();
+            services.AddScoped<IOutputItemValidator, OutputItemValidator>();
+            services.AddScoped<IPurchaseItemValidator, PurchaseItemBaseValidator>();
         }
 
         private static void RegisterServicesOthers(IServiceCollection services)

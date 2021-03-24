@@ -13,7 +13,7 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
     {
         Task<OutputDto> FindAsync(Guid outputId);
 
-        Task<IList<OutputDto>> FilterAsync(Pagination pagination, OutputFilter filter);
+        Task<Pageable<OutputDto>> FilterAsync(Pagination pagination, OutputFilter filter);
 
         Task<ApplicationDataResult<OutputDto>> AddAsync(AddOrUpdateOutputDto outputDto);
 

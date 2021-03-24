@@ -8,7 +8,7 @@ namespace JacksonVeroneze.StockService.Domain.Filters
 {
     public class MovementFilter : BaseFilter<Movement>
     {
-        public Guid? productId { get; set; }
+        public Guid? ProductId { get; set; }
 
         public override Expression<Func<Movement, bool>> ToQuery()
             => MovementQuery.GetQuery(this);

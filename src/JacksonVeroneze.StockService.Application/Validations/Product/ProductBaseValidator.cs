@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
     /// <summary>
     /// Class responsible for validator.
     /// </summary>
-    public class ProductValidator : Validator, IProductValidator
+    public class ProductBaseValidator : BaseValidator, IProductValidator
     {
         private readonly IProductRepository _productRepository;
 
@@ -19,7 +19,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Product
         /// Method responsible for initialize validator.
         /// </summary>
         /// <param name="productRepository"></param>
-        public ProductValidator(IProductRepository productRepository)
+        public ProductBaseValidator(IProductRepository productRepository)
             => _productRepository = productRepository;
 
         /// <summary>

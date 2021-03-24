@@ -64,7 +64,8 @@ namespace JacksonVeroneze.StockService.Mapper
         private void MapPageableEntityToPageableDto()
         {
             CreateMap<Pageable<Product>, Pageable<ProductDto>>();
-
+            CreateMap<Pageable<Adjustment>, Pageable<AdjustmentDto>>();
+            CreateMap<Pageable<Output>, Pageable<OutputDto>>();
             CreateMap<Pageable<Purchase>, Pageable<PurchaseDto>>();
         }
     }

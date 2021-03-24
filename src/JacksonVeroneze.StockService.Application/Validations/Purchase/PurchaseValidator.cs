@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.Purchase
     /// <summary>
     /// Class responsible for validator.
     /// </summary>
-    public class PurchaseValidator : Validator, IPurchaseValidator
+    public class PurchaseValidator : BaseValidator, IPurchaseValidator
     {
         private readonly IPurchaseRepository _purchaseRepository;
 

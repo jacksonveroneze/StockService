@@ -11,8 +11,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration.AuthorizationToke
         {
             RequestToken requestToken = new()
             {
-                ClientId = Environment.GetEnvironmentVariable("AUTHORIZATION_CLIENT_ID"),
-                ClientSecret = Environment.GetEnvironmentVariable("AUTHORIZATION_CLIENT_SECRET"),
+                ClientId = "dHBnIudUunKw8pYQPcdjJr40AOJyU1lt",
+                ClientSecret = "ljz4vCOt3kvWgiF-0_P_kgQX_eP6hMlebMUeWR6_hy9TzZ5nVAUuXkRhtWhDC6mu",
                 Audience = "https://stock-jacksonveroneze.azurewebsites.net",
                 GrantType = "client_credentials",
             };
