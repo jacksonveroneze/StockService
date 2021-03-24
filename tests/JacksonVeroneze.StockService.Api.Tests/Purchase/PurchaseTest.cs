@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
             Task.Run(async () => await _testsFixture.ClearDatabase());
         }
 
-        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente", Skip = "Erro")]
+        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente")]
         [Trait(nameof(PurchasesController), nameof(PurchasesController.Filter))]
         public async Task PurchasesController_Filter_DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente()
         {
@@ -49,7 +49,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
             // Act
             TestApiResponseOperationGet<Pageable<PurchaseDto>> result =
                 await _testsFixture.SendGetRequest<Pageable<PurchaseDto>>(
-                    $"{_uriPart}?skip={skip}&take={take}&description=a");
+                    $"{_uriPart}?skip={skip}&take={take}&description=a&state=1&dateInitial=2020-01-01&dateEnd=2022-01-01");
 
             // Assert
             IList<Domain.Entities.Purchase> productsFiltered =
@@ -285,7 +285,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
         public async Task PurchasesController_Close_DeveFecharCorretamenteQuandoNaoEstiverFechado()
         {
             // Arrange
-            Domain.Entities.Purchase purchase = PurchaseFaker.Generate();
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItems(5);
 
             await _testsFixture.MockInDatabase(purchase);
 

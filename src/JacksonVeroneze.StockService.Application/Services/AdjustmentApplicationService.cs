@@ -67,7 +67,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<Pageable<AdjustmentDto>> FilterAsync(Pagination pagination, AdjustmentFilter filter)
             => _mapper.Map<Pageable<AdjustmentDto>>(
-                await _adjustmentRepository.FilterAsync(pagination, filter));
+                await _adjustmentRepository.FilterPaginateAsync(pagination, filter));
 
         /// <summary>
         /// Method responsible for add adjustment.

@@ -13,10 +13,15 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         {
             string[] customPolices =
             {
-                "products:filter", "products:find", "products:create", "products:update", "products:delete",
-                "purchases:filter", "purchases:find", "purchases:create", "purchases:update", "purchases:delete",
-                "purchases:close", "purchases:find-items", "purchases:find-item", "purchases:create-item",
-                "purchases:update-item", "purchases:remove-item",
+                "adjustments:filter", "adjustments:find", "adjustments:create", "adjustments:update",
+                "adjustments:delete", "adjustments:close", "adjustments:find-items", "adjustments:find-item",
+                "adjustments:create-item", "adjustments:update-item", "adjustments:remove-item", "outputs:filter",
+                "outputs:find", "outputs:create", "outputs:update", "outputs:delete", "outputs:close",
+                "outputs:find-items", "outputs:find-item", "outputs:create-item", "outputs:update-item",
+                "outputs:remove-item", "purchases:filter", "purchases:find", "purchases:create", "purchases:update",
+                "purchases:delete", "purchases:close", "purchases:find-items", "purchases:find-item",
+                "purchases:create-item", "purchases:update-item", "purchases:remove-item", "products:filter",
+                "products:find", "products:create", "products:update", "products:delete"
             };
 
             services.AddAuthorization(options =>

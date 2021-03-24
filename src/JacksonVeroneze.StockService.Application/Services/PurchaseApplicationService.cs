@@ -67,7 +67,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<Pageable<PurchaseDto>> FilterAsync(Pagination pagination, PurchaseFilter filter)
             => _mapper.Map<Pageable<PurchaseDto>>(
-                await _purchaseRepository.FilterAsync(pagination, filter));
+                await _purchaseRepository.FilterPaginateAsync(pagination, filter));
 
         /// <summary>
         /// Method responsible for add purchase.

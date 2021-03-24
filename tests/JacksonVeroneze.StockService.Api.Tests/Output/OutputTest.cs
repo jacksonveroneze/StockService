@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             Task.Run(async () => await _testsFixture.ClearDatabase());
         }
 
-        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente", Skip = "Erro")]
+        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente")]
         [Trait(nameof(OutputsController), nameof(OutputsController.Filter))]
         public async Task OutputsController_Filter_DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente()
         {
@@ -49,7 +49,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             // Act
             TestApiResponseOperationGet<Pageable<OutputDto>> result =
                 await _testsFixture.SendGetRequest<Pageable<OutputDto>>(
-                    $"{_uriPart}?skip={skip}&take={take}&description=a");
+                    $"{_uriPart}?skip={skip}&take={take}&description=a&state=1&dateInitial=2020-01-01&dateEnd=2022-01-01");
 
             // Assert
             IList<Domain.Entities.Output> productsFiltered =
@@ -285,7 +285,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
         public async Task OutputsController_Close_DeveFecharCorretamenteQuandoNaoEstiverFechado()
         {
             // Arrange
-            Domain.Entities.Output output = OutputFaker.Generate();
+            Domain.Entities.Output output = OutputFaker.GenerateWithItems(5);
 
             await _testsFixture.MockInDatabase(output);
 

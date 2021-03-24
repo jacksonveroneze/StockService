@@ -52,7 +52,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
             where TFilter : BaseFilter<T>
         {
             IQueryable<T> query = _context.Set<T>()
-                .AsNoTrackingWithIdentityResolution()
+                .AsNoTracking()
                 .Where(filter.ToQuery());
 
             int total = await query.CountAsync();

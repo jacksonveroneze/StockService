@@ -67,7 +67,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<Pageable<OutputDto>> FilterAsync(Pagination pagination, OutputFilter filter)
             => _mapper.Map<Pageable<OutputDto>>(
-                await _outputRepository.FilterAsync(pagination, filter));
+                await _outputRepository.FilterPaginateAsync(pagination, filter));
 
         /// <summary>
         /// Method responsible for add output.

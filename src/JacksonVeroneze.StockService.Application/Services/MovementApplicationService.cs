@@ -33,7 +33,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<IList<MovementDto>> FilterAsync(Pagination pagination, MovementFilter filter)
             => _mapper.Map<List<MovementDto>>(
-                await _movementRepository.FilterAsync(pagination, filter));
+                await _movementRepository.FilterPaginateAsync(pagination, filter));
 
     }
 }
