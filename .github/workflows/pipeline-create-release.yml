@@ -54,7 +54,7 @@ jobs:
               run: /usr/share/dotnet/dotnet build --configuration Release
 
             - name: dotnet publish
-              run: /usr/share/dotnet/dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+              run: /usr/share/dotnet/dotnet publish -c Release -o /tmp/stock-app
 
             - name: remove files
               run: |
@@ -67,7 +67,7 @@ jobs:
                   app-name: 'stock-jacksonveroneze'
                   slot-name: 'production'
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-                  package: ${{env.DOTNET_ROOT}}/myapp
+                  package: /tmp/stock-app
 
     genetateDocker:
         name: Generate docker image
