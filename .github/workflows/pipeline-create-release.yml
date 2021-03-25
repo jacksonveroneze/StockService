@@ -9,8 +9,8 @@ env:
     DOTNET_ROOT: "/home/runner/.dotnet/app"
 
 jobs:
-    install-dotnet:
-        name: Install .NET
+    install-dotnet-sdk:
+        name: Install .NET SDK
         runs-on: ubuntu-20.04
 
         steps:
@@ -20,34 +20,28 @@ jobs:
               with:
                   dotnet-version: '5.0.x'
 
-    build:
-        name: Build
+    build-deploy:
+        name: Build and Deploy
         runs-on: ubuntu-20.04
-        needs: install-dotnet
+        needs: install-dotnet-sdk
 
         steps:
             - uses: actions/checkout@v2
 
-            - name: Restore dependencies
+            - name: Restore
               run: dotnet restore
 
-            - name: Build with dotnet
+            - name: Build
               run: dotnet build --configuration Release
 
-            - name: dotnet publish
+            - name: Publish
               run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}
               
-            - name: remove files
+            - name: Remove Files
               run: |
                    rm ${{env.DOTNET_ROOT}}/appsettings.json
                    rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
-
-    deployAzure:
-        name: Deploy Azure
-        runs-on: ubuntu-20.04
-        needs: build
-
-        steps:
+                   
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
               with:
@@ -56,25 +50,31 @@ jobs:
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
                   package: ${{env.DOTNET_ROOT}}
 
-    genetateDocker:
-        name: Generate docker image
+    genetate-publish-docker:
+        name: Generate and Publish Docker Image
         runs-on: ubuntu-20.04
-        needs: build
+        needs: install-dotnet-sdk
 
         steps:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
-
-            - name: Build and push
+                  
+            - name: Login
               run: |
                   echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
                   echo ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} | docker login https://registry.digitalocean.com -u ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} --password-stdin
-
+                  
+            - name: Build
+              run: |
                   docker build . -t stock-service:$(echo ${GITHUB_REF:10})
-
+  
+            - name: Create TAG
+              run: |
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
-
+ 
+            - name: Push
+              run: |
                   docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
                   docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
