@@ -35,7 +35,7 @@ jobs:
               run: dotnet build --configuration Release
 
             - name: dotnet publish
-              run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}x
+              run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}
 
     deployAzure:
         name: Deploy Azure
@@ -45,10 +45,10 @@ jobs:
         steps:
             - uses: actions/checkout@master
 
-#            - name: remove files
-#              run: |
-#                  - rm /tmp/stock-app/appsettings.json
-#                  - rm /tmp/stock-app/appsettings.Development.json
+            - name: remove files
+              run: |
+                  - rm ${{env.DOTNET_ROOT}}/appsettings.json
+                  - rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
 
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
