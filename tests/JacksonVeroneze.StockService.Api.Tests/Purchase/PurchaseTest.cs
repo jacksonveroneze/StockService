@@ -353,6 +353,24 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
             result.Content.Should().HaveCount(total);
         }
 
+        [Fact(DisplayName = "DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste")]
+        [Trait(nameof(PurchasesController), nameof(PurchasesController.FindItems))]
+        public async Task PurchasesController_FindItems_DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(purchase);
+
+            // Act
+            TestApiResponseOperationGet<IList<PurchaseItemDto>> result =
+                await _testsFixture.SendGetRequest<IList<PurchaseItemDto>>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items");
+
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
         [Fact(DisplayName = "DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado")]
         [Trait(nameof(PurchasesController), nameof(PurchasesController.FindItem))]
         public async Task PurchasesController_FindItem_DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado()
@@ -369,6 +387,25 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             // Assert
             result.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "DeveRetornarErro400QuandoBuscarUmItemCujoPaiNaoExiste")]
+        [Trait(nameof(PurchasesController), nameof(PurchasesController.FindItem))]
+        public async Task PurchasesController_FindItem_DeveRetornarErro404QuandoBuscarUmItemCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(purchase);
+
+            // Act
+            TestApiResponseOperationGet<PurchaseItemDto> result =
+                await _testsFixture.SendGetRequest<PurchaseItemDto>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items/{purchase.Items.First().Id}");
+
+            // Assert
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido")]

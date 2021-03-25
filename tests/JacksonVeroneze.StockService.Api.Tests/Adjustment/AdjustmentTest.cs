@@ -353,6 +353,24 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             result.Content.Should().HaveCount(total);
         }
 
+        [Fact(DisplayName = "DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste")]
+        [Trait(nameof(OutputsController), nameof(AdjustmentsController.FindItems))]
+        public async Task AdjustmentsController_FindItems_DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Adjustment adjustment = AdjustmentFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(adjustment);
+
+            // Act
+            TestApiResponseOperationGet<IList<AdjustmentItemDto>> result =
+                await _testsFixture.SendGetRequest<IList<AdjustmentItemDto>>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items");
+
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
         [Fact(DisplayName = "DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado")]
         [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.FindItem))]
         public async Task AdjustmentsController_FindItem_DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado()
@@ -369,6 +387,25 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
             // Assert
             result.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "DeveRetornarErro400QuandoBuscarUmItemCujoPaiNaoExiste")]
+        [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.FindItem))]
+        public async Task AdjustmentsController_FindItem_DeveRetornarErro404QuandoBuscarUmItemCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Adjustment adjustment = AdjustmentFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(adjustment);
+
+            // Act
+            TestApiResponseOperationGet<AdjustmentItemDto> result =
+                await _testsFixture.SendGetRequest<AdjustmentItemDto>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items/{adjustment.Items.First().Id}");
+
+            // Assert
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido")]

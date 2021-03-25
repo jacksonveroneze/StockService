@@ -353,6 +353,24 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.Content.Should().HaveCount(total);
         }
 
+        [Fact(DisplayName = "DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste")]
+        [Trait(nameof(OutputsController), nameof(PurchasesController.FindItems))]
+        public async Task OutputsController_FindItems_DeveRetornarErro404QuandoBuscarOsItensCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Output output = OutputFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(output);
+
+            // Act
+            TestApiResponseOperationGet<IList<OutputItemDto>> result =
+                await _testsFixture.SendGetRequest<IList<OutputItemDto>>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items");
+
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
         [Fact(DisplayName = "DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado")]
         [Trait(nameof(OutputsController), nameof(OutputsController.FindItem))]
         public async Task OutputsController_FindItem_DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado()
@@ -369,6 +387,25 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
 
             // Assert
             result.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "DeveRetornarErro400QuandoBuscarUmItemCujoPaiNaoExiste")]
+        [Trait(nameof(OutputsController), nameof(AdjustmentsController.FindItem))]
+        public async Task OutputsController_FindItem_DeveRetornarErro404QuandoBuscarUmItemCujoPaiNaoExiste()
+        {
+            // Arrange
+            Domain.Entities.Output output = OutputFaker.GenerateWithItems(5);
+
+            await _testsFixture.MockInDatabase(output);
+
+            // Act
+            TestApiResponseOperationGet<OutputItemDto> result =
+                await _testsFixture.SendGetRequest<OutputItemDto>(
+                    $"{_uriPart}/{Guid.NewGuid()}/items/{output.Items.First().Id}");
+
+            // Assert
+            result.Status.Should().Be(StatusCodes.Status404NotFound);
+            result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido")]
