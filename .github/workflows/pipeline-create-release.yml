@@ -39,8 +39,8 @@ jobs:
               
             - name: remove files
               run: |
-                  - rm ${{env.DOTNET_ROOT}}/appsettings.json
-                  - rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
+                   rm ${{env.DOTNET_ROOT}}/appsettings.json
+                   rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
 
     deployAzure:
         name: Deploy Azure
