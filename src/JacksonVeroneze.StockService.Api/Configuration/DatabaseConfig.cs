@@ -25,7 +25,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                             })
                         .AddEfSecondLevelCacheInterceptor(serviceProvider)
                         .UseLazyLoadingProxies()
-                        .UseChangeTrackingProxies(false)
                         .UseSnakeCaseNamingConvention()
                         .EnableDetailedErrors()
                         .EnableSensitiveDataLogging());

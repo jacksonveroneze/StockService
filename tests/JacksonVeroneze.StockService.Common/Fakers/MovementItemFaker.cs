@@ -11,7 +11,8 @@ namespace JacksonVeroneze.StockService.Common.Fakers
                 .CustomInstantiator(f =>
                     new MovementItem(
                         f.Random.Int(1, 100),
-                        movement
+                        movement,
+                        AdjustmentItemFaker.Generate(AdjustmentFaker.Generate())
                     )
                 );
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
@@ -7,7 +8,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
     {
         public virtual Product Product { get; private set; }
 
-        private readonly List<MovementItem> _items = new List<MovementItem>();
+        private readonly List<MovementItem> _items = new();
 
         public virtual IReadOnlyCollection<MovementItem> Items => _items;
 
@@ -24,6 +25,9 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public void AddItem(MovementItem item)
             => _items.Add(item);
+
+        public int? FindLastAmmount()
+            => Items.LastOrDefault()?.Amount;
 
         private void Validate()
         {

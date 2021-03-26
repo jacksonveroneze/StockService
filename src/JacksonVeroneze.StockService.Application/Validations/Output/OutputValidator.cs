@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.Output;
 using JacksonVeroneze.StockService.Core.Notifications;
+using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Validations.Output
@@ -14,13 +18,18 @@ namespace JacksonVeroneze.StockService.Application.Validations.Output
     public class OutputValidator : BaseValidator, IOutputValidator
     {
         private readonly IOutputRepository _outputRepository;
+        private readonly IMovementRepository _movementRepository;
 
         /// <summary>
         /// Method responsible for initialize validator.
         /// </summary>
         /// <param name="outputRepository"></param>
-        public OutputValidator(IOutputRepository outputRepository)
-            => _outputRepository = outputRepository;
+        /// <param name="movementRepository"></param>
+        public OutputValidator(IOutputRepository outputRepository, IMovementRepository movementRepository)
+        {
+            _outputRepository = outputRepository;
+            _movementRepository = movementRepository;
+        }
 
         /// <summary>
         /// Method responsible for validation.
@@ -99,8 +108,10 @@ namespace JacksonVeroneze.StockService.Application.Validations.Output
                     CreateNotification(nameof(Output), ApplicationValidationMessages.OutputNotFoundById));
 
             if (output.State == OutputState.Closed)
-                notificationContext.AddNotification(
+                return notificationContext.AddNotification(
                     CreateNotification(nameof(Output), ApplicationValidationMessages.OutputIsClosed));
+
+            await ValidateHasStockAsync(notificationContext, output);
 
             return notificationContext;
         }
@@ -116,6 +127,39 @@ namespace JacksonVeroneze.StockService.Application.Validations.Output
             ValidationResult validationResult = await outputDto.Validate();
 
             notificationContext.AddNotifications(validationResult);
+        }
+
+        /// <summary>
+        /// Method responsible for validation.
+        /// </summary>
+        /// <param name="notificationContext"></param>
+        /// <param name="output"></param>
+        /// <returns></returns>
+        private async Task ValidateHasStockAsync(NotificationContext notificationContext, Domain.Entities.Output output)
+        {
+            IList<Guid> listProducts = output.Items.Select(x => x.Product.Id).ToList();
+
+            IList<Movement> listMovements =
+                await _movementRepository.FilterAsync(new MovementFilter {ProductIds = listProducts});
+
+            foreach (Domain.Entities.OutputItem outputItem in output.Items)
+            {
+                Movement movement = listMovements.FirstOrDefault(x => x.Product.Id == outputItem.Product.Id);
+
+                if (movement is null)
+                {
+                    notificationContext.AddNotification(
+                        CreateNotification(nameof(Output), ApplicationValidationMessages.OutputItemProductNotMovement));
+                }
+                else
+                {
+                    int? lastAmmount = movement.FindLastAmmount();
+
+                    if (lastAmmount.HasValue is false || lastAmmount.Value < outputItem.Amount)
+                        notificationContext.AddNotification(CreateNotification(nameof(Output),
+                            ApplicationValidationMessages.OutputItemProductNotSufficientStock));
+                }
+            }
         }
     }
 }

@@ -21,10 +21,29 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         {
         }
 
-        public MovementItem(int amount, Movement movement)
+        public MovementItem(int amount, Movement movement, AdjustmentItem adjustmentItem)
         {
             Amount = amount;
             Movement = movement;
+            _adjustmentItems.Add(adjustmentItem);
+
+            Validate();
+        }
+
+        public MovementItem(int amount, Movement movement, OutputItem outputItem)
+        {
+            Amount = amount;
+            Movement = movement;
+            _outputItems.Add(outputItem);
+
+            Validate();
+        }
+
+        public MovementItem(int amount, Movement movement, PurchaseItem purchaseItem)
+        {
+            Amount = amount;
+            Movement = movement;
+            _purchaseItems.Add(purchaseItem);
 
             Validate();
         }

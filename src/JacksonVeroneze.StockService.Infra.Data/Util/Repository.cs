@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EFCoreSecondLevelCacheInterceptor;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
     {
         public IUnitOfWork UnitOfWork { get; set; }
 
-        private readonly DatabaseContext _context;
+        protected readonly DatabaseContext _context;
 
         protected Repository(DatabaseContext context)
         {

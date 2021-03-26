@@ -88,7 +88,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     amount = table.Column<int>(type: "int", nullable: false),
-                    value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     adjustment_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -105,7 +105,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         column: x => x.adjustment_id,
                         principalTable: "adjustment",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_adjustment_item_product_product_id",
                         column: x => x.product_id,
@@ -143,7 +143,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     amount = table.Column<int>(type: "int", nullable: false),
-                    value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     output_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -160,7 +160,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         column: x => x.output_id,
                         principalTable: "output",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "fk_output_item_product_product_id",
                         column: x => x.product_id,
@@ -175,7 +175,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     amount = table.Column<int>(type: "int", nullable: false),
-                    value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     purchase_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -198,7 +198,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         column: x => x.purchase_id,
                         principalTable: "purchase",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

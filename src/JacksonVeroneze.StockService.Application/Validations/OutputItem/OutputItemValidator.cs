@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using JacksonVeroneze.StockService.Application.DTO.OutputItem;
 using JacksonVeroneze.StockService.Core.Notifications;
+using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Enums;
+using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 
 namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
@@ -13,18 +15,22 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
     /// </summary>
     public class OutputItemValidator : BaseValidator, IOutputItemValidator
     {
-        private readonly IProductRepository _productRepository;
         private readonly IOutputRepository _outputRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IMovementRepository _movementRepository;
 
         /// <summary>
         /// Method responsible for initialize validator.
         /// </summary>
+        /// <param name="outputRepository"></param>
         /// <param name="productRepository"></param>
-        /// <param name="productRepository1"></param>
-        public OutputItemValidator(IOutputRepository productRepository, IProductRepository productRepository1)
+        /// <param name="movementRepository"></param>
+        public OutputItemValidator(IOutputRepository outputRepository, IProductRepository productRepository,
+            IMovementRepository movementRepository)
         {
-            _outputRepository = productRepository;
-            _productRepository = productRepository1;
+            _outputRepository = outputRepository;
+            _productRepository = productRepository;
+            _movementRepository = movementRepository;
         }
 
         /// <summary>
@@ -33,12 +39,14 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
         /// <param name="outputId"></param>
         /// <param name="outputItemDto"></param>
         /// <returns></returns>
-        public async Task<NotificationContext> ValidateCreateAsync(Guid outputId, AddOrUpdateOutputItemDto outputItemDto)
+        public async Task<NotificationContext> ValidateCreateAsync(Guid outputId,
+            AddOrUpdateOutputItemDto outputItemDto)
         {
             NotificationContext notificationContext = new();
 
             await ValidateDefaultActionsAsync(notificationContext, outputId, default);
             await ValidateDtoAsync(notificationContext, outputItemDto);
+            await ValidateHasStockAsync(notificationContext, outputItemDto);
 
             return notificationContext;
         }
@@ -57,6 +65,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
 
             await ValidateDefaultActionsAsync(notificationContext, outputId, outputItemId);
             await ValidateDtoAsync(notificationContext, outputItemDto);
+            await ValidateHasStockAsync(notificationContext, outputItemDto);
 
             return notificationContext;
         }
@@ -131,6 +140,33 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
             if (outputItem is null)
                 notificationContext.AddNotification(
                     CreateNotification(nameof(Output), ApplicationValidationMessages.OutputItemNotFoundById));
+        }
+
+        /// <summary>
+        /// Method responsible for validation.
+        /// </summary>
+        /// <param name="notificationContext"></param>
+        /// <param name="outputItemDto"></param>
+        /// <returns></returns>
+        private async Task ValidateHasStockAsync(NotificationContext notificationContext,
+            AddOrUpdateOutputItemDto outputItemDto)
+        {
+            Movement movement =
+                await _movementRepository.FindAsync(new MovementFilter {ProductId = outputItemDto.ProductId});
+
+            if (movement is null)
+            {
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Output), ApplicationValidationMessages.OutputItemProductNotMovement));
+
+                return;
+            }
+
+            int? lastAmmount = movement.FindLastAmmount();
+
+            if (lastAmmount.HasValue is false || lastAmmount.Value < outputItemDto.Amount)
+                notificationContext.AddNotification(
+                    CreateNotification(nameof(Output), ApplicationValidationMessages.OutputItemProductNotSufficientStock));
         }
     }
 }

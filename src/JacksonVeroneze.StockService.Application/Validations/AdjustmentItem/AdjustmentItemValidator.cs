@@ -13,18 +13,18 @@ namespace JacksonVeroneze.StockService.Application.Validations.AdjustmentItem
     /// </summary>
     public class AdjustmentItemValidator : BaseValidator, IAdjustmentItemValidator
     {
-        private readonly IProductRepository _productRepository;
         private readonly IAdjustmentRepository _adjustmentRepository;
+        private readonly IProductRepository _productRepository;
 
         /// <summary>
         /// Method responsible for initialize validator.
         /// </summary>
+        /// <param name="adjustmentRepository"></param>
         /// <param name="productRepository"></param>
-        /// <param name="productRepository1"></param>
-        public AdjustmentItemValidator(IAdjustmentRepository productRepository, IProductRepository productRepository1)
+        public AdjustmentItemValidator(IAdjustmentRepository adjustmentRepository, IProductRepository productRepository)
         {
-            _adjustmentRepository = productRepository;
-            _productRepository = productRepository1;
+            _adjustmentRepository = adjustmentRepository;
+            _productRepository = productRepository;
         }
 
         /// <summary>

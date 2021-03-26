@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Core.Data;
@@ -49,7 +50,8 @@ namespace JacksonVeroneze.StockService.Infra.Data
         {
             foreach (EntityEntry entry in ChangeTracker.Entries())
             {
-                if (entry.State == EntityState.Added)
+                if (entry.State == EntityState.Added &&
+                    entry.Members.Any(x => x.Metadata.Name.Equals("TenantId")))
                     entry.Property("TenantId").CurrentValue = _teantId;
 
                 if (entry.State == EntityState.Modified)
@@ -61,7 +63,6 @@ namespace JacksonVeroneze.StockService.Infra.Data
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
-
                     entry.Property("DeletedAt").CurrentValue = DateTime.Now;
                 }
             }

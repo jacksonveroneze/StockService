@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using JacksonVeroneze.StockService.Application.DTO.Movement;
 using JacksonVeroneze.StockService.Application.Interfaces;
-using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
+using JacksonVeroneze.StockService.Domain.Models;
 
 namespace JacksonVeroneze.StockService.Application.Services
 {
@@ -28,12 +27,10 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <summary>
         /// Method responsible for filter data.
         /// </summary>
-        /// <param name="pagination"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public async Task<IList<MovementDto>> FilterAsync(Pagination pagination, MovementFilter filter)
-            => _mapper.Map<List<MovementDto>>(
-                await _movementRepository.FilterPaginateAsync(pagination, filter));
-
+        public async Task<IList<MovementModel>> FilterAsync(MovementFilter filter)
+            => _mapper.Map<List<MovementModel>>(
+                await _movementRepository.ReportFilterAsync(filter));
     }
 }

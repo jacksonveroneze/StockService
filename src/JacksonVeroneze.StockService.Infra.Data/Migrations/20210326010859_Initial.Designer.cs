@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JacksonVeroneze.StockService.Infra.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210306132816_Initial")]
+    [Migration("20210326010859_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AdjustmentItemMovementItem", b =>
@@ -121,7 +121,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .HasColumnName("updated_at");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
                         .HasColumnName("value");
 
                     b.Property<int>("Version")
@@ -303,7 +304,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .HasColumnName("updated_at");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
                         .HasColumnName("value");
 
                     b.Property<int>("Version")
@@ -449,7 +451,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .HasColumnName("updated_at");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
                         .HasColumnName("value");
 
                     b.Property<int>("Version")
@@ -529,7 +532,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("AdjustmentId")
                         .HasConstraintName("fk_adjustment_item_adjustment_adjustment_id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Product", "Product")
@@ -574,7 +577,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("OutputId")
                         .HasConstraintName("fk_output_item_output_output_id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.Product", "Product")
@@ -602,7 +605,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                         .WithMany("Items")
                         .HasForeignKey("PurchaseId")
                         .HasConstraintName("fk_purchase_item_purchase_purchase_id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");

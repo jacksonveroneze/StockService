@@ -1,6 +1,6 @@
 namespace JacksonVeroneze.StockService.Application.Validations
 {
-    public class ApplicationValidationMessages
+    public static class ApplicationValidationMessages
     {
         // Product
         public const string ProductFoundByDescription = "Produto já cadastrado com a descrição informada";
@@ -8,7 +8,7 @@ namespace JacksonVeroneze.StockService.Application.Validations
         public const string ProductHasItems = "Este produto tem dependencias, portanto não pode ser removido";
 
         // Purchase
-        public const string PurchaseNotFoundById = "Compra näo encontrado com o código informado";
+        public const string PurchaseNotFoundById = "Compra não encontrado com o código informado";
         public const string PurchaseHasItems = "Esta compra tem dependencias, portanto não pode ser removido";
 
         public const string PurchaseIsClosed =
@@ -16,27 +16,30 @@ namespace JacksonVeroneze.StockService.Application.Validations
 
 
         // PurchaseItem
-        public const string PurchaseItemNotFoundById = "Item da compra näo encontrado com o código informado";
+        public const string PurchaseItemNotFoundById = "Item da compra não encontrado com o código informado";
 
         // Adjustment
-        public const string AdjustmentNotFoundById = "Compra näo encontrado com o código informado";
-        public const string AdjustmentHasItems = "Esta compra tem dependencias, portanto não pode ser removido";
+        public const string AdjustmentNotFoundById = "Acerto não encontrado com o código informado";
+        public const string AdjustmentHasItems = "Este acerto tem dependencias, portanto não pode ser removido";
 
         public const string AdjustmentIsClosed =
-            "A compra informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
+            "O acerto informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
 
 
         // AdjustmentItem
-        public const string AdjustmentItemNotFoundById = "Item da compra näo encontrado com o código informado";
+        public const string AdjustmentItemNotFoundById = "Item do acerto não encontrado com o código informado";
 
         // Output
-        public const string OutputNotFoundById = "Compra näo encontrado com o código informado";
-        public const string OutputHasItems = "Esta compra tem dependencias, portanto não pode ser removido";
+        public const string OutputNotFoundById = "Saída não encontrada com o código informado";
+        public const string OutputHasItems = "Esta saída tem dependencias, portanto não pode ser removido";
 
         public const string OutputIsClosed =
-            "A compra informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
+            "A saída informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
+
 
         // OutputItem
-        public const string OutputItemNotFoundById = "Item da compra näo encontrado com o código informado";
+        public const string OutputItemNotFoundById = "Item da saída não encontrado com o código informado";
+        public const string OutputItemProductNotMovement = "Item da saída (Produto) não tem movimentação de estoque";
+        public const string OutputItemProductNotSufficientStock= "Item da saída (Produto) não tem estoque suficiente para esta saída";
     }
 }
