@@ -15,6 +15,7 @@ using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 using JacksonVeroneze.StockService.Domain.Services;
 using JacksonVeroneze.StockService.Identity;
+using JacksonVeroneze.StockService.Infra.Bus.Mediator;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Infra.IoC
@@ -72,7 +73,8 @@ namespace JacksonVeroneze.StockService.Infra.IoC
 
         private static void RegisterServicesOthers(IServiceCollection services)
         {
-            services.AddScoped<IBus, Bus.Mediator.Bus>();
+            services.AddScoped<IBus, BusMediator>();
+            services.AddScoped<IBusExternal, Bus.MassTransit.BusMassTransit>();
             services.AddScoped<IUser, AspNetUser>();
             services.AddScoped<DatabaseContext>();
         }

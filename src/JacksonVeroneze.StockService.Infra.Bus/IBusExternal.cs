@@ -4,7 +4,7 @@ using JacksonVeroneze.StockService.Core.Messages.CommonMessages.DomainEvents;
 
 namespace JacksonVeroneze.StockService.Infra.Bus
 {
-    public interface IBus
+    public interface IBusExternal
     {
         Task PublishEvent<T>(T evento) where T : Event;
 

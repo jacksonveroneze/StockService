@@ -24,6 +24,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAutoMediatRConfiguration()
                 .AddDependencyInjectionConfiguration()
                 .AddSwaggerConfiguration()
+                .AddMassTransitConfiguration(configuration)
                 .AddApplicationInsightsConfiguration(configuration)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)

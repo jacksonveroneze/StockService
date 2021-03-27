@@ -13,14 +13,14 @@ namespace JacksonVeroneze.StockService.Domain.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
-        private readonly IBus _bus;
+        private readonly IBusExternal _bus;
 
         /// <summary>
         /// Method responsible for initialize service.
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="bus"></param>
-        public ProductService(IProductRepository repository, IBus bus)
+        public ProductService(IProductRepository repository, IBusExternal bus)
         {
             _repository = repository;
             _bus = bus;

@@ -52,8 +52,8 @@ services:
         image: rabbitmq:3.8-management-alpine
         container_name: rabbitmq
         environment:
-            - RABBITMQ_DEFAULT_USER=admin
-            - RABBITMQ_DEFAULT_PASS=admin
+            - RABBITMQ_DEFAULT_USER=guest
+            - RABBITMQ_DEFAULT_PASS=guest
         healthcheck:
             test: curl --silent --fail http://rabbitmq:15672 || exit 1
             interval: 15s

@@ -1,16 +1,16 @@
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Core.Messages.CommonMessages.DomainEvents;
-using MediatR;
+using MassTransit;
 
-namespace JacksonVeroneze.StockService.Infra.Bus.Mediator
+namespace JacksonVeroneze.StockService.Infra.Bus.MassTransit
 {
-    public class BusMediator : IBus
+    public class BusMassTransit : IBusExternal
     {
-        private readonly IMediator _bus;
+        private readonly IBusControl _bus;
 
-        public BusMediator(IMediator mediator)
-            => _bus = mediator;
+        public BusMassTransit(IBusControl massTransit)
+            => _bus = massTransit;
 
         public async Task PublishEvent<T>(T evento) where T : Event
             => await _bus.Publish(evento);
