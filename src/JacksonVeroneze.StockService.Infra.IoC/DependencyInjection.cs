@@ -45,6 +45,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IOutputService, OutputService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IMovementService, MovementService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)

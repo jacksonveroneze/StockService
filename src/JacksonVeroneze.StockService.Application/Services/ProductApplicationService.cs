@@ -10,12 +10,14 @@ using JacksonVeroneze.StockService.Core.Notifications;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
+using JacksonVeroneze.StockService.Domain.Interfaces.Services;
 
 namespace JacksonVeroneze.StockService.Application.Services
 {
     public class ProductApplicationService : ApplicationService, IProductApplicationService
     {
         private readonly IMapper _mapper;
+        private readonly IProductService _productService;
         private readonly IProductRepository _productRepository;
         private readonly IProductValidator _productValidator;
 
@@ -23,13 +25,16 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// Method responsible for initialize service.
         /// </summary>
         /// <param name="mapper"></param>
+        /// <param name="productService"></param>
         /// <param name="productRepository"></param>
         /// <param name="productValidator"></param>
         public ProductApplicationService(IMapper mapper,
+            IProductService productService,
             IProductRepository productRepository,
             IProductValidator productValidator)
         {
             _mapper = mapper;
+            _productService = productService;
             _productRepository = productRepository;
             _productValidator = productValidator;
         }
@@ -66,9 +71,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Product product = _mapper.Map<Product>(productDto);
 
-            await _productRepository.AddAsync(product);
-
-            await _productRepository.UnitOfWork.CommitAsync();
+            await _productService.AddAsync(product);
 
             return ApplicationDataResult<ProductDto>.FactoryFromData(_mapper.Map<ProductDto>(product));
         }
