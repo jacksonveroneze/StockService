@@ -19,6 +19,10 @@ services:
             - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
             - APP_CONFIG_Serilog__MinimumLevel__Override__Microsoft=Information
             - APP_CONFIG_Serilog__MinimumLevel__Override__System=Information
+            - APP_CONFIG_RabbitMq__Host=localhost
+            - APP_CONFIG_RabbitMq__VirtualHost=stock_service
+            - APP_CONFIG_RabbitMq__Username=guest
+            - APP_CONFIG_RabbitMq__Password=guest
         healthcheck:
             test: curl --silent --fail http://api/health || exit 1
             interval: 15s
