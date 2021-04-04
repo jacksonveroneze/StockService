@@ -102,8 +102,6 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
         public async Task PurchasesController_Create_DeveSalvarCorretamenteQuandoEmEstadoValido()
         {
             // Arrange
-            await _testsFixture.ClearDatabase();
-
             AddOrUpdatePurchaseDto purchaseDto = AddOrUpdatePurchaseDtoFaker.GenerateValid();
 
             // Act

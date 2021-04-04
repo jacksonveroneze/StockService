@@ -102,8 +102,6 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
         public async Task AdjustmentsController_Create_DeveSalvarCorretamenteQuandoEmEstadoValido()
         {
             // Arrange
-            await _testsFixture.ClearDatabase();
-
             AddOrUpdateAdjustmentDto adjustmentDto = AddOrUpdateAdjustmentDtoFaker.GenerateValid();
 
             // Act

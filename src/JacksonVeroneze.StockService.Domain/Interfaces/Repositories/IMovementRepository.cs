@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
@@ -9,6 +8,6 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Repositories
 {
     public interface IMovementRepository : IRepository<Movement>
     {
-        Task<List<MovementModel>> ReportFilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<Movement>;
+        Task<Pageable<MovementModel>> ReportFilterAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<Movement>;
     }
 }

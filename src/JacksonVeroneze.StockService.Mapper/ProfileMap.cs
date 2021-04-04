@@ -8,6 +8,7 @@ using JacksonVeroneze.StockService.Application.DTO.Purchase;
 using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Events.Product;
 
 namespace JacksonVeroneze.StockService.Mapper
 {
@@ -18,6 +19,7 @@ namespace JacksonVeroneze.StockService.Mapper
             MapDtoToEntity();
             MapEntityToDto();
             MapPageableEntityToPageableDto();
+            MapEntityToEvent();
         }
 
         private void MapDtoToEntity()
@@ -57,6 +59,14 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<PurchaseItem, PurchaseItemDto>()
                 .ForMember(x => x.PurchaseId, f => f.MapFrom(x => x.Purchase.Id))
                 .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+        }
+
+        private void MapEntityToEvent()
+        {
+            CreateMap<Product, ProductAddedEvent>()
+                .ConstructUsing(x => new ProductAddedEvent(x.Id))
+                .ForMember(x => x.Description, b => b.MapFrom(x => x.Description))
+                .ForMember(x => x.IsActive, b => b.MapFrom(x => x.IsActive));
         }
 
         private void MapPageableEntityToPageableDto()

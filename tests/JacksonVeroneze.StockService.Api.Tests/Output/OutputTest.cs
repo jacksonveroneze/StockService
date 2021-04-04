@@ -102,8 +102,6 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
         public async Task OutputsController_Create_DeveSalvarCorretamenteQuandoEmEstadoValido()
         {
             // Arrange
-            await _testsFixture.ClearDatabase();
-
             AddOrUpdateOutputDto outputDto = AddOrUpdateOutputDtoFaker.GenerateValid();
 
             // Act

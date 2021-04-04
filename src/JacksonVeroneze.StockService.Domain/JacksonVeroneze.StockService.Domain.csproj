@@ -9,4 +9,8 @@
     <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Bus\JacksonVeroneze.StockService.Infra.Bus.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
 </Project>

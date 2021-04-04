@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
     {
         Task<ProductDto> FindAsync(Guid productId);
 
-        Task<Pageable<ProductDto>> FilterAsync(Pagination pagination, ProductFilter productFilter);
+        Task<Pageable<ProductDto>> FilterAsync(Pagination pagination, ProductFilter filter);
 
         Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto productDto);
 

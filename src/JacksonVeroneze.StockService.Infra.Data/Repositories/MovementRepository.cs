@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
@@ -16,10 +17,12 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
         {
         }
 
-        public async Task<List<MovementModel>> ReportFilterAsync<TFilter>(TFilter filter)
+        public async Task<Pageable<MovementModel>> ReportFilterAsync<TFilter>(TFilter filter)
             where TFilter : BaseFilter<Movement>
         {
-            return await _context.Set<Movement>()
+            int total = await CountAsync(filter);
+
+            List<MovementModel> data = await _context.Set<Movement>()
                 .Include(x => x.Items)
                 .Include(x => x.Product)
                 .Where(filter.ToQuery())
@@ -30,6 +33,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
                     Ammount = x.FindLastAmmount().Value
                 })
                 .ToListAsync();
+
+            return FactoryPageable(data, total, 0, total);
         }
     }
 }

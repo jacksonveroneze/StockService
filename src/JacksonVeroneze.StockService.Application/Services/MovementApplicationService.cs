@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using JacksonVeroneze.StockService.Application.Interfaces;
+using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Models;
@@ -29,8 +30,7 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public async Task<IList<MovementModel>> FilterAsync(MovementFilter filter)
-            => _mapper.Map<List<MovementModel>>(
-                await _movementRepository.ReportFilterAsync(filter));
+        public async Task<Pageable<MovementModel>> FilterAsync(MovementFilter filter)
+            => await _movementRepository.ReportFilterAsync(filter);
     }
 }

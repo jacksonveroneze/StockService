@@ -47,25 +47,20 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
             => BuidQueryable(pagination, filter)
                 .ToListAsync();
 
+        public Task<int> CountAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
+            => _context.Set<T>()
+                .AsNoTracking()
+                .Where(filter.ToQuery())
+                .CountAsync();
+
         public async Task<Pageable<T>> FilterPaginateAsync<TFilter>(Pagination pagination, TFilter filter)
             where TFilter : BaseFilter<T>
         {
-            IQueryable<T> query = _context.Set<T>()
-                .AsNoTracking()
-                .Where(filter.ToQuery());
+            int total = await CountAsync(filter);
 
-            int total = await query.CountAsync();
+            List<T> data = await BuidQueryable(pagination, filter).ToListAsync();
 
-            List<T> data = await BuidQueryable(pagination, filter)
-                .ToListAsync();
-
-            return new Pageable<T>
-            {
-                Data = data,
-                Total = total,
-                Pages = (int)Math.Ceiling(total / (decimal)(pagination.Take ??= 30)),
-                CurrentPage = pagination.Skip <= 0 ? 1 : pagination.Skip
-            };
+            return FactoryPageable<T>(data, total, pagination.Skip ??= 0, pagination.Take ??= 30);
         }
 
         private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter)
@@ -75,6 +70,16 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
                 .Where(filter.ToQuery())
                 .OrderByDescending(x => x.CreatedAt)
                 .ConfigureSkipTakeFromPagination(pagination);
+        }
+
+        protected Pageable<TType> FactoryPageable<TType>(IList<TType> data, int total, int skip, int take) where TType : class
+        {
+            return new Pageable<TType>() {
+                Data = data,
+                Total = total,
+                Pages = (int)Math.Ceiling(total / (decimal)(take)),
+                CurrentPage = skip <= 0 ? 1 : skip
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Product;
@@ -14,16 +15,19 @@ namespace JacksonVeroneze.StockService.Domain.Services
     {
         private readonly IProductRepository _repository;
         private readonly IBusExternal _bus;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Method responsible for initialize service.
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="bus"></param>
-        public ProductService(IProductRepository repository, IBusExternal bus)
+        /// <param name="mapper"></param>
+        public ProductService(IProductRepository repository, IBusExternal bus, IMapper mapper)
         {
             _repository = repository;
             _bus = bus;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -36,7 +40,7 @@ namespace JacksonVeroneze.StockService.Domain.Services
             await _repository.AddAsync(product);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _bus.PublishDomainEvent(new ProductAddedEvent(product.Id));
+                await _bus.PublishEvent(_mapper.Map<ProductAddedEvent>(product));
         }
     }
 }

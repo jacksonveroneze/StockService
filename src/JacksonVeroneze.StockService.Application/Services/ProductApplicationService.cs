@@ -51,11 +51,11 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// Method responsible for find list of products.
         /// </summary>
         /// <param name="pagination"></param>
-        /// <param name="productFilter"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
-        public async Task<Pageable<ProductDto>> FilterAsync(Pagination pagination, ProductFilter productFilter)
+        public async Task<Pageable<ProductDto>> FilterAsync(Pagination pagination, ProductFilter filter)
             => _mapper.Map<Pageable<ProductDto>>(
-                await _productRepository.FilterPaginateAsync(pagination, productFilter));
+                await _productRepository.FilterPaginateAsync(pagination, filter));
 
         /// <summary>
         /// Method responsible for add product.
