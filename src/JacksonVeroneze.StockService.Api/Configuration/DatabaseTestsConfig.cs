@@ -8,10 +8,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     public static class DatabaseTestsConfig
     {
         public static IServiceCollection AddDatabaseTestsConfiguration(this IServiceCollection services, IConfiguration configuration)
-            => services.AddEntityFrameworkInMemoryDatabase()
-                .AddDbContext<DatabaseContext>(options =>
+            => services
+                .AddDbContext<DatabaseContext>((_, options) =>
                     options
-                        .UseInMemoryDatabase("DefaultConnection")
+                        .UseSqlite(configuration.GetConnectionString("DefaultConnection"))
                         .UseLazyLoadingProxies()
                         .UseSnakeCaseNamingConvention()
                         .EnableDetailedErrors()

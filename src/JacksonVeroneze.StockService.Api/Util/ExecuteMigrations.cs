@@ -25,7 +25,7 @@ namespace JacksonVeroneze.StockService.Api.Util
                 scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
             //if (args.Contains("d"))
-            await databaseContext.Database.EnsureDeletedAsync();
+            //await databaseContext.Database.EnsureDeletedAsync();
 
             await databaseContext.Database.MigrateAsync();
 

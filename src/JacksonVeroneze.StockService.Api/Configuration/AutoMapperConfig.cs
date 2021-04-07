@@ -10,7 +10,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             => services.AddAutoMapper((cfg) =>
             {
                 cfg.AddProfile<ProfileMapStock>();
-                cfg.ForAllMaps((_, me) => me.IgnoreAllPropertiesWithAnInaccessibleSetter());
+                cfg.ForAllMaps((_, x) => x.IgnoreAllPropertiesWithAnInaccessibleSetter());
             });
 
         public static IServiceCollection AddAutoMapperConfigurationValid(this IServiceCollection services)

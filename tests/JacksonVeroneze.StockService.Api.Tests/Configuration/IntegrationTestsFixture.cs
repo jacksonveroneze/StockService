@@ -7,6 +7,7 @@ using JacksonVeroneze.StockService.Api.Tests.Configuration.AuthorizationToken;
 using JacksonVeroneze.StockService.Common.Integration;
 using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -23,18 +24,16 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
     /// <typeparam name="TStartup"></typeparam>
     public class IntegrationTestsFixture<TStartup> : IDisposable where TStartup : class
     {
-        private readonly AppFactory<TStartup> _factory;
+        public readonly AppFactory<TStartup> _factory;
         private readonly HttpClient _client;
+        private readonly DatabaseContext _context;
 
         /// <summary>
         /// Method responsible for initialize fixture.
         /// </summary>
         public IntegrationTestsFixture()
         {
-            WebApplicationFactoryClientOptions clientOptions = new()
-            {
-                AllowAutoRedirect = true, MaxAutomaticRedirections = 7
-            };
+            WebApplicationFactoryClientOptions clientOptions = new() {AllowAutoRedirect = true, MaxAutomaticRedirections = 7};
 
             _factory = new AppFactory<TStartup>();
 
@@ -45,7 +44,16 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
             ResponseToken token = FindToken.FindAsync().Result;
 
             _client.AddJwtToken(token.AccessToken);
+
+            _context = _factory.Services.GetRequiredService<DatabaseContext>();
         }
+
+        /// <summary>
+        /// Method responsible for run migrations.
+        /// </summary>
+        /// <returns></returns>
+        public async Task RunMigrations()
+            => await _context.Database.MigrateAsync();
 
         /// <summary>
         /// Method responsible for mock data in database.
@@ -55,15 +63,9 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// <returns></returns>
         public async Task MockInDatabase<T>(T entity) where T : class
         {
-            using IServiceScope scope = _factory.Services.CreateScope();
+            await _context.Set<T>().AddAsync(entity);
 
-            IServiceProvider scopedServices = scope.ServiceProvider;
-
-            DatabaseContext context = scopedServices.GetRequiredService<DatabaseContext>();
-
-            await context.Set<T>().AddAsync(entity);
-
-            await context.CommitAsync();
+            await _context.CommitAsync();
         }
 
         /// <summary>
@@ -74,15 +76,9 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// <returns></returns>
         public async Task MockInDatabase<T>(IList<T> entity) where T : class
         {
-            using IServiceScope scope = _factory.Services.CreateScope();
+            await _context.Set<T>().AddRangeAsync(entity);
 
-            IServiceProvider scopedServices = scope.ServiceProvider;
-
-            DatabaseContext context = scopedServices.GetRequiredService<DatabaseContext>();
-
-            await context.Set<T>().AddRangeAsync(entity);
-
-            await context.CommitAsync();
+            await _context.CommitAsync();
         }
 
         /// <summary>
@@ -90,15 +86,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// </summary>
         /// <returns></returns>
         public async Task ClearDatabase()
-        {
-            using IServiceScope scope = _factory.Services.CreateScope();
-
-            IServiceProvider scopedServices = scope.ServiceProvider;
-
-            DatabaseContext context = scopedServices.GetRequiredService<DatabaseContext>();
-
-            await context.Database.EnsureDeletedAsync();
-        }
+            => await _context.Database.EnsureDeletedAsync();
 
         /// <summary>
         /// Method responsible for deserialize data.
@@ -122,10 +110,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
 
             if (resultHttp.IsSuccessStatusCode)
             {
-                return new TestApiResponseOperationGet<TResponseType>()
-                {
-                    Content = await DeserializeObject<TResponseType>(resultHttp), HttpResponse = resultHttp
-                };
+                return new TestApiResponseOperationGet<TResponseType>() {Content = await DeserializeObject<TResponseType>(resultHttp), HttpResponse = resultHttp};
             }
 
             TestApiResponseOperationGet<TResponseType> result =

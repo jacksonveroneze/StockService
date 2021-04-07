@@ -23,7 +23,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
         {
             _testsFixture = testsFixture;
 
-            Task.Run(async () => await _testsFixture.ClearDatabase());
+            _testsFixture.ClearDatabase().Wait();
+            _testsFixture.RunMigrations().Wait();
         }
 
         [Fact(DisplayName = "DeveFiltarOsDadosTotalizadosCorretamente", Skip = "Terminar")]

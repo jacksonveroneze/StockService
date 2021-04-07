@@ -16,7 +16,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
             => new Faker<Product>()
                 .CustomInstantiator(f =>
                     new Product(
-                        f.Commerce.Product()
+                        $"{f.Commerce.Product()} - {f.Commerce.ProductName()}"
                     )
                 );
     }

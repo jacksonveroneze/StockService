@@ -26,7 +26,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         {
             _testsFixture = testsFixture;
 
-            Task.Run(async () => await _testsFixture.ClearDatabase());
+            _testsFixture.ClearDatabase().Wait();
+            _testsFixture.RunMigrations().Wait();
         }
 
         [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente")]
@@ -178,10 +179,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
 
             await _testsFixture.MockInDatabase(product);
 
-            AddOrUpdateProductDto productDto = new()
-            {
-                Description = $"{product.Description}_atualizado", IsActive = true
-            };
+            AddOrUpdateProductDto productDto = new() {Description = $"{product.Description}_atualizado", IsActive = true};
 
             // Act
             TestApiResponseOperations<ProductDto> result =

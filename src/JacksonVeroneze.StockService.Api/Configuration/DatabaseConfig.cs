@@ -14,7 +14,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services,
             IConfiguration configuration)
             => services.AddEfSecondLevelCacheConfiguration()
-                .AddDbContext<DatabaseContext>((serviceProvider, options) =>
+                .AddDbContext<DatabaseContext>((_, options) =>
                     options
                         .UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                             optionsBuilder =>
@@ -23,7 +23,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                                     .CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds)
                                     .EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null);
                             })
-                        .AddEfSecondLevelCacheInterceptor(serviceProvider)
                         .UseLazyLoadingProxies()
                         .UseSnakeCaseNamingConvention()
                         .EnableDetailedErrors()
