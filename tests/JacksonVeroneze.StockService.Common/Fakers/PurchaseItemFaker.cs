@@ -19,7 +19,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
             => new Faker<PurchaseItem>()
                 .CustomInstantiator(f =>
                     new PurchaseItem(
-                        f.Random.Int(1, 100),
+                        f.Random.Int(100, 200),
                         f.Random.Decimal(1, 100),
                         purchase,
                         product
@@ -30,7 +30,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
             => new Faker<PurchaseItem>()
                 .CustomInstantiator(f =>
                     new PurchaseItem(
-                        f.Random.Int(1, 100),
+                        f.Random.Int(100, 200),
                         f.Random.Decimal(1, 100),
                         purchase,
                         ProductFaker.Generate()

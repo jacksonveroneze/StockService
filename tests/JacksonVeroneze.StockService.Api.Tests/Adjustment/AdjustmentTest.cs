@@ -372,7 +372,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
         [Fact(DisplayName = "DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado")]
         [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.FindItem))]
-        public async Task AdjustmentsController_FindItem_DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado()
+        public async Task
+            AdjustmentsController_FindItem_DeveBuscarCorretamenteOItemPeloIdQuandoOMesmoEstiverCadastrado()
         {
             // Arrange
             Domain.Entities.Adjustment adjustment = AdjustmentFaker.GenerateWithItems(5);
@@ -407,7 +408,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
-        [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido", Skip = "Arrumar")]
+        [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido")]
         [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.CreateItem))]
         public async Task AdjustmentsController_CreateItem_DeveSalvarCorretamenteOItemQuandoEmEstadoValido()
         {
@@ -438,9 +439,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(adjustmentItemDto.Amount);
-            resultGet.Content.Value.Should().Be(adjustmentItemDto.Value);
+            resultGet.Content.Value.Should().BeApproximately(adjustmentItemDto.Value, (decimal)0.01);
         }
-
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarCriarItemEmEstadoInvalido")]
         [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.CreateItem))]
@@ -580,7 +580,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarItemEmEstadoInvalido")]
         [Trait(nameof(AdjustmentsController), nameof(AdjustmentsController.UpdateItem))]
-        public async Task AdjustmentsController_UpdateItem_DeveRetornarErro400QuandoTentarAtualizarItemEmEstadoInvalido()
+        public async Task
+            AdjustmentsController_UpdateItem_DeveRetornarErro400QuandoTentarAtualizarItemEmEstadoInvalido()
         {
             // Arrange
             Domain.Entities.Adjustment adjustment = AdjustmentFaker.GenerateWithItems(2);

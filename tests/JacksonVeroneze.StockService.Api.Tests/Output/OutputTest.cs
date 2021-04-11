@@ -280,7 +280,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.OutputIsClosed));
         }
 
-        [Fact(DisplayName = "DeveFecharCorretamenteQuandoNaoEstiverFechado", Skip = "Erro")]
+        [Fact(DisplayName = "DeveFecharCorretamenteQuandoNaoEstiverFechado")]
         [Trait(nameof(OutputsController), nameof(OutputsController.Close))]
         public async Task OutputsController_Close_DeveFecharCorretamenteQuandoNaoEstiverFechado()
         {
@@ -417,16 +417,21 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
-        [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido", Skip = "Erro")]
+        [Fact(DisplayName = "DeveSalvarCorretamenteOItemQuandoEmEstadoValido")]
         [Trait(nameof(OutputsController), nameof(OutputsController.CreateItem))]
         public async Task OutputsController_CreateItem_DeveSalvarCorretamenteOItemQuandoEmEstadoValido()
         {
             // Arrange
-            Domain.Entities.Output output = OutputFaker.Generate();
             Domain.Entities.Product product = ProductFaker.Generate();
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItem(product);
+            purchase.Close();
+            purchase.AddEvent(new PurchaseClosedEvent(purchase.Id));
 
-            await _testsFixture.MockInDatabase(output);
+            Domain.Entities.Output output = OutputFaker.Generate();
+
             await _testsFixture.MockInDatabase(product);
+            await _testsFixture.MockInDatabase(purchase);
+            await _testsFixture.MockInDatabase(output);
 
             AddOrUpdateOutputItemDto outputItemDto =
                 AddOrUpdateOutputItemDtoFaker.GenerateValid(product.Id);
@@ -438,7 +443,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
 
             TestApiResponseOperationGet<OutputItemDto> resultGet =
                 await _testsFixture.SendGetRequest<OutputItemDto>(
-                     result.HttpResponse.Headers.Location?.ToString());
+                    result.HttpResponse.Headers.Location?.ToString());
 
             // Assert
             result.Should().NotBeNull();
@@ -448,9 +453,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(outputItemDto.Amount);
-            resultGet.Content.Value.Should().Be(outputItemDto.Value);
+            resultGet.Content.Value.Should().BeApproximately(outputItemDto.Value, (decimal)0.01);
         }
-
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarCriarItemEmEstadoInvalido")]
         [Trait(nameof(OutputsController), nameof(OutputsController.CreateItem))]
@@ -538,7 +542,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
 
             await _testsFixture.MockInDatabase(output);
 
-            AddOrUpdateOutputItemDto outputItemDto = new() {ProductId = output.Items.First().Product.Id, Amount = 10, Value = 20};
+            AddOrUpdateOutputItemDto outputItemDto =
+                new() {ProductId = output.Items.First().Product.Id, Amount = 10, Value = 20};
 
             // Act
             TestApiResponseOperations<OutputDto> result =
@@ -551,13 +556,20 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
-        [Fact(DisplayName = "DeveAtualizarCorretamenteOItemQuandoEmEstadoValido", Skip = "Erro")]
+        [Fact(DisplayName = "DeveAtualizarCorretamenteOItemQuandoEmEstadoValido")]
         [Trait(nameof(OutputsController), nameof(OutputsController.UpdateItem))]
         public async Task OutputsController_UpdateItem_DeveAtualizarCorretamenteOItemQuandoEmEstadoValido()
         {
             // Arrange
-            Domain.Entities.Output output = OutputFaker.GenerateWithItems(2);
+            Domain.Entities.Product product = ProductFaker.Generate();
+            Domain.Entities.Purchase purchase = PurchaseFaker.GenerateWithItem(product);
+            purchase.Close();
+            purchase.AddEvent(new PurchaseClosedEvent(purchase.Id));
 
+            Domain.Entities.Output output = OutputFaker.GenerateWithItem(product);
+
+            await _testsFixture.MockInDatabase(product);
+            await _testsFixture.MockInDatabase(purchase);
             await _testsFixture.MockInDatabase(output);
 
             OutputItem outputItem = output.Items.First();

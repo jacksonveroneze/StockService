@@ -11,13 +11,13 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
     {
         protected override IHostBuilder CreateHostBuilder()
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(
-                    outputTemplate:
-                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-                    theme: AnsiConsoleTheme.Literate)
-                .Enrich.FromLogContext()
-                .CreateLogger();
+            // Log.Logger = new LoggerConfiguration()
+            //     .WriteTo.Console(
+            //         outputTemplate:
+            //         "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+            //         theme: AnsiConsoleTheme.Literate)
+            //     .Enrich.FromLogContext()
+            //     .CreateLogger();
 
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>

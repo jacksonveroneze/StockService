@@ -438,7 +438,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Purchase
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(purchaseItemDto.Amount);
-            //resultGet.Content.Value.Should().Be(purchaseItemDto.Value);
+            resultGet.Content.Value.Should().BeApproximately(purchaseItemDto.Value, (decimal)0.01);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarCriarItemEmEstadoInvalido")]
