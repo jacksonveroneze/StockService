@@ -34,7 +34,8 @@ services:
             - database
             - rabbitmq
         depends_on:
-            -   database
+            - database
+            - rabbitmq
         ports:
             - 8080:80
 
