@@ -27,16 +27,16 @@ namespace JacksonVeroneze.StockService.Api.Util
             //if (args.Contains("d"))
             //await databaseContext.Database.EnsureDeletedAsync();
 
-            await databaseContext.Database.MigrateAsync();
+            //await databaseContext.Database.MigrateAsync();
 
-            await SeedData(databaseContext);
+            //await SeedData(databaseContext);
         }
 
         private static async Task SeedData(DatabaseContext databaseContext)
         {
             Log.Information("Seed: {0}", "Performing data");
 
-            IList<Product> listProducts = new List<Product>() {new("Café"), new("Farinha"), new("Água")};
+            IList<Product> listProducts = new List<Product>() {new("Café 1"), new("Farinha 2"), new("Água 3")};
 
             await SeedDataPurchase(databaseContext, listProducts);
             await databaseContext.CommitAsync();

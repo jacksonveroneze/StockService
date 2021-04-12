@@ -39,8 +39,7 @@ jobs:
 
             - name: Remove Files
               run: |
-                   rm ${{env.DOTNET_ROOT}}/appsettings.json
-                   rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
+                   rm ${{env.DOTNET_ROOT}}/appsettings.*
 
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2

@@ -2,7 +2,7 @@ version: "3.8"
 services:
     api:
         container_name: api
-        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:0.0.6
+        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
         tty: true
         build:
             context: .
@@ -13,7 +13,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Production
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=Server=database;Database=stock;User Id=SA;Password=localPass@word;
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=Server=jacksonveroneze.database.windows.net;Database=stock;User Id=jacksonveroneze;Password=9bb9a6ed86f050f335b0aced963a59a9@;
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
             - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
