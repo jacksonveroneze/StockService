@@ -18,12 +18,12 @@ namespace JacksonVeroneze.StockService.Api.Util
             if (environment != null && environment.Equals("Development", StringComparison.CurrentCultureIgnoreCase))
                 builder.AddJsonFile("appsettings.json", true, true);
 
-            IConfigurationRoot configurat = builder
+            IConfigurationRoot configuration = builder
                 .AddEnvironmentVariables("APP_CONFIG_")
                 .Build();
 
             return new LoggerConfiguration()
-                .ReadFrom.Configuration(configurat)
+                .ReadFrom.Configuration(configuration)
                 .WriteTo.Console(
                     outputTemplate:
                     "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
