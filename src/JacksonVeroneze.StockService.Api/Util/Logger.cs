@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -9,14 +10,20 @@ namespace JacksonVeroneze.StockService.Api.Util
     {
         public static ILogger FactoryLogger()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory());
+
+            string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            if (environment != null && environment.Equals("Development", StringComparison.CurrentCultureIgnoreCase))
+                builder.AddJsonFile("appsettings.json", true, true);
+
+            IConfigurationRoot configurat = builder
                 .AddEnvironmentVariables("APP_CONFIG_")
                 .Build();
 
             return new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+                .ReadFrom.Configuration(configurat)
                 .WriteTo.Console(
                     outputTemplate:
                     "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
