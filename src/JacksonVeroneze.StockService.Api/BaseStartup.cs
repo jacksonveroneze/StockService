@@ -16,10 +16,13 @@ namespace JacksonVeroneze.StockService.Api
         protected BaseStartup(IHostEnvironment hostEnvironment)
         {
             IConfigurationBuilder builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables("APP_CONFIG_");
+                .SetBasePath(hostEnvironment.ContentRootPath);
+
+            if (hostEnvironment.IsDevelopment())
+                builder.AddJsonFile("appsettings.json", true, true)
+                    .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true);
+
+            builder.AddEnvironmentVariables("APP_CONFIG_");
 
             Configuration = builder.Build();
 
@@ -29,7 +32,7 @@ namespace JacksonVeroneze.StockService.Api
         public virtual void ConfigureServices(IServiceCollection services)
             => services.AddApiConfiguration(Configuration, HostEnvironment);
 
-        public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+        public virtual void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
             => app.UseApiConfiguration(provider);
     }
 }

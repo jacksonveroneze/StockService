@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace JacksonVeroneze.StockService.Api
 {
-    public class StartupTests : BaseStartup
+    public sealed class StartupTests : BaseStartup
     {
         public StartupTests(IHostEnvironment hostEnvironment) : base(hostEnvironment)
         {
