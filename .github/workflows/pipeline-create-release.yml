@@ -37,10 +37,10 @@ jobs:
             - name: Publish
               run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}
 
-#            - name: Remove Files
-#              run: |
-#                   rm ${{env.DOTNET_ROOT}}/appsettings.json
-#                   rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
+            - name: Remove Files
+              run: |
+                   rm ${{env.DOTNET_ROOT}}/appsettings.json
+                   rm ${{env.DOTNET_ROOT}}/appsettings.Development.json
 
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
@@ -72,9 +72,11 @@ jobs:
             - name: Create TAG
               run: |
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                  docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
 
             - name: Push
               run: |
                   docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
+                  docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
                   docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
