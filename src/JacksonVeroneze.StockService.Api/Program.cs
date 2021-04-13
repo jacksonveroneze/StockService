@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
@@ -11,16 +12,27 @@ namespace JacksonVeroneze.StockService.Api
     {
         public static async Task Main(string[] args)
         {
-            Log.Logger = Logger.FactoryLogger();
+            try
+            {
+                Log.Logger = Logger.FactoryLogger();
 
-            Log.Information($"Application: {0}", "Starting up");
-            Log.Information($"Total params: {0}", args.Length);
+                Log.Information($"Application: {0}", "Starting up");
+                Log.Information($"Total params: {0}", args.Length);
 
-            IHost host = CreateHostBuilder(args).Build();
+                IHost host = CreateHostBuilder(args).Build();
 
-            await ExecuteMigrations.Execute(host, args);
+                await ExecuteMigrations.Execute(host, args);
 
-            await host.RunAsync();
+                await host.RunAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Host terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

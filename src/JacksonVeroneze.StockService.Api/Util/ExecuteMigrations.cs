@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Domain.Entities;
@@ -24,10 +25,10 @@ namespace JacksonVeroneze.StockService.Api.Util
             DatabaseContext databaseContext =
                 scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
-            //if (args.Contains("d"))
-            //await databaseContext.Database.EnsureDeletedAsync();
+            if (((IList)args).Contains("d"))
+                await databaseContext.Database.EnsureDeletedAsync();
 
-            //await databaseContext.Database.MigrateAsync();
+            await databaseContext.Database.MigrateAsync();
 
             //await SeedData(databaseContext);
         }

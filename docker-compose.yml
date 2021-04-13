@@ -3,6 +3,7 @@ services:
     api:
         container_name: api
         image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+        restart: always
         tty: true
         build:
             context: .
@@ -19,7 +20,7 @@ services:
             - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
             - APP_CONFIG_Serilog__MinimumLevel__Override__Microsoft=Information
             - APP_CONFIG_Serilog__MinimumLevel__Override__System=Information
-            - APP_CONFIG_BusType=RabbitMq
+            - APP_CONFIG_BusType=Memory
             - APP_CONFIG_BusRabbitMq__Host=localhost
             - APP_CONFIG_BusRabbitMq__VirtualHost=stock_service
             - APP_CONFIG_BusRabbitMq__Username=guest
@@ -30,18 +31,13 @@ services:
             timeout: 3s
             start_period: 5s
             retries: 3
-        links:
-            - database
-            - rabbitmq
-        depends_on:
-            - database
-            - rabbitmq
         ports:
             - 8080:80
 
     database:
         container_name: database
         image: mcr.microsoft.com/mssql/server:2019-latest
+        restart: always
         environment:
             SA_PASSWORD: localPass@word
             ACCEPT_EULA: Y
@@ -55,8 +51,9 @@ services:
             - 1433:1433
 
     rabbitmq:
-        image: rabbitmq:3.8-management-alpine
         container_name: rabbitmq
+        image: rabbitmq:3.8-management-alpine
+        restart: always
         environment:
             - RABBITMQ_DEFAULT_USER=guest
             - RABBITMQ_DEFAULT_PASS=guest

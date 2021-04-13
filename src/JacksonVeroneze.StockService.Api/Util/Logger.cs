@@ -12,9 +12,15 @@ namespace JacksonVeroneze.StockService.Api.Util
         {
             return new LoggerConfiguration()
                 .ReadFrom.Configuration(FactoryConfiguration())
+                .Enrich.WithProperty("ApplicationName", "Stock Service")
+                .Enrich.WithProperty("Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .Enrich.WithEnvironmentUserName()
+                .Enrich.WithDemystifiedStackTraces()
                 .WriteTo.Console(
                     outputTemplate:
-                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                    "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}{NewLine}{Message:lj} {Properties:j}{NewLine}{Exception}{NewLine}",
                     theme: AnsiConsoleTheme.Literate)
                 .Enrich.FromLogContext()
                 .CreateLogger();
