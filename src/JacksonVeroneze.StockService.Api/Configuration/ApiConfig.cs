@@ -1,10 +1,12 @@
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using HealthChecks.UI.Client;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -47,7 +49,15 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerSetup(provider)
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHealthChecks("/hc",
+                        new HealthCheckOptions
+                        {
+                            Predicate = _ => true, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
+                });
 
             return app;
         }
