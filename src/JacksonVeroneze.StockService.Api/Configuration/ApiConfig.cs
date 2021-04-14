@@ -1,3 +1,4 @@
+using Elastic.Apm.NetCoreAll;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -38,7 +39,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         }
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app,
-            IApiVersionDescriptionProvider provider)
+            IApiVersionDescriptionProvider provider, IConfiguration configuration)
         {
             app.UseCultureSetup()
                 .UseCors(CorsPolicyName)
@@ -49,6 +50,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerSetup(provider)
+                .UseElasticApmSetup(configuration)
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

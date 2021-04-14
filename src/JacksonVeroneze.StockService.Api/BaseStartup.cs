@@ -33,6 +33,6 @@ namespace JacksonVeroneze.StockService.Api
             => services.AddApiConfiguration(Configuration, HostEnvironment);
 
         public virtual void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
-            => app.UseApiConfiguration(provider);
+            => app.UseApiConfiguration(provider, Configuration);
     }
 }

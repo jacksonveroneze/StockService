@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EFCoreSecondLevelCacheInterceptor;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using Microsoft.EntityFrameworkCore;
@@ -74,7 +75,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
 
         protected Pageable<TType> FactoryPageable<TType>(IList<TType> data, int total, int skip, int take) where TType : class
         {
-            return new Pageable<TType>() {
+            return new() {
                 Data = data,
                 Total = total,
                 Pages = (int)Math.Ceiling(total / (decimal)(take)),

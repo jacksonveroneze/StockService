@@ -25,6 +25,8 @@ services:
             - APP_CONFIG_BusRabbitMq__VirtualHost=stock_service
             - APP_CONFIG_BusRabbitMq__Username=guest
             - APP_CONFIG_BusRabbitMq__Password=guest
+            - APP_CONFIG_ElasticApm__SecretToken=
+            - APP_CONFIG_ElasticApm__ServerUrls=
         healthcheck:
             test: curl --silent --fail http://api/health || exit 1
             interval: 15s
