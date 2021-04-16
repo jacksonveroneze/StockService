@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,9 @@ namespace JacksonVeroneze.StockService.Api
         {
             try
             {
+                Activity.DefaultIdFormat = ActivityIdFormat.W3C;
+                Activity.ForceDefaultIdFormat = true;
+
                 Log.Logger = Logger.FactoryLogger();
 
                 Log.Information($"Application: {0}", "Starting up");

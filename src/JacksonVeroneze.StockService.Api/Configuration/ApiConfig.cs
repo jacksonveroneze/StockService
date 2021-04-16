@@ -1,4 +1,5 @@
-using Elastic.Apm.NetCoreAll;
+using System;
+using System.Diagnostics;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -8,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using HealthChecks.UI.Client;
+using Microsoft.ApplicationInsights.DependencyCollector;
+using OpenTelemetry;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -29,11 +34,19 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAutoMediatRConfiguration()
                 .AddBusConfiguration(configuration)
                 .AddApplicationInsightsConfiguration(configuration)
+                .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
                 .AddVersioningConfigConfiguration()
                 .AddControllers()
                 .AddJsonOptionsSerializeConfiguration();
+
+            services.AddHttpClient("viacep", c =>
+            {
+                c.BaseAddress = new Uri("https://viacep.com.br/ws/01001000/json");
+                c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            });
 
             return services;
         }
