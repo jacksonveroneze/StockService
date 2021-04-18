@@ -1,17 +1,15 @@
-using JacksonVeroneze.StockService.Api.Util.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using JacksonVeroneze.NET.Commons.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
-    public static class AddAuthorizationConfig
+    public static class AuthorizationConfig
     {
         public static IServiceCollection AddAuthorizationConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
-            string[] customPolices =
+            string[] polices =
             {
                 "adjustments:filter", "adjustments:find", "adjustments:create", "adjustments:update",
                 "adjustments:delete", "adjustments:close", "adjustments:find-items", "adjustments:find-item",
@@ -24,23 +22,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 "products:find", "products:create", "products:update", "products:delete"
             };
 
-            services.AddAuthorization(options =>
+            return services.AddAuthorizationConfiguration(x =>
             {
-                foreach (string customPolice in customPolices)
-                    options.AddCustomPolicy(customPolice, configuration["Auth:Authority"]);
+                x.Authority = configuration["Auth:Authority"];
+                x.Polices = polices;
             });
-
-            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            return services;
-        }
-
-        private static void AddCustomPolicy(this AuthorizationOptions options, string policyName,
-            string authority)
-        {
-            options.AddPolicy(policyName,
-                policy => policy.Requirements.Add(new HasScopeRequirement(policyName, authority)));
         }
     }
 }

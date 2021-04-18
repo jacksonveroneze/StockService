@@ -1,6 +1,6 @@
 using System;
+using JacksonVeroneze.NET.Commons.Exceptions;
 using JacksonVeroneze.StockService.Core.DomainObjects;
-using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 
 namespace JacksonVeroneze.StockService.Core.Exceptions
 {

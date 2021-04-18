@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
+using JacksonVeroneze.NET.Commons.Exceptions;
 using JacksonVeroneze.StockService.Common.Fakers;
-using JacksonVeroneze.StockService.Core.DomainObjects.Exceptions;
 using JacksonVeroneze.StockService.Domain.Entities;
 using Xunit;
 

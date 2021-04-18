@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using JacksonVeroneze.NET.Commons.ApiVersioning;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
@@ -6,21 +6,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     public static class ApiVersioningConfig
     {
         public static IServiceCollection AddVersioningConfigConfiguration(this IServiceCollection services)
-        {
-            services.AddApiVersioning(p =>
+            => services.AddApiVersioningConfiguration(x =>
             {
-                p.DefaultApiVersion = new ApiVersion(1, 0);
-                p.ReportApiVersions = true;
-                p.AssumeDefaultVersionWhenUnspecified = true;
+                x.MajorVersion = 1;
+                x.MinorVersion = 0;
             });
-
-            services.AddVersionedApiExplorer(p =>
-            {
-                p.GroupNameFormat = "'v'VVV";
-                p.SubstituteApiVersionInUrl = true;
-            });
-
-            return services;
-        }
     }
 }

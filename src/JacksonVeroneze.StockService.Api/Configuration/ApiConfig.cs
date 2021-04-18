@@ -1,18 +1,14 @@
-using System;
-using System.Diagnostics;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using HealthChecks.UI.Client;
-using Microsoft.ApplicationInsights.DependencyCollector;
-using OpenTelemetry;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
+using JacksonVeroneze.NET.Commons.Culture;
+using JacksonVeroneze.NET.Commons.HealthCheck;
+using JacksonVeroneze.NET.Commons.Routing;
+using JacksonVeroneze.NET.Commons.Swagger;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -24,9 +20,9 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             IConfiguration configuration,
             IHostEnvironment hostEnvironment)
         {
-            services.AddRouting(options => options.LowercaseUrls = true)
+            services.AddRoutingConfiguration()
                 .AddCorsConfiguration(configuration, CorsPolicyName)
-                .HealthChecksConfiguration()
+                .AddHealthCheckConfiguration()
                 .AddAutoMapperConfiguration()
                 .AddAutoMapperConfigurationValid()
                 .AddDependencyInjectionConfiguration()
@@ -41,38 +37,25 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddControllers()
                 .AddJsonOptionsSerializeConfiguration();
 
-            services.AddHttpClient("viacep", c =>
-            {
-                c.BaseAddress = new Uri("https://viacep.com.br/ws/01001000/json");
-                c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
-            });
-
             return services;
         }
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app,
             IApiVersionDescriptionProvider provider, IConfiguration configuration)
         {
-            app.UseCultureSetup()
+            app.UseCultureConfiguration()
                 .UseCors(CorsPolicyName)
-                .UseHealthChecksSetup()
+                .UseHealthCheckConfiguration()
                 .UseSerilogRequestLogging()
                 .UseRouting()
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseSwaggerSetup(provider)
+                .UseSwaggerConfiguration(provider)
                 .UseElasticApmSetup(configuration)
                 .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                    endpoints.MapHealthChecks("/hc",
-                        new HealthCheckOptions
-                        {
-                            Predicate = _ => true, ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                        });
-                });
+                    endpoints.MapControllers()
+                );
 
             return app;
         }

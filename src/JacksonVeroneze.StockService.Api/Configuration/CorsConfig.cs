@@ -1,3 +1,4 @@
+using JacksonVeroneze.NET.Commons.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,16 +9,10 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddCorsConfiguration(this IServiceCollection services,
             IConfiguration configuration,
             string corsPolicy) =>
-            services.AddCors(options =>
+            services.AddCorsConfiguration(x =>
             {
-                options.AddPolicy(corsPolicy,
-                    builder =>
-                    {
-                        builder
-                            .WithOrigins(configuration["Urls_Allow_Cors"].Split(";"))
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    });
+                x.Policy = corsPolicy;
+                x.UrlsAllowed = configuration["Urls_Allow_Cors"].Split(";");
             });
     }
 }

@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup Label="Сommon properties">
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Label="Packages dependency versions">
+        <CommonsVersion>0.0.1</CommonsVersion>
+      </PropertyGroup>
+</Project>

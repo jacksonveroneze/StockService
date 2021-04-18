@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
+using JacksonVeroneze.NET.Commons.Logger;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +20,12 @@ namespace JacksonVeroneze.StockService.Api
                 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
                 Activity.ForceDefaultIdFormat = true;
 
-                Log.Logger = Logger.FactoryLogger();
+                Log.Logger = Logger.FactoryLogger(x =>
+                {
+                    x.Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    x.ApplicationName = "Stock Service";
+                    x.CurrentDirectory = Directory.GetCurrentDirectory();
+                });
 
                 Log.Information($"Application: {0}", "Starting up");
                 Log.Information($"Total params: {0}", args.Length);

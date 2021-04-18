@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using JacksonVeroneze.StockService.Application.DTO.Product;
@@ -21,7 +20,6 @@ namespace JacksonVeroneze.StockService.Application.Services
         private readonly IProductService _productService;
         private readonly IProductRepository _productRepository;
         private readonly IProductValidator _productValidator;
-        private readonly IHttpClientFactory _httpClientFactory;
 
         /// <summary>
         /// Method responsible for initialize service.
@@ -33,14 +31,12 @@ namespace JacksonVeroneze.StockService.Application.Services
         public ProductApplicationService(IMapper mapper,
             IProductService productService,
             IProductRepository productRepository,
-            IProductValidator productValidator,
-            IHttpClientFactory httpClientFactory)
+            IProductValidator productValidator)
         {
             _mapper = mapper;
             _productService = productService;
             _productRepository = productRepository;
             _productValidator = productValidator;
-            _httpClientFactory = httpClientFactory;
         }
 
         /// <summary>
@@ -68,9 +64,6 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<ApplicationDataResult<ProductDto>> AddAsync(AddOrUpdateProductDto productDto)
         {
-            var client = _httpClientFactory.CreateClient("viacep");
-            string result1 = await client.GetStringAsync("/");
-
             NotificationContext result = await _productValidator.ValidateCreateAsync(productDto);
 
             if (result.HasNotifications)

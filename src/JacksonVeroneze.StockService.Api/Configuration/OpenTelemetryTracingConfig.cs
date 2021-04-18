@@ -1,10 +1,8 @@
 using System;
+using JacksonVeroneze.NET.Commons.OpenTelemetry;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OpenTelemetry;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -12,17 +10,17 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     {
         public static IServiceCollection AddOpenTelemetryTracingConfiguration(this IServiceCollection services,
             IConfiguration configuration, IHostEnvironment hostEnvironment)
-            => services.AddOpenTelemetryTracing(
-                builder => builder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(hostEnvironment.ApplicationName))
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddSqlClientInstrumentation(options => { options.SetTextCommandContent = true; })
-                    .AddJaegerExporter(options =>
-                    {
-                        options.AgentHost = configuration["Jaeger:AgentHost"];
-                        options.AgentPort = Convert.ToInt32(configuration["Jaeger:AgentPort"]);
-                    })
-                    .AddConsoleExporter());
+        {
+            if (string.IsNullOrEmpty(configuration["Jaeger:AgentHost"]) is false &&
+                string.IsNullOrEmpty(configuration["Jaeger:AgentPort"]) is false)
+                services.AddOpenTelemetryTracingConfiguration(x =>
+                {
+                    x.ApplicationName = hostEnvironment.ApplicationName;
+                    x.JaegerAgentHost = configuration["Jaeger:AgentHost"];
+                    x.JaegerAgentPort = Convert.ToInt32(configuration["Jaeger:AgentPort"]);
+                });
+
+            return services;
+        }
     }
 }
