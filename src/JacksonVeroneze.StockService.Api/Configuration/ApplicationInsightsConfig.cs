@@ -9,7 +9,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddApplicationInsightsConfiguration(this IServiceCollection services,
             IConfiguration configuration)
         {
-            if (string.IsNullOrEmpty(configuration["Jaeger:ApplicationInsights_InstrumentationKey"]) is false)
+            if (string.IsNullOrEmpty(configuration["ApplicationInsights_InstrumentationKey"]) is false)
                 services.AddApplicationInsightsConfiguration(x =>
                     x.InstrumentationKey = configuration["ApplicationInsights_InstrumentationKey"]);
 
