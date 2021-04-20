@@ -36,7 +36,7 @@ services:
             - APP_CONFIG_Jaeger__AgentPort=6831
         healthcheck:
             test: curl --silent --fail http://api/health || exit 1
-            interval: 15s
+            interval: 30s
             timeout: 3s
             start_period: 5s
             retries: 3
@@ -60,7 +60,7 @@ services:
             ACCEPT_EULA: Y
         healthcheck:
             test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-Usa", "-PlocalPass@word", "-Q", "select 1" ]
-            interval: 15s
+            interval: 30s
             timeout: 3s
             start_period: 5s
             retries: 3
@@ -76,7 +76,7 @@ services:
             - RABBITMQ_DEFAULT_PASS=guest
         healthcheck:
             test: curl --silent --fail http://rabbitmq:15672 || exit 1
-            interval: 15s
+            interval: 30s
             timeout: 3s
             start_period: 5s
             retries: 3
@@ -94,7 +94,7 @@ services:
             - COLLECTOR_ZIPKIN_HTTP_PORT=9411
         healthcheck:
             test: curl --silent --fail http://jaeger:16686 || exit 1
-            interval: 15s
+            interval: 30s
             timeout: 3s
             start_period: 5s
             retries: 3
