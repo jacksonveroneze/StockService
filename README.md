@@ -11,7 +11,7 @@ API para gerenciamento de estoque desenvolvida em .NET 5
 
 | Branch        | Main           | Develop  |
 | ------------- |:-------------:| -----:|
-| Status CI      | ![Pipeline](https://github.com/jacksonveroneze/stock-service/workflows/Pipeline/badge.svg?branch=main) | ![Pipeline](https://github.com/jacksonveroneze/stock-service/workflows/Pipeline/badge.svg?branch=develop) |
+| Status CI      | [![Pipeline](https://github.com/jacksonveroneze/stock-service/actions/workflows/pipeline-commit.yml/badge.svg?branch=main)](https://github.com/jacksonveroneze/stock-service/actions/workflows/pipeline-commit.yml) | [![Pipeline](https://github.com/jacksonveroneze/stock-service/actions/workflows/pipeline-commit.yml/badge.svg?branch=main)](https://github.com/jacksonveroneze/stock-service/actions/workflows/pipeline-commit.yml) |
 
 
 ## 💻 Sobre o projeto
@@ -35,10 +35,10 @@ Tabela de conteúdos
 
 ## ✅ Features
 
-- [ ] Compras
-- [ ] Saídas
-- [ ] Acertos
-- [ ] Movimentação do estoque
+- [ x ] Compras
+- [ x ] Saídas
+- [ x ] Acertos
+- [ x ] Movimentação do estoque
 
 ## 🎲 Demonstração da aplicação
 
