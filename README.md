@@ -35,10 +35,10 @@ Tabela de conteúdos
 
 ## ✅ Features
 
-- [ ] Compras
-- [ ] Saídas
-- [ ] Acertos
-- [ ] Movimentação do estoque
+- [ x ] Compras
+- [ x ] Saídas
+- [ x ] Acertos
+- [ x ] Movimentação do estoque
 
 ## 🎲 Demonstração da aplicação
 
