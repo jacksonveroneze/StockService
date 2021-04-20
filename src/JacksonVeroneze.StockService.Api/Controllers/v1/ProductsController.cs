@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Elastic.Apm;
 using JacksonVeroneze.StockService.Application.DTO.Product;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Application.Util;

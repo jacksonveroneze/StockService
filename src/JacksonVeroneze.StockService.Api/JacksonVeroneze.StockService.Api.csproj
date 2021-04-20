@@ -9,33 +9,36 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.5"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="5.0.5"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="5.0.5" />
 
-    <PackageReference Include="MassTransit" Version="7.1.8"/>
-    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.8"/>
-    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.8"/>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8"/>
-    <PackageReference Include="MassTransit.SerilogIntegration" Version="5.5.6"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="MassTransit" Version="7.1.8" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.8" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.8" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8" />
+    <PackageReference Include="MassTransit.SerilogIntegration" Version="5.5.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 
-    <PackageReference Include="Elastic.Apm.SerilogEnricher" Version="1.5.1"/>
-    <PackageReference Include="Elastic.CommonSchema.Serilog" Version="1.5.1"/>
-    <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.9.0"/>
+    <PackageReference Include="Elastic.Apm.SerilogEnricher" Version="1.5.1" />
+    <PackageReference Include="Elastic.CommonSchema.Serilog" Version="1.5.1" />
+    <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.9.0" />
 
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1"/>
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0"/>
-    <PackageReference Include="EasyCaching.InMemory" Version="1.2.0"/>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="EasyCaching.InMemory" Version="1.2.0" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.0.38" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
 
-    <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)"/>
+    <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Application\JacksonVeroneze.StockService.Application.csproj"/>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj"/>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.IoC\JacksonVeroneze.StockService.Infra.IoC.csproj"/>
-    <ProjectReference Include="..\JacksonVeroneze.StockService.Mapper\JacksonVeroneze.StockService.Mapper.csproj"/>
+    <ProjectReference Include="..\JacksonVeroneze.StockService.AntiCorruption\JacksonVeroneze.StockService.AntiCorruption.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Application\JacksonVeroneze.StockService.Application.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Data\JacksonVeroneze.StockService.Infra.Data.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.IoC\JacksonVeroneze.StockService.Infra.IoC.csproj" />
+    <ProjectReference Include="..\JacksonVeroneze.StockService.Mapper\JacksonVeroneze.StockService.Mapper.csproj" />
   </ItemGroup>
 
 </Project>

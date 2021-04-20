@@ -13,8 +13,8 @@ services:
             - DOTNET_RUNNING_IN_CONTAINER=true
             - ASPNETCORE_ENVIRONMENT=Production
             - APP_CONFIG_Urls_Allow_Cors=*;
-            - APP_CONFIG_ApplicationInsights_InstrumentationKey=6bcb32fd-5483-4ac9-9e0b-1d94c9bed762
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=Server=jacksonveroneze.database.windows.net;Database=stock;User Id=jacksonveroneze;Password=9bb9a6ed86f050f335b0aced963a59a9@;
+            - APP_CONFIG_ApplicationInsights_InstrumentationKey=
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
             - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
@@ -25,8 +25,13 @@ services:
             - APP_CONFIG_BusRabbitMq__VirtualHost=stock_service
             - APP_CONFIG_BusRabbitMq__Username=guest
             - APP_CONFIG_BusRabbitMq__Password=guest
-            - APP_CONFIG_ElasticApm__SecretToken=cANwTH1NZ0dxLjEe7y
-            - APP_CONFIG_ElasticApm__ServerUrls=https://d673a41e04c54c08bcc0b79f0e23d539.apm.sa-east-1.aws.cloud.es.io:443
+            - APP_CONFIG_ElasticApm__Enabled=
+            - APP_CONFIG_ElasticApm__SecretToken=
+            - APP_CONFIG_ElasticApm__ServerUrls=
+            - APP_CONFIG_ElasticApm__CaptureBody=
+            - APP_CONFIG_ElasticApm__CaptureHeaders=
+            - APP_CONFIG_ElasticApm__CaptureBodyContentTypes=
+            - APP_CONFIG_ElasticApm__LogLevel=Trace
             - APP_CONFIG_Jaeger__AgentHost=172.17.0.1
             - APP_CONFIG_Jaeger__AgentPort=6831
         healthcheck:
@@ -35,6 +40,14 @@ services:
             timeout: 3s
             start_period: 5s
             retries: 3
+        links:
+            - database
+            - rabbitmq
+            - jaeger
+        depends_on:
+            - database
+            - rabbitmq
+            - jaeger
         ports:
             - 8080:80
 
