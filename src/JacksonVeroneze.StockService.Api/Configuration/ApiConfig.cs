@@ -58,7 +58,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerConfiguration(provider)
-                .UseElasticApmSetup(configuration)
+                //.UseElasticApmSetup(configuration)
                 .UseEndpoints(endpoints =>
                     endpoints.MapControllers()
                 );
