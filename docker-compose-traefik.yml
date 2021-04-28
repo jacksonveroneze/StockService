@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+    traefik:
+        container_name: traefik
+        image: traefik:v2.4
+        restart: always
+        command:
+            - --log.level=DEBUG
+            - --api.insecure=true
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
+            - --entrypoints.web.address=:80
+        ports:
+            - "80:80"
+            - "8080:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        labels:
+            - traefik.docker.network=stock_network
+
+    api:
+        container_name: api
+        labels:
+            - traefik.backend=stockservice
+            - traefik.enable=true
+            - traefik.http.routers.api.rule=Host(`stockservice.localhost`)
+            - traefik.http.routers.api.entrypoints=web
+            - traefik.port=8089
+            - traefik.docker.network=stock_network
+
+networks:
+    stock_network:
+        external: true
