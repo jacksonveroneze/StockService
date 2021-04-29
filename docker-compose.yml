@@ -110,7 +110,3 @@ services:
 volumes:
     database:
     rabbitmq:
-
-networks:
-    stock_network:
-        external: true
