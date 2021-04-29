@@ -62,7 +62,6 @@ jobs:
             - name: Login
               run: |
                   echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
-                  echo ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} | docker login https://registry.digitalocean.com -u ${{ secrets.TOKEN_REGISTRY_DIGITAL_OCEAN }} --password-stdin
 
             - name: Build
               run: |
@@ -72,10 +71,8 @@ jobs:
               run: |
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
                   docker tag stock-service:$(echo ${GITHUB_REF:10}) docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
-                  docker tag stock-service:$(echo ${GITHUB_REF:10}) registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
 
             - name: Push
               run: |
                   docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:$(echo ${GITHUB_REF:10})
                   docker push docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
-                  docker push registry.digitalocean.com/registry-jacksonveroneze/stock-service:$(echo ${GITHUB_REF:10})
