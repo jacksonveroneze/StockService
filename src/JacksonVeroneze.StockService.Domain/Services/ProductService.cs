@@ -16,18 +16,21 @@ namespace JacksonVeroneze.StockService.Domain.Services
     {
         private readonly IProductRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
         //private readonly IBusExternal _bus;
-        //private readonly IMailService _mailService;
+
 
         /// <summary>
         /// Method responsible for initialize service.
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        public ProductService(IProductRepository repository, IMapper mapper)
+        /// <param name="mailService"></param>
+        public ProductService(IProductRepository repository, IMapper mapper, IMailService mailService)
         {
             _repository = repository;
             _mapper = mapper;
+            _mailService = mailService;
         }
 
         /// <summary>
@@ -43,13 +46,13 @@ namespace JacksonVeroneze.StockService.Domain.Services
             {
                 // await _bus.PublishEvent(_mapper.Map<ProductAddedEvent>(product));
 
-                // await _mailService.SendAsync(new MailRequest()
-                // {
-                //     From = "jackson@jacksonveroneze.com",
-                //     To = "jackson@jacksonveroneze.com",
-                //     Subject = "Novo produto cadastrado",
-                //     Text = product.Description
-                // });
+                await _mailService.SendAsync(new MailRequest()
+                {
+                    From = "jackson@jacksonveroneze.com",
+                    To = "jackson@jacksonveroneze.com",
+                    Subject = "Novo produto cadastrado",
+                    Text = product.Description
+                });
             }
         }
     }

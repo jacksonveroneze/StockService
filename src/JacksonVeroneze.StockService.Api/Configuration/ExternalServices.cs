@@ -25,11 +25,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 
             services.AddRefitClient<IMailService>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(configuration["UrlMailService"]))
-                .ConfigurePrimaryHttpMessageHandler(sp => new HttpClientHandler
+                .ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
                 {
                     AllowAutoRedirect = true,
                     ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
-                    SslProtocols = SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12
+                    SslProtocols = SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13
                 })
                 .AddPolicyHandler(retryPolicy);
 
