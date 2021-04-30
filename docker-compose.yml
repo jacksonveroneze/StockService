@@ -14,7 +14,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Production
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=Server=database;Database=stock;User Id=sa;Password=localPass@word;
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
             - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
@@ -25,8 +25,8 @@ services:
             - APP_CONFIG_BusRabbitMq__VirtualHost=stock_service
             - APP_CONFIG_BusRabbitMq__Username=guest
             - APP_CONFIG_BusRabbitMq__Password=guest
-            - APP_CONFIG_Jaeger__AgentHost=
-            - APP_CONFIG_Jaeger__AgentPort=
+            - APP_CONFIG_Jaeger__AgentHost=jaeger
+            - APP_CONFIG_Jaeger__AgentPort=6831
             - APP_CONFIG_UrlMailService=
             - ELASTIC_APM_ENABLED=true
             - ELASTIC_APM_SECRET_TOKEN=
