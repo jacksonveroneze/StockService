@@ -38,7 +38,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
-                .AddExternalServicesConfiguration(configuration)
+                //.AddExternalServicesConfiguration(configuration)
                 .AddVersioningConfigConfiguration()
                 .AddControllers()
                 .AddJsonOptionsSerializeConfiguration();

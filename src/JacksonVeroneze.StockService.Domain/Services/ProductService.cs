@@ -25,12 +25,10 @@ namespace JacksonVeroneze.StockService.Domain.Services
         /// </summary>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        /// <param name="mailService"></param>
-        public ProductService(IProductRepository repository, IMapper mapper, IMailService mailService)
+        public ProductService(IProductRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _mailService = mailService;
         }
 
         /// <summary>
@@ -46,13 +44,13 @@ namespace JacksonVeroneze.StockService.Domain.Services
             {
                 // await _bus.PublishEvent(_mapper.Map<ProductAddedEvent>(product));
 
-                await _mailService.SendAsync(new MailRequest()
-                {
-                    From = "jackson@jacksonveroneze.com",
-                    To = "jackson@jacksonveroneze.com",
-                    Subject = "Novo produto cadastrado",
-                    Text = product.Description
-                });
+                // await _mailService.SendAsync(new MailRequest()
+                // {
+                //     From = "jackson@jacksonveroneze.com",
+                //     To = "jackson@jacksonveroneze.com",
+                //     Subject = "Novo produto cadastrado",
+                //     Text = product.Description
+                // });
             }
         }
     }
