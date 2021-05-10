@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Security.Authentication;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -12,8 +9,6 @@ using JacksonVeroneze.NET.Commons.Culture;
 using JacksonVeroneze.NET.Commons.HealthCheck;
 using JacksonVeroneze.NET.Commons.Routing;
 using JacksonVeroneze.NET.Commons.Swagger;
-using JacksonVeroneze.StockService.AntiCorruption;
-using Refit;
 
 namespace JacksonVeroneze.StockService.Api.Configuration
 {
@@ -35,10 +30,9 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAutoMediatRConfiguration()
                 .AddBusConfiguration(configuration)
                 .AddApplicationInsightsConfiguration(configuration)
-                .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
-                //.AddExternalServicesConfiguration(configuration)
+                .AddExternalServicesConfiguration(configuration)
                 .AddVersioningConfigConfiguration()
                 .AddControllers()
                 .AddJsonOptionsSerializeConfiguration();
@@ -58,7 +52,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerConfiguration(provider)
-                //.UseElasticApmSetup(configuration)
                 .UseEndpoints(endpoints =>
                     endpoints.MapControllers()
                 );

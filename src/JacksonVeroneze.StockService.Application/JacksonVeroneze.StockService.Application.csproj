@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper" Version="$(AutoMapperVersion)" />
     <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)" />
   </ItemGroup>
 
