@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-    api1:
+    api:
         container_name: api
         image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
         restart: always
