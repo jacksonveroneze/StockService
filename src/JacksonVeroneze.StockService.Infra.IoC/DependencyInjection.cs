@@ -74,7 +74,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         private static void RegisterServicesOthers(IServiceCollection services)
         {
             services.AddScoped<IBus, BusMediator>();
-            services.AddScoped<IBusExternal, Bus.MassTransit.BusMassTransit>();
+            //services.AddScoped<IBusExternal, Bus.MassTransit.BusMassTransit>();
             services.AddScoped<IUser, AspNetUser>();
             services.AddScoped<DatabaseContext>();
         }
