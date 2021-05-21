@@ -36,6 +36,7 @@ namespace JacksonVeroneze.StockService.Infra.Data
 
             var tentantId = _teantId;
 
+            modelBuilder.AddFilter<Adjustment>(tentantId);
             modelBuilder.AddFilter<AdjustmentItem>(tentantId);
             modelBuilder.AddFilter<Output>(tentantId);
             modelBuilder.AddFilter<OutputItem>(tentantId);
