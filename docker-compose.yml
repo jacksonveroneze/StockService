@@ -51,7 +51,7 @@ services:
             - rabbitmq
             - jaeger
         ports:
-            - 8089:80
+            - 8088:80
 
     database:
         container_name: database

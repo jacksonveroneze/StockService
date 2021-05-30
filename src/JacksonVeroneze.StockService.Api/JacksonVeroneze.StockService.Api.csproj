@@ -11,7 +11,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="5.0.6" />
 
     <PackageReference Include="MassTransit" Version="7.1.8" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.1.8" />
@@ -19,16 +18,11 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8" />
     <PackageReference Include="MassTransit.SerilogIntegration" Version="5.5.6" />
 
-    <PackageReference Include="Elastic.Apm.SerilogEnricher" Version="1.5.1" />
-    <PackageReference Include="Elastic.CommonSchema.Serilog" Version="1.5.1" />
-    <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.9.0" />
-
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="EasyCaching.InMemory" Version="1.2.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.0.38" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
-
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="5.0.6" />
     <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)" />
   </ItemGroup>
 

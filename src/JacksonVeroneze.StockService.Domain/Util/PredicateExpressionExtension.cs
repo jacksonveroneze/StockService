@@ -27,7 +27,7 @@ namespace JacksonVeroneze.StockService.Domain.Util
 
     internal class SubstExpressionVisitor : ExpressionVisitor
     {
-        public Dictionary<Expression, Expression> subst = new Dictionary<Expression, Expression>();
+        public Dictionary<Expression, Expression> subst = new();
 
         protected override Expression VisitParameter(ParameterExpression node)
         {
