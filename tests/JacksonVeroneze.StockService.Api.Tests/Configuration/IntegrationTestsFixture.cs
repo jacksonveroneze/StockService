@@ -33,7 +33,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// </summary>
         public IntegrationTestsFixture()
         {
-            WebApplicationFactoryClientOptions clientOptions = new() {AllowAutoRedirect = true, MaxAutomaticRedirections = 7};
+            WebApplicationFactoryClientOptions clientOptions =
+                new() {AllowAutoRedirect = true, MaxAutomaticRedirections = 7};
 
             _factory = new AppFactory<TStartup>();
 
@@ -109,9 +110,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
             HttpResponseMessage resultHttp = await _client.GetAsync(url);
 
             if (resultHttp.IsSuccessStatusCode)
-            {
-                return new TestApiResponseOperationGet<TResponseType>() {Content = await DeserializeObject<TResponseType>(resultHttp), HttpResponse = resultHttp};
-            }
+                return new TestApiResponseOperationGet<TResponseType>()
+                {
+                    Content = await DeserializeObject<TResponseType>(resultHttp), HttpResponse = resultHttp
+                };
 
             TestApiResponseOperationGet<TResponseType> result =
                 await DeserializeObject<TestApiResponseOperationGet<TResponseType>>(resultHttp);

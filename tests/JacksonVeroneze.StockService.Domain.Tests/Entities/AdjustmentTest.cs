@@ -134,7 +134,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             AdjustmentItem adjustmentItem3 = (AdjustmentItem)adjustmentItem2.ShallowCopy();
 
-            adjustmentItem3.Update(adjustmentItem1.Amount, adjustmentItem1.Value, adjustmentItem1.Product);
+            adjustmentItem3.Update(adjustmentItem1.Amount, adjustmentItem1.Product);
 
             // Act
             Action act = () => adjustment.UpdateItem(adjustmentItem3);
@@ -197,22 +197,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             // Assert
             act.Should().Throw<NotFoundException>();
-        }
-
-        [Fact(DisplayName = "DeveSomarCorretamenteValorTotal")]
-        [Trait("Adjustment", "CalculateTotalValue")]
-        public void Adjustment_CalculateTotalValue_DeveSomarCorretamenteValorTotal()
-        {
-            // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.Generate();
-
-            IList<AdjustmentItem> itemsMock = AdjustmentItemFaker.Generate(adjustment, 10);
-
-            foreach (AdjustmentItem itemMock in itemsMock)
-                adjustment.AddItem(itemMock);
-
-            // Assert
-            adjustment.TotalValue.Should().Be(itemsMock.Sum(x => x.CalculteValue()));
         }
 
         [Fact(DisplayName = "DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto")]

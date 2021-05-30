@@ -28,6 +28,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime dateTimeValue, JsonSerializerOptions options) =>
-            writer.WriteStringValue(dateTimeValue.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+            writer.WriteStringValue(dateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss", DateTimeFormatInfo.CurrentInfo));
     }
 }

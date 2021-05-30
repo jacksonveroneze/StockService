@@ -7,8 +7,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
     {
         public int Amount { get; private set; }
 
-        public decimal Value { get; private set; }
-
         public virtual Output Output { get; private set; }
 
         public virtual Product Product { get; private set; }
@@ -21,22 +19,18 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         {
         }
 
-        public OutputItem(int amount, decimal value, Output output, Product product)
+        public OutputItem(int amount, Output output, Product product)
         {
             Amount = amount;
-            Value = value;
             Output = output;
             Product = product;
 
             Validate();
         }
 
-        public decimal CalculteValue() => Value * Amount;
-
-        public void Update(int amount, decimal value, Product product)
+        public void Update(int amount, Product product)
         {
             Amount = amount;
-            Value = value;
             Product = product;
 
             Validate();
@@ -45,7 +39,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private void Validate()
         {
             Guards.ValidarSeMenorQue(Amount, 1, "A quantidade deve ser maior que zero");
-            Guards.ValidarSeMenorQue(Value, 1, "O Valor deve ser maior que zero");
         }
     }
 }

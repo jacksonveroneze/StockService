@@ -58,8 +58,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateIfExistsItemByProduct(item);
 
             _items.Add(item);
-
-            CalculateTotalValue();
         }
 
         public void UpdateItem(OutputItem item)
@@ -73,8 +71,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             _items.Remove(putputItem);
 
             _items.Add(item);
-
-            CalculateTotalValue();
         }
 
         public void RemoveItem(OutputItem item)
@@ -84,15 +80,10 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             ValidateIfItemNotExist(item);
 
             _items.Remove(item);
-
-            CalculateTotalValue();
         }
 
         public OutputItem FindItem(Guid id)
             => Items.FirstOrDefault(x => x.Id == id);
-
-        private void CalculateTotalValue()
-            => TotalValue = Items.Sum(x => x.CalculteValue());
 
         private void ValidateIfItemNotExist(OutputItem item)
         {

@@ -17,29 +17,12 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             Adjustment adjustment = AdjustmentFaker.Generate();
             Product product = ProductFaker.Generate();
 
-            Func<AdjustmentItem> func1 = () => new AdjustmentItem(0, 1, adjustment, product);
-            Func<AdjustmentItem> func2 = () => new AdjustmentItem(1, 0, adjustment, product);
+            Func<AdjustmentItem> func1 = () => new AdjustmentItem(0, adjustment, product);
+            Func<AdjustmentItem> func2 = () => new AdjustmentItem(-1, adjustment, product);
 
             // Assert
             func1.Should().Throw<DomainException>();
             func2.Should().Throw<DomainException>();
-        }
-
-        [Fact(DisplayName = "DeveCalculaCorretamenteOValorDoItem")]
-        [Trait("AdjustmentItem", "CalculteValue")]
-        public void AdjustmentItem_CalculteValue_DeveCalculaCorretamenteOValorDoItem()
-        {
-            // Arange && Act
-            Adjustment adjustment = AdjustmentFaker.Generate();
-            Product product = ProductFaker.Generate();
-
-            AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
-
-            // Act
-            decimal value = item.CalculteValue();
-
-            // Assert
-            value.Should().Be(20);
         }
 
         [Fact(DisplayName = "DeveRetornarDomainExceptionAoTentarAtualizarComValoresInvalidos")]
@@ -51,11 +34,11 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             Product product = ProductFaker.Generate();
             Product newProduct = ProductFaker.Generate();
 
-            AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
+            AdjustmentItem item = new AdjustmentItem(10, adjustment, product);
 
             // Act
-            Action action1 = () => item.Update(0, 5, newProduct);
-            Action action2 = () => item.Update(1, 0, newProduct);
+            Action action1 = () => item.Update(0, newProduct);
+            Action action2 = () => item.Update(-1, newProduct);
 
             // Assert
             action1.Should().Throw<DomainException>();
@@ -71,14 +54,13 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
             Product product = ProductFaker.Generate();
             Product newProduct = ProductFaker.Generate();
 
-            AdjustmentItem item = new AdjustmentItem(10, 2, adjustment, product);
+            AdjustmentItem item = new AdjustmentItem(10, adjustment, product);
 
             // Act
-            item.Update(10, 5, newProduct);
+            item.Update(10, newProduct);
 
             // Assert
             item.Amount.Should().Be(10);
-            item.Value.Should().Be(5);
         }
     }
 }

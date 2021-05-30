@@ -46,7 +46,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             output.Items.Should().HaveCount(totalItens);
-            output.TotalValue.Should().Be(outputItens.Sum(x => x.CalculteValue()));
             _outputRepositoryMock.Verify(x => x.Update(It.IsAny<Output>()), Times.Exactly(totalItens));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<OutputItemAdded>()), Times.Exactly(totalItens));
@@ -74,7 +73,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             output.Items.Should().HaveCount(totalItens);
-            output.TotalValue.Should().Be(outputItens.Sum(x => x.CalculteValue()));
             _outputRepositoryMock.Verify(x => x.Update(It.IsAny<Output>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<OutputItemUpdated>()), Times.Once);
@@ -102,7 +100,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             output.Items.Should().HaveCount(totalItens - 1);
-            output.TotalValue.Should().Be(outputItens.Skip(1).Sum(x => x.CalculteValue()));
             _outputRepositoryMock.Verify(x => x.Update(It.IsAny<Output>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<OutputItemRemoved>()), Times.Once);
@@ -131,7 +128,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Assert
             output.State.Should().Be(OutputState.Closed);
             output.Items.Should().HaveCount(totalItens);
-            output.TotalValue.Should().Be(outputItens.Sum(x => x.CalculteValue()));
             _outputRepositoryMock.Verify(x => x.Update(It.IsAny<Output>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<OutputClosedEvent>()), Times.Once);

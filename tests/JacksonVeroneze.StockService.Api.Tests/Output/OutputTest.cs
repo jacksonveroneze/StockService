@@ -448,12 +448,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             // Assert
             result.Should().NotBeNull();
             result.Data.Amount.Should().Be(outputItemDto.Amount);
-            result.Data.Value.Should().Be(outputItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(outputItemDto.Amount);
-            resultGet.Content.Value.Should().BeApproximately(outputItemDto.Value, (decimal)0.01);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarCriarItemEmEstadoInvalido")]
@@ -465,7 +463,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
 
             await _testsFixture.MockInDatabase(output);
 
-            AddOrUpdateOutputItemDto outputDto = new() {Amount = 0, Value = 0, ProductId = Guid.NewGuid()};
+            AddOrUpdateOutputItemDto outputDto = new() {Amount = 0, ProductId = Guid.NewGuid()};
 
             // Act
             TestApiResponseOperations<OutputDto> result =
@@ -543,7 +541,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             await _testsFixture.MockInDatabase(output);
 
             AddOrUpdateOutputItemDto outputItemDto =
-                new() {ProductId = output.Items.First().Product.Id, Amount = 10, Value = 20};
+                new() {ProductId = output.Items.First().Product.Id, Amount = 10};
 
             // Act
             TestApiResponseOperations<OutputDto> result =
@@ -575,7 +573,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             OutputItem outputItem = output.Items.First();
 
             AddOrUpdateOutputItemDto outputItemDto =
-                new() {Amount = 10, Value = 20, ProductId = outputItem.Product.Id};
+                new() {Amount = 10, ProductId = outputItem.Product.Id};
 
             // Act
             TestApiResponseOperations<OutputItemDto> result =
@@ -589,12 +587,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             // Assert
             result.Should().NotBeNull();
             result.Data.Amount.Should().Be(outputItemDto.Amount);
-            result.Data.Value.Should().Be(outputItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(outputItemDto.Amount);
-            resultGet.Content.Value.Should().Be(outputItemDto.Value);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarItemEmEstadoInvalido")]
@@ -609,7 +605,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             OutputItem outputItem = output.Items.First();
 
             AddOrUpdateOutputItemDto outputItemDto =
-                new() {Amount = 0, Value = 0, ProductId = Guid.NewGuid()};
+                new() {Amount = 0, ProductId = Guid.NewGuid()};
 
             // Act
             TestApiResponseOperations<OutputItemDto> result =
@@ -709,7 +705,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             OutputItem outputItem = output.Items.First();
 
             AddOrUpdateOutputItemDto outputItemDto =
-                new() {Amount = 10, Value = 20, ProductId = output.Items.Last().Product.Id};
+                new() {Amount = 10, ProductId = output.Items.Last().Product.Id};
 
             // Act
             TestApiResponseOperations<OutputItemDto> result =

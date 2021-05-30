@@ -207,7 +207,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Product product = await _productRepository.FindAsync(outputItemDto.ProductId);
 
-            OutputItem outputItem = new(outputItemDto.Amount, outputItemDto.Value, output, product);
+            OutputItem outputItem = new(outputItemDto.Amount, output, product);
 
             await _outputService.AddItemAsync(output, outputItem);
 
@@ -236,7 +236,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Product product = await _productRepository.FindAsync(outputItemDto.ProductId);
 
-            outputItem.Update(outputItemDto.Amount, outputItemDto.Value, product);
+            outputItem.Update(outputItemDto.Amount, product);
 
             await _outputService.UpdateItemAsync(output, outputItem);
 

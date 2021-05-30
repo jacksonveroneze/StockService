@@ -46,7 +46,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens);
-            adjustment.TotalValue.Should().Be(adjustmentItens.Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentItemAdded>()), Times.Exactly(totalItens));
@@ -74,7 +73,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens);
-            adjustment.TotalValue.Should().Be(adjustmentItens.Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentItemUpdated>()), Times.Once);
@@ -102,7 +100,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
 
             // Assert
             adjustment.Items.Should().HaveCount(totalItens - 1);
-            adjustment.TotalValue.Should().Be(adjustmentItens.Skip(1).Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentItemRemoved>()), Times.Once);
@@ -131,7 +128,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Services
             // Assert
             adjustment.State.Should().Be(AdjustmentState.Closed);
             adjustment.Items.Should().HaveCount(totalItens);
-            adjustment.TotalValue.Should().Be(adjustmentItens.Sum(x => x.CalculteValue()));
             _adjustmentRepositoryMock.Verify(x => x.Update(It.IsAny<Adjustment>()), Times.Exactly(totalItens + 1));
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Exactly(totalItens + 1));
             _busHandlerMock.Verify(x => x.PublishDomainEvent(It.IsAny<AdjustmentClosedEvent>()), Times.Once);

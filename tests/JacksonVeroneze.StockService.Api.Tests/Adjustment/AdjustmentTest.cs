@@ -434,12 +434,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             // Assert
             result.Should().NotBeNull();
             result.Data.Amount.Should().Be(adjustmentItemDto.Amount);
-            result.Data.Value.Should().Be(adjustmentItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(adjustmentItemDto.Amount);
-            resultGet.Content.Value.Should().BeApproximately(adjustmentItemDto.Value, (decimal)0.01);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarCriarItemEmEstadoInvalido")]
@@ -451,7 +449,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
             await _testsFixture.MockInDatabase(adjustment);
 
-            AddOrUpdateAdjustmentItemDto adjustmentDto = new() {Amount = 0, Value = 0, ProductId = Guid.NewGuid()};
+            AddOrUpdateAdjustmentItemDto adjustmentDto = new() {Amount = 0, ProductId = Guid.NewGuid()};
 
             // Act
             TestApiResponseOperations<AdjustmentDto> result =
@@ -530,7 +528,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
 
             AddOrUpdateAdjustmentItemDto adjustmentItemDto = new()
             {
-                ProductId = adjustment.Items.First().Product.Id, Amount = 10, Value = 20
+                ProductId = adjustment.Items.First().Product.Id, Amount = 10
             };
 
             // Act
@@ -556,7 +554,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             AdjustmentItem adjustmentItem = adjustment.Items.First();
 
             AddOrUpdateAdjustmentItemDto adjustmentItemDto =
-                new() {Amount = 10, Value = 20, ProductId = adjustmentItem.Product.Id};
+                new() {Amount = 10, ProductId = adjustmentItem.Product.Id};
 
             // Act
             TestApiResponseOperations<AdjustmentItemDto> result =
@@ -570,12 +568,10 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             // Assert
             result.Should().NotBeNull();
             result.Data.Amount.Should().Be(adjustmentItemDto.Amount);
-            result.Data.Value.Should().Be(adjustmentItemDto.Value);
             result.Errors.Should().BeEmpty();
 
             resultGet.Should().NotBeNull();
             resultGet.Content.Amount.Should().Be(adjustmentItemDto.Amount);
-            resultGet.Content.Value.Should().Be(adjustmentItemDto.Value);
         }
 
         [Fact(DisplayName = "DeveRetornarErro400QuandoTentarAtualizarItemEmEstadoInvalido")]
@@ -591,7 +587,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             AdjustmentItem adjustmentItem = adjustment.Items.First();
 
             AddOrUpdateAdjustmentItemDto adjustmentItemDto =
-                new() {Amount = 0, Value = 0, ProductId = Guid.NewGuid()};
+                new() {Amount = 0, ProductId = Guid.NewGuid()};
 
             // Act
             TestApiResponseOperations<AdjustmentItemDto> result =
@@ -691,7 +687,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Adjustment
             AdjustmentItem adjustmentItem = adjustment.Items.First();
 
             AddOrUpdateAdjustmentItemDto adjustmentItemDto =
-                new() {Amount = 10, Value = 20, ProductId = adjustment.Items.Last().Product.Id};
+                new() {Amount = 10, ProductId = adjustment.Items.Last().Product.Id};
 
             // Act
             TestApiResponseOperations<AdjustmentItemDto> result =

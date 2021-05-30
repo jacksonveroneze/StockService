@@ -134,7 +134,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             OutputItem outputItem3 = (OutputItem)outputItem2.ShallowCopy();
 
-            outputItem3.Update(outputItem1.Amount, outputItem1.Value, outputItem1.Product);
+            outputItem3.Update(outputItem1.Amount, outputItem1.Product);
 
             // Act
             Action act = () => output.UpdateItem(outputItem3);
@@ -197,22 +197,6 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
 
             // Assert
             act.Should().Throw<NotFoundException>();
-        }
-
-        [Fact(DisplayName = "DeveSomarCorretamenteValorTotal")]
-        [Trait("Output", "CalculateTotalValue")]
-        public void Output_CalculateTotalValue_DeveSomarCorretamenteValorTotal()
-        {
-            // Arange && Act
-            Output output = OutputFaker.Generate();
-
-            IList<OutputItem> itemsMock = OutputItemFaker.Generate(output, 10);
-
-            foreach (OutputItem itemMock in itemsMock)
-                output.AddItem(itemMock);
-
-            // Assert
-            output.TotalValue.Should().Be(itemsMock.Sum(x => x.CalculteValue()));
         }
 
         [Fact(DisplayName = "DeveSetarOStatusParaFechadoCorretamenteSeEstiverAberto")]

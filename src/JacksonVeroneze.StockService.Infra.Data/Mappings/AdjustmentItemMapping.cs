@@ -16,10 +16,6 @@ namespace JacksonVeroneze.StockService.Infra.Data.Mappings
             builder.Property(c => c.Amount)
                 .IsRequired();
 
-            builder.Property(c => c.Value)
-                .HasPrecision(10,2)
-                .IsRequired();
-
             builder.Property(c => c.CreatedAt)
                 .IsRequired();
 

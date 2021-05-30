@@ -20,7 +20,6 @@ namespace JacksonVeroneze.StockService.Common.Fakers
                 .CustomInstantiator(f =>
                     new AdjustmentItem(
                         f.Random.Int(1, 100),
-                        f.Random.Decimal(1, 100),
                         adjustment,
                         product
                     )
@@ -31,7 +30,6 @@ namespace JacksonVeroneze.StockService.Common.Fakers
                 .CustomInstantiator(f =>
                     new AdjustmentItem(
                         f.Random.Int(1, 100),
-                        f.Random.Decimal(1, 100),
                         adjustment,
                         ProductFaker.Generate()
                     )

@@ -11,8 +11,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
 
         public int Amount { get; set; }
 
-        public decimal Value { get; set; }
-
         public Task<ValidationResult> Validate()
             => new AddOrUpdateAdjustmentItemDtoValidator()
                 .ValidateAsync(this);
@@ -22,10 +20,6 @@ namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
             public AddOrUpdateAdjustmentItemDtoValidator()
             {
                 RuleFor(x => x.Amount)
-                    .NotNull()
-                    .GreaterThan(0);
-
-                RuleFor(x => x.Value)
                     .NotNull()
                     .GreaterThan(0);
             }
