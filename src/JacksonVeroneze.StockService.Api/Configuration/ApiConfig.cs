@@ -30,6 +30,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddAutoMediatRConfiguration()
                 .AddBusConfiguration(configuration)
                 .AddApplicationInsightsConfiguration(configuration)
+                .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
                 .AddExternalServicesConfiguration(configuration)
