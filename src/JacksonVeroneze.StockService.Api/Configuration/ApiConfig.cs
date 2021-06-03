@@ -1,3 +1,4 @@
+using JacksonVeroneze.NET.Commons.Cors;
 using JacksonVeroneze.StockService.Api.Middlewares.ErrorHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -14,14 +15,12 @@ namespace JacksonVeroneze.StockService.Api.Configuration
 {
     public static class ApiConfig
     {
-        private const string CorsPolicyName = "CorsPolicy";
-
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services,
             IConfiguration configuration,
             IHostEnvironment hostEnvironment)
         {
             services.AddRoutingConfiguration()
-                .AddCorsConfiguration(configuration, CorsPolicyName)
+                .AddCorsConfiguration(configuration)
                 .AddHealthCheckConfiguration()
                 .AddAutoMapperConfiguration()
                 .AddAutoMapperConfigurationValid()
@@ -45,7 +44,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             IApiVersionDescriptionProvider provider, IConfiguration configuration)
         {
             app.UseCultureConfiguration()
-                .UseCors(CorsPolicyName)
+                .UseCorsConfiguration()
                 .UseHealthCheckConfiguration()
                 .UseSerilogRequestLogging()
                 .UseRouting()
@@ -53,9 +52,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .UseAuthorization()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerConfiguration(provider)
-                .UseEndpoints(endpoints =>
-                    endpoints.MapControllers()
-                );
+                .UseEndpoints(endpoints => endpoints.MapControllers());
 
             return app;
         }

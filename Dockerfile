@@ -17,7 +17,7 @@ ENV LANGUAGE pt-BR
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apk add icu-libs curl && \
+RUN apk add icu-libs curl tzdata && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /app
