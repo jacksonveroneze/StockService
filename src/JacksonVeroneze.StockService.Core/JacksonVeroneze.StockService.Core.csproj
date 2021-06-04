@@ -9,7 +9,7 @@
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
 
-    <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)" />
+    <PackageReference Include="JacksonVeroneze.NET.Commons" Version="0.0.7" />
   </ItemGroup>
 
 </Project>
