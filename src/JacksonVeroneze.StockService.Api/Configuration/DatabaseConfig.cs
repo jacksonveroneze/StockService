@@ -9,7 +9,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
     {
         public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services,
             IConfiguration configuration)
-            => services.AddSqlServerDatabaseConfiguration<DatabaseContext>(x =>
+            => services.AddPostgreSqlDatabaseConfiguration<DatabaseContext>(x =>
                 x.ConnectionString = configuration.GetConnectionString("DefaultConnection"));
     }
 }

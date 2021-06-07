@@ -22,4 +22,5 @@ RUN apk add icu-libs curl tzdata && \
 
 WORKDIR /app
 COPY --from=build-env /app/out .
+
 ENTRYPOINT ["dotnet", "JacksonVeroneze.StockService.Api.dll"]

@@ -3,32 +3,32 @@ using System;
 using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace JacksonVeroneze.StockService.Infra.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210530213322_Initial")]
+    [Migration("20210607003455_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.6")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("AdjustmentItemMovementItem", b =>
                 {
                     b.Property<Guid>("AdjustmentItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("adjustment_items_id");
 
                     b.Property<Guid>("MovementItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("movement_items_id");
 
                     b.HasKey("AdjustmentItemsId", "MovementItemsId")
@@ -43,41 +43,41 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Adjustment", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("description");
 
                     b.Property<int>("State")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("state");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -89,39 +89,39 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.AdjustmentItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<Guid>("AdjustmentId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("adjustment_id");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("amount");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -139,31 +139,31 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Movement", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -178,35 +178,35 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.MovementItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("amount");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<Guid>("MovementId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("movement_id");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -221,41 +221,41 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Output", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("description");
 
                     b.Property<int>("State")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("state");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -267,39 +267,39 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.OutputItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("amount");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<Guid>("OutputId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("output_id");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -317,37 +317,37 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -363,41 +363,41 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.Purchase", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("description");
 
                     b.Property<int>("State")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("state");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -409,44 +409,44 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("JacksonVeroneze.StockService.Domain.Entities.PurchaseItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("amount");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("deleted_at");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
                     b.Property<Guid>("PurchaseId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("purchase_id");
 
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<decimal>("Value")
                         .HasPrecision(10, 2)
-                        .HasColumnType("decimal(10,2)")
+                        .HasColumnType("numeric(10,2)")
                         .HasColumnName("value");
 
                     b.Property<int>("Version")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasColumnName("version");
 
                     b.HasKey("Id")
@@ -464,11 +464,11 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("MovementItemOutputItem", b =>
                 {
                     b.Property<Guid>("MovementItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("movement_items_id");
 
                     b.Property<Guid>("OutputItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("output_items_id");
 
                     b.HasKey("MovementItemsId", "OutputItemsId")
@@ -483,11 +483,11 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
             modelBuilder.Entity("MovementItemPurchaseItem", b =>
                 {
                     b.Property<Guid>("MovementItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("movement_items_id");
 
                     b.Property<Guid>("PurchaseItemsId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("uuid")
                         .HasColumnName("purchase_items_id");
 
                     b.HasKey("MovementItemsId", "PurchaseItemsId")
@@ -504,7 +504,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                     b.HasOne("JacksonVeroneze.StockService.Domain.Entities.AdjustmentItem", null)
                         .WithMany()
                         .HasForeignKey("AdjustmentItemsId")
-                        .HasConstraintName("fk_adjustment_item_movement_item_adjustment_item_adjustment_items_id")
+                        .HasConstraintName("fk_adjustment_item_movement_item_adjustment_item_adjustment_ite")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

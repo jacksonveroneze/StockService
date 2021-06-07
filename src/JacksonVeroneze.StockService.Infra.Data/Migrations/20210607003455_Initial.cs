@@ -11,15 +11,15 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "adjustment",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    state = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    state = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,15 +30,15 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "output",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    state = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    state = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,14 +49,14 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "product",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    is_active = table.Column<bool>(type: "bit", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,15 +67,15 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "purchase",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    state = table.Column<int>(type: "int", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    state = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,15 +86,15 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "adjustment_item",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    amount = table.Column<int>(type: "int", nullable: false),
-                    adjustment_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false),
+                    adjustment_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,13 +117,13 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "movement",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,15 +140,15 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "output_item",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    amount = table.Column<int>(type: "int", nullable: false),
-                    output_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false),
+                    output_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,16 +171,16 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "purchase_item",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    amount = table.Column<int>(type: "int", nullable: false),
-                    value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    purchase_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    product_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false),
+                    value = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: false),
+                    purchase_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,14 +203,14 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "movement_item",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    amount = table.Column<int>(type: "int", nullable: false),
-                    movement_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    version = table.Column<int>(type: "int", nullable: false),
-                    tenant_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false),
+                    movement_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    deleted_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    version = table.Column<int>(type: "integer", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -227,14 +227,14 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "adjustment_item_movement_item",
                 columns: table => new
                 {
-                    adjustment_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    movement_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    adjustment_items_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    movement_items_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_adjustment_item_movement_item", x => new { x.adjustment_items_id, x.movement_items_id });
                     table.ForeignKey(
-                        name: "fk_adjustment_item_movement_item_adjustment_item_adjustment_items_id",
+                        name: "fk_adjustment_item_movement_item_adjustment_item_adjustment_ite",
                         column: x => x.adjustment_items_id,
                         principalTable: "adjustment_item",
                         principalColumn: "id",
@@ -251,8 +251,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "movement_item_output_item",
                 columns: table => new
                 {
-                    movement_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    output_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    movement_items_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    output_items_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -275,8 +275,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Migrations
                 name: "movement_item_purchase_item",
                 columns: table => new
                 {
-                    movement_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    purchase_items_id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    movement_items_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    purchase_items_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
