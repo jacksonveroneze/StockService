@@ -19,6 +19,9 @@ namespace JacksonVeroneze.StockService.Infra.Data
         private readonly IUser _user;
         private readonly Guid _teantId = Guid.Parse("09163A85-D55E-4E2F-B7E2-DD191FE22A6E");
 
+        public DbSet<Movement> Movement { get; }
+        public DbSet<MovementItem> MovementItem { get; }
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IBus bus, IUser user)
             : base(options)
         {
@@ -36,15 +39,15 @@ namespace JacksonVeroneze.StockService.Infra.Data
 
             var tentantId = _teantId;
 
-            modelBuilder.AddFilter<Adjustment>(tentantId);
-            modelBuilder.AddFilter<AdjustmentItem>(tentantId);
-            modelBuilder.AddFilter<Output>(tentantId);
-            modelBuilder.AddFilter<OutputItem>(tentantId);
-            modelBuilder.AddFilter<Purchase>(tentantId);
-            modelBuilder.AddFilter<PurchaseItem>(tentantId);
-            modelBuilder.AddFilter<Movement>(tentantId);
-            modelBuilder.AddFilter<MovementItem>(tentantId);
-            modelBuilder.AddFilter<Product>(tentantId);
+            // modelBuilder.AddFilter<Adjustment>(tentantId);
+            // modelBuilder.AddFilter<AdjustmentItem>(tentantId);
+            // modelBuilder.AddFilter<Output>(tentantId);
+            // modelBuilder.AddFilter<OutputItem>(tentantId);
+            // modelBuilder.AddFilter<Purchase>(tentantId);
+            // modelBuilder.AddFilter<PurchaseItem>(tentantId);
+            // modelBuilder.AddFilter<Movement>(tentantId);
+            // modelBuilder.AddFilter<MovementItem>(tentantId);
+            // modelBuilder.AddFilter<Product>(tentantId);
         }
 
         public async Task<bool> CommitAsync()

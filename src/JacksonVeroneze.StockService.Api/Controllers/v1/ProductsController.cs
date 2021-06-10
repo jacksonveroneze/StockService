@@ -45,7 +45,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [Authorize("products:find")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
@@ -84,7 +84,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <param name="productDto"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         [Authorize("products:update")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
@@ -103,7 +103,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [Authorize("products:delete")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]

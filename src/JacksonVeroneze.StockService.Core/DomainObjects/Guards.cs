@@ -28,7 +28,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public static void ValidarTamanho(string valor, int maximo, string mensagem)
         {
-            var length = valor.Trim().Length;
+            int length = valor.Trim().Length;
 
             if (length > maximo)
                 throw ExceptionsFactory.FactoryDomainException(mensagem);

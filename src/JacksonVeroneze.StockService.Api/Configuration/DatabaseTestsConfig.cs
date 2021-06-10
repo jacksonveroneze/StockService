@@ -10,6 +10,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         public static IServiceCollection AddDatabaseTestsConfiguration(this IServiceCollection services,
             IConfiguration configuration)
             => services.AddSqliteDatabaseConfiguration<DatabaseContext>(x =>
-                x.ConnectionString = configuration.GetConnectionString("DefaultConnection"));
+            {
+                x.ConnectionString = configuration.GetConnectionString("DefaultConnection");
+                x.EnableDetailedErrors = true;
+                x.EnableSensitiveDataLogging = true;
+                x.UseLazyLoadingProxies = true;
+            });
     }
 }

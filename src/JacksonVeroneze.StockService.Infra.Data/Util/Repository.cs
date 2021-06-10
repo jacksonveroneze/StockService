@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EFCoreSecondLevelCacheInterceptor;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +32,6 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
         public Task<T> FindAsync(Guid id)
             => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
                 context.Set<T>()
-                    //.Cacheable(CacheExpirationMode.Absolute, TimeSpan.FromMinutes(5))
                     .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
@@ -73,9 +71,11 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
                 .ConfigureSkipTakeFromPagination(pagination);
         }
 
-        protected Pageable<TType> FactoryPageable<TType>(IList<TType> data, int total, int skip, int take) where TType : class
+        protected Pageable<TType> FactoryPageable<TType>(IList<TType> data, int total, int skip, int take)
+            where TType : class
         {
-            return new() {
+            return new()
+            {
                 Data = data,
                 Total = total,
                 Pages = (int)Math.Ceiling(total / (decimal)(take)),

@@ -6,7 +6,6 @@ using JacksonVeroneze.NET.Commons.Logger;
 using JacksonVeroneze.StockService.Api.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace JacksonVeroneze.StockService.Api
@@ -20,19 +19,15 @@ namespace JacksonVeroneze.StockService.Api
                 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
                 Activity.ForceDefaultIdFormat = true;
 
-                Log.Logger = Logger.FactoryLogger(x =>
-                {
-                    x.Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-                    x.ApplicationName = "Stock Service";
-                    x.CurrentDirectory = Directory.GetCurrentDirectory();
-                });
+                string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+                Log.Logger = FactoryLogger(environment);
 
                 Log.Information($"Application: {0}", "Starting up");
-                Log.Information($"Total params: {0}", args.Length);
 
                 IHost host = CreateHostBuilder(args).Build();
 
-                await ExecuteMigrations.Execute(host, args);
+                await MigrateDatabase(host, args, environment);
 
                 await host.RunAsync();
             }
@@ -51,13 +46,28 @@ namespace JacksonVeroneze.StockService.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<StartupApi>();
-                    webBuilder.UseSerilog()
-                        .ConfigureLogging(logging =>
-                        {
-                            logging.ClearProviders();
-                            logging.AddConsole();
-                            logging.AddAzureWebAppDiagnostics();
-                        });
+                    webBuilder.UseSerilog();
                 });
+
+        private static ILogger FactoryLogger(string environment)
+        {
+            return Logger.FactoryLogger(x =>
+            {
+                x.Environment = environment;
+                x.ApplicationName = "Stock Service";
+                x.CurrentDirectory = Directory.GetCurrentDirectory();
+            });
+        }
+
+        private static async Task MigrateDatabase(IHost host, string[] args, string environment)
+        {
+            if (environment != null &&
+                !environment.Equals("Production", StringComparison.InvariantCultureIgnoreCase))
+            {
+                await ExecuteMigrations.Execute(host, args);
+
+                Log.Information("Executed database migrate");
+            }
+        }
     }
 }

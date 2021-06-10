@@ -14,10 +14,10 @@ services:
             - ASPNETCORE_ENVIRONMENT=Production
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=172.17.0.1;Database=stock;Username=postgres;Password=localPass@word
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock;Username=postgres;Password=localPass@word
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
-            - APP_CONFIG_Serilog__MinimumLevel__Default=Debug
+            - APP_CONFIG_Serilog__MinimumLevel__Default=Information
             - APP_CONFIG_Serilog__MinimumLevel__Override__Microsoft=Information
             - APP_CONFIG_Serilog__MinimumLevel__Override__System=Information
             - APP_CONFIG_BusType=Memory
@@ -36,18 +36,18 @@ services:
             start_period: 5s
             retries: 3
         links:
-            - database
+            - database_postgres
             - rabbitmq
             - jaeger
         depends_on:
-            - database
+            - database_postgres
             - rabbitmq
             - jaeger
         ports:
             - 8088:80
 
-    database:
-        container_name: database
+    database_mssql:
+        container_name: database_mssql
         image: mcr.microsoft.com/mssql/server:2019-latest
         restart: always
         environment:
@@ -62,8 +62,8 @@ services:
         ports:
             - 1433:1433
 
-    postgres:
-        container_name: postgres
+    database_postgres:
+        container_name: database_postgres
         image: postgres:13-alpine
         restart: always
         environment:
@@ -75,7 +75,7 @@ services:
             start_period: 5s
             retries: 3
         volumes:
-            - postgres:/var/lib/postgresql/data
+            - database_postgres:/var/lib/postgresql/data
         ports:
             - 5432:5432
 
@@ -119,6 +119,6 @@ services:
             - 14268:14268
             - 9411:9411
 volumes:
-    postgres:
-    database:
+    database_mssql:
+    database_postgres:
     rabbitmq:

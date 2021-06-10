@@ -27,7 +27,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             => _items.Add(item);
 
         public int? FindLastAmmount()
-            => Items.OrderBy(x => x.CreatedAt).LastOrDefault()?.Amount;
+            => Items.OrderByDescending(x => x.CreatedAt).FirstOrDefault()?.Amount;
 
         private void Validate()
         {

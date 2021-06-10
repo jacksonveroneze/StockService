@@ -46,7 +46,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [Authorize("purchases:find")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
@@ -85,7 +85,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <param name="purchaseDto"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         [Authorize("purchases:update")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
@@ -104,7 +104,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [Authorize("purchases:delete")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]
@@ -123,7 +123,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPut("{id}/close")]
+        [HttpPut("{id:guid}/close")]
         [Authorize("purchases:close")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
@@ -142,7 +142,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}/items")]
+        [HttpGet("{id:guid}/items")]
         [Authorize("purchases:find-items")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -155,7 +155,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [HttpGet("{id}/items/{itemId}")]
+        [HttpGet("{id:guid}/items/{itemId:guid}")]
         [Authorize("purchases:find-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
@@ -175,7 +175,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <param name="purchaseItemDto"></param>
         /// <returns></returns>
-        [HttpPost("{id}/items")]
+        [HttpPost("{id:guid}/items")]
         [Authorize("purchases:create-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Create))]
@@ -199,7 +199,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="itemId"></param>
         /// <param name="purchaseItemDto"></param>
         /// <returns></returns>
-        [HttpPut("{id}/items/{itemId}")]
+        [HttpPut("{id:guid}/items/{itemId:guid}")]
         [Authorize("purchases:update-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Update))]
@@ -221,7 +221,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="id"></param>
         /// <param name="itemId"></param>
         /// <returns></returns>
-        [HttpDelete("{id}/items/{itemId}")]
+        [HttpDelete("{id:guid}/items/{itemId:guid}")]
         [Authorize("purchases:remove-item")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Delete))]

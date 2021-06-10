@@ -12,6 +12,6 @@ namespace JacksonVeroneze.StockService.Api
 
         public override void ConfigureServices(IServiceCollection services)
             => services.AddApiConfiguration(Configuration, HostEnvironment)
-                .AddDatabaseConfiguration(Configuration);
+                .AddDatabaseConfiguration(Configuration, HostEnvironment);
     }
 }

@@ -28,11 +28,9 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddSwaggerConfiguration()
                 .AddAutoMediatRConfiguration()
                 .AddBusConfiguration(configuration)
-                .AddApplicationInsightsConfiguration(configuration)
                 .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
-                .AddExternalServicesConfiguration(configuration)
                 .AddVersioningConfigConfiguration()
                 .AddControllers()
                 .AddJsonOptionsSerializeConfiguration();
@@ -41,7 +39,7 @@ namespace JacksonVeroneze.StockService.Api.Configuration
         }
 
         public static IApplicationBuilder UseApiConfiguration(this IApplicationBuilder app,
-            IApiVersionDescriptionProvider provider, IConfiguration configuration)
+            IApiVersionDescriptionProvider provider)
         {
             app.UseCultureConfiguration()
                 .UseCorsConfiguration()
