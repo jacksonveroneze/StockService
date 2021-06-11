@@ -42,8 +42,6 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
-        public void Activate() => IsActive = true;
-
         public void Inactivate() => IsActive = false;
 
         private void Validate()

@@ -24,14 +24,13 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
 
             List<MovementModel> data = await _context.Set<Movement>()
                 .AsSplitQuery()
+                .AsNoTracking()
                 .Where(filter.ToQuery())
                 .Select(x => new MovementModel()
                 {
                     ProductId = x.Product.Id,
                     ProductDescription = x.Product.Description,
-                    Ammount = x.Items.OrderByDescending(b => b.CreatedAt).FirstOrDefault().Amount,
-                    LastMovementItem = x.Items.OrderByDescending(b => b.CreatedAt).FirstOrDefault().Id,
-                    Total = x.Items.Sum(b => b.Amount)
+                    Ammount = x.Items.OrderByDescending(b => b.CreatedAt).FirstOrDefault().Amount
                 })
                 .ToListAsync();
 

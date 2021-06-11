@@ -9,9 +9,5 @@ namespace JacksonVeroneze.StockService.Domain.Models
         public string ProductDescription { get; set; }
 
         public int Ammount { get; set; }
-
-        public int Total { get; set; }
-
-        public Guid LastMovementItem { get; set; }
     }
 }

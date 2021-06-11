@@ -9,7 +9,7 @@ namespace JacksonVeroneze.StockService.Domain.Util
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> a, Expression<Func<T, bool>> b)
         {
             ParameterExpression parameter = a.Parameters[0];
-            SubstExpressionVisitor visitor = new SubstExpressionVisitor();
+            SubstExpressionVisitor visitor = new();
             visitor.subst[b.Parameters[0]] = parameter;
             BinaryExpression body = Expression.AndAlso(a.Body, visitor.Visit(b.Body));
             return Expression.Lambda<Func<T, bool>>(body, parameter);
@@ -18,7 +18,7 @@ namespace JacksonVeroneze.StockService.Domain.Util
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> a, Expression<Func<T, bool>> b)
         {
             ParameterExpression parameter = a.Parameters[0];
-            SubstExpressionVisitor visitor = new SubstExpressionVisitor();
+            SubstExpressionVisitor visitor = new();
             visitor.subst[b.Parameters[0]] = parameter;
             BinaryExpression body = Expression.Or(a.Body, visitor.Visit(b.Body));
             return Expression.Lambda<Func<T, bool>>(body, parameter);

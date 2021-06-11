@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JacksonVeroneze.StockService.Api.Controllers.v1;
@@ -7,6 +9,8 @@ using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Common.Integration;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Events.Adjustment;
+using JacksonVeroneze.StockService.Domain.Events.Output;
+using JacksonVeroneze.StockService.Domain.Events.Purchase;
 using JacksonVeroneze.StockService.Domain.Models;
 using Xunit;
 
@@ -19,6 +23,11 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
 
         private readonly IntegrationTestsFixture<StartupTests> _testsFixture;
 
+        private readonly IList<Domain.Entities.Product> _listProducts = ProductFaker.Generate(2);
+        private readonly Domain.Entities.Adjustment _adjustment = AdjustmentFaker.Generate();
+        private readonly Domain.Entities.Purchase _purchase = PurchaseFaker.Generate();
+        private readonly Domain.Entities.Output _output = OutputFaker.Generate();
+
         public MovementTest(IntegrationTestsFixture<StartupTests> testsFixture)
         {
             _testsFixture = testsFixture;
@@ -27,36 +36,12 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
             _testsFixture.RunMigrations().Wait();
         }
 
-        [Fact(DisplayName = "DeveFiltarOsDadosTotalizadosCorretamente", Skip = "Terminar")]
+        [Fact(DisplayName = "DeveFiltarOsDadosTotalizadosCorretamente")]
         [Trait(nameof(MovementsController), nameof(MovementsController.Filter))]
         public async Task MovementsController_Filter_DeveFiltarOsDadosTotalizadosCorretamente()
         {
             // Arrange
-            IList<Domain.Entities.Product> listProducts = ProductFaker.Generate(10);
-
-            await _testsFixture.MockInDatabase(listProducts);
-
-            Domain.Entities.Adjustment adjustment = AdjustmentFaker.Generate();
-            Domain.Entities.Output output = OutputFaker.Generate();
-            Domain.Entities.Purchase purchase = PurchaseFaker.Generate();
-
-            foreach (Domain.Entities.Product product in listProducts)
-            {
-                adjustment.AddItem(AdjustmentItemFaker.Generate(adjustment, product));
-                output.AddItem(OutputItemFaker.Generate(output, product));
-                purchase.AddItem(PurchaseItemFaker.Generate(purchase, product));
-            }
-
-            // Chamar Close ????
-            adjustment.AddEvent(new AdjustmentClosedEvent(adjustment.Id));
-
-            // adjustment.Close();
-            // output.Close();
-            // purchase.Close();
-
-            await _testsFixture.MockInDatabase(adjustment);
-            await _testsFixture.MockInDatabase(output);
-            await _testsFixture.MockInDatabase(purchase);
+            await MockData();
 
             // Act
             TestApiResponseOperationGet<Pageable<MovementModel>> result =
@@ -65,6 +50,67 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
             // Assert
             result.Should().NotBeNull();
             result.Errors.Should().BeEmpty();
+
+            foreach (Domain.Entities.Product product in _listProducts)
+            {
+                int totalAmmountAdjustment = _adjustment.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+                int totalAmmountPurchase = _purchase.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+                int totalAmmountOutput = _output.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+
+                int totalAmmmountProduct = totalAmmountAdjustment + totalAmmountPurchase - totalAmmountOutput;
+
+                result.Content.Data.First(x => x.ProductId == product.Id).Ammount.Should().Be(totalAmmmountProduct);
+            }
+        }
+
+        [Fact(DisplayName = "DeveFiltarOsDadosPorProdutoTotalizadosCorretamente")]
+        [Trait(nameof(MovementsController), nameof(MovementsController.Filter))]
+        public async Task MovementsController_Filter_DeveFiltarOsDadosPorProdutoTotalizadosCorretamente()
+        {
+            // Arrange
+            await MockData();
+
+            Domain.Entities.Product product = _listProducts.First();
+
+            // Act
+            TestApiResponseOperationGet<Pageable<MovementModel>> result =
+                await _testsFixture.SendGetRequest<Pageable<MovementModel>>($"{_uriPart}?ProductId={product.Id}");
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Errors.Should().BeEmpty();
+
+            int totalAmmountAdjustment = _adjustment.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+            int totalAmmountPurchase = _purchase.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+            int totalAmmountOutput = _output.Items.Where(x => x.Product == product).Sum(x => x.Amount);
+
+            int totalAmmmountProduct = totalAmmountAdjustment + totalAmmountPurchase - totalAmmountOutput;
+
+            result.Content.Data.First(x => x.ProductId == product.Id).Ammount.Should().Be(totalAmmmountProduct);
+        }
+
+        private async Task MockData()
+        {
+            await _testsFixture.MockInDatabase(_listProducts);
+
+            foreach (Domain.Entities.Product product in _listProducts)
+            {
+                _adjustment.AddItem(AdjustmentItemFaker.Generate(_adjustment, product));
+                _purchase.AddItem(PurchaseItemFaker.Generate(_purchase, product));
+                _output.AddItem(OutputItemFaker.Generate(_output, product));
+            }
+
+            _adjustment.AddEvent(new AdjustmentClosedEvent(_adjustment.Id));
+            _purchase.AddEvent(new PurchaseClosedEvent(_purchase.Id));
+            _output.AddEvent(new OutputClosedEvent(_output.Id));
+
+            _adjustment.Close();
+            _purchase.Close();
+            _output.Close();
+
+            await _testsFixture.MockInDatabase(_adjustment);
+            await _testsFixture.MockInDatabase(_purchase);
+            await _testsFixture.MockInDatabase(_output);
         }
     }
 }

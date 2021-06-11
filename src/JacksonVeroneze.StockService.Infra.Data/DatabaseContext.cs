@@ -6,10 +6,10 @@ using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.Messages;
 using JacksonVeroneze.StockService.Infra.Data.Util;
-using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Interfaces.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace JacksonVeroneze.StockService.Infra.Data
 {
@@ -18,9 +18,6 @@ namespace JacksonVeroneze.StockService.Infra.Data
         private readonly IBus _bus;
         private readonly IUser _user;
         private readonly Guid _teantId = Guid.Parse("09163A85-D55E-4E2F-B7E2-DD191FE22A6E");
-
-        public DbSet<Movement> Movement { get; }
-        public DbSet<MovementItem> MovementItem { get; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IBus bus, IUser user)
             : base(options)

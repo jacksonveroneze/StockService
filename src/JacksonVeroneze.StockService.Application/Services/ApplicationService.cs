@@ -1,6 +1,6 @@
 namespace JacksonVeroneze.StockService.Application.Services
 {
-    public class ApplicationService
+    public abstract class ApplicationService
     {
     }
 }
