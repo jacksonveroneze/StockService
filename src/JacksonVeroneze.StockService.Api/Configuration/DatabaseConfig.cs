@@ -15,7 +15,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 x.ConnectionString = configuration.GetConnectionString("DefaultConnection");
                 x.EnableDetailedErrors = hostEnvironment.IsDevelopment();
                 x.EnableSensitiveDataLogging = hostEnvironment.IsDevelopment();
-                x.UseLazyLoadingProxies = true;
             });
     }
 }
