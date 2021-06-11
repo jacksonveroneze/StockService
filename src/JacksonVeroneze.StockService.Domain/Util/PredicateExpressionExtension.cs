@@ -8,19 +8,19 @@ namespace JacksonVeroneze.StockService.Domain.Util
     {
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> a, Expression<Func<T, bool>> b)
         {
-            var parameter = a.Parameters[0];
-            var visitor = new SubstExpressionVisitor();
+            ParameterExpression parameter = a.Parameters[0];
+            SubstExpressionVisitor visitor = new SubstExpressionVisitor();
             visitor.subst[b.Parameters[0]] = parameter;
-            var body = Expression.AndAlso(a.Body, visitor.Visit(b.Body));
+            BinaryExpression body = Expression.AndAlso(a.Body, visitor.Visit(b.Body));
             return Expression.Lambda<Func<T, bool>>(body, parameter);
         }
 
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> a, Expression<Func<T, bool>> b)
         {
-            var parameter = a.Parameters[0];
-            var visitor = new SubstExpressionVisitor();
+            ParameterExpression parameter = a.Parameters[0];
+            SubstExpressionVisitor visitor = new SubstExpressionVisitor();
             visitor.subst[b.Parameters[0]] = parameter;
-            var body = Expression.Or(a.Body, visitor.Visit(b.Body));
+            BinaryExpression body = Expression.Or(a.Body, visitor.Visit(b.Body));
             return Expression.Lambda<Func<T, bool>>(body, parameter);
         }
     }
@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Domain.Util
 
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            if (subst.TryGetValue(node, out var newValue))
+            if (subst.TryGetValue(node, out Expression newValue))
                 return newValue;
 
             return node;

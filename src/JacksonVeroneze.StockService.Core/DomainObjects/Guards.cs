@@ -20,7 +20,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public static void ValidarSeDiferente(string pattern, string valor, string mensagem)
         {
-            var regex = new Regex(pattern);
+            Regex regex = new Regex(pattern);
 
             if (!regex.IsMatch(valor))
                 throw ExceptionsFactory.FactoryDomainException(mensagem);
@@ -36,7 +36,7 @@ namespace JacksonVeroneze.StockService.Core.DomainObjects
 
         public static void ValidarTamanho(string valor, int minimo, int maximo, string mensagem)
         {
-            var length = valor.Trim().Length;
+            int length = valor.Trim().Length;
 
             if (length < minimo || length > maximo)
                 throw ExceptionsFactory.FactoryDomainException(mensagem);

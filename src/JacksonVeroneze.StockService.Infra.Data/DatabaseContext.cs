@@ -37,7 +37,7 @@ namespace JacksonVeroneze.StockService.Infra.Data
 
             //var claim = _user.GetClaimsIdentity().FirstOrDefault(x => x.Type == ClaimTypes.UserData);
 
-            var tentantId = _teantId;
+            Guid tentantId = _teantId;
 
             // modelBuilder.AddFilter<Adjustment>(tentantId);
             // modelBuilder.AddFilter<AdjustmentItem>(tentantId);
