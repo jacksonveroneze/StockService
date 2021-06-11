@@ -3,7 +3,7 @@
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Label="Packages dependency versions">
-        <CommonsVersion1>0.0.12</CommonsVersion1>
+        <CommonsVersion>0.0.12</CommonsVersion>
         <AutoMapperVersion>10.1.1</AutoMapperVersion>
       </PropertyGroup>
 </Project>
