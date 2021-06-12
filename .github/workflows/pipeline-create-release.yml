@@ -44,7 +44,7 @@ jobs:
             - name: Deploy to Azure Web App
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: 'stock-jacksonveroneze'
+                  app-name: 'stockservice-jacksonveroneze'
                   slot-name: 'production'
                   publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
                   package: ${{env.DOTNET_ROOT}}
