@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
     traefik:
         container_name: traefik
@@ -11,15 +12,14 @@ services:
             - --providers.docker.exposedbydefault=false
             - --entrypoints.web.address=:80
         ports:
-            - "80:80"
-            - "8080:8080"
+            - 80:80
+            - 8088:8080
         volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+            - /var/run/docker.sock:/var/run/docker.sock:ro
         labels:
             - traefik.docker.network=stock_network
 
     api:
-        container_name: api
         labels:
             - traefik.backend=stockservice
             - traefik.enable=true
@@ -27,6 +27,10 @@ services:
             - traefik.http.routers.api.entrypoints=web
             - traefik.port=8089
             - traefik.docker.network=stock_network
+            - traefik.http.middlewares.api-compress.compress=true
+            - traefik.http.middlewares.api-ratelimit.ratelimit.average=10
+            - traefik.http.middlewares.api-ratelimit.ratelimit.burst=10
+            - traefik.http.middlewares.api-ratelimit.ratelimit.period=1
 
 networks:
     stock_network:

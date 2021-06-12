@@ -1,13 +1,11 @@
 version: "3.8"
+
 services:
     api:
         container_name: api
         image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
         restart: always
         tty: true
-        build:
-            context: .
-            dockerfile: Dockerfile
         environment:
             - ASPNETCORE_URLS=http://+:80
             - DOTNET_RUNNING_IN_CONTAINER=true
@@ -44,7 +42,7 @@ services:
             - rabbitmq
             - jaeger
         ports:
-            - 8088:80
+            - 8089:80
 
     database_mssql:
         container_name: database_mssql
