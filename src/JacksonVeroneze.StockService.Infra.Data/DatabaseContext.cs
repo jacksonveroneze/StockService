@@ -5,11 +5,11 @@ using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Core.Messages;
+using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Infra.Data.Util;
 using JacksonVeroneze.StockService.Domain.Interfaces.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace JacksonVeroneze.StockService.Infra.Data
 {
@@ -32,19 +32,19 @@ namespace JacksonVeroneze.StockService.Infra.Data
 
             modelBuilder.Ignore<Event>();
 
-            //var claim = _user.GetClaimsIdentity().FirstOrDefault(x => x.Type == ClaimTypes.UserData);
+            modelBuilder.HasDefaultSchema("stock");
 
             Guid tentantId = _teantId;
 
-            // modelBuilder.AddFilter<Adjustment>(tentantId);
-            // modelBuilder.AddFilter<AdjustmentItem>(tentantId);
-            // modelBuilder.AddFilter<Output>(tentantId);
-            // modelBuilder.AddFilter<OutputItem>(tentantId);
-            // modelBuilder.AddFilter<Purchase>(tentantId);
-            // modelBuilder.AddFilter<PurchaseItem>(tentantId);
-            // modelBuilder.AddFilter<Movement>(tentantId);
-            // modelBuilder.AddFilter<MovementItem>(tentantId);
-            // modelBuilder.AddFilter<Product>(tentantId);
+            modelBuilder.AddFilter<Adjustment>(tentantId);
+            modelBuilder.AddFilter<AdjustmentItem>(tentantId);
+            modelBuilder.AddFilter<Output>(tentantId);
+            modelBuilder.AddFilter<OutputItem>(tentantId);
+            modelBuilder.AddFilter<Purchase>(tentantId);
+            modelBuilder.AddFilter<PurchaseItem>(tentantId);
+            modelBuilder.AddFilter<Movement>(tentantId);
+            modelBuilder.AddFilter<MovementItem>(tentantId);
+            modelBuilder.AddFilter<Product>(tentantId);
         }
 
         public async Task<bool> CommitAsync()
@@ -52,19 +52,20 @@ namespace JacksonVeroneze.StockService.Infra.Data
             foreach (EntityEntry entry in ChangeTracker.Entries())
             {
                 if (entry.State == EntityState.Added &&
-                    entry.Members.Any(x => x.Metadata.Name.Equals("TenantId")))
-                    entry.Property("TenantId").CurrentValue = _teantId;
+                    entry.Members.Any(x => x.Metadata.Name.Equals(nameof(Entity.TenantId))))
+                    entry.Property(nameof(Entity.TenantId)).CurrentValue = _teantId;
 
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Property("UpdatedAt").CurrentValue = DateTime.Now;
-                    entry.Property("Version").CurrentValue = (int)entry.Property("Version").CurrentValue + 1;
+                    entry.Property(nameof(Entity.UpdatedAt)).CurrentValue = DateTime.Now;
+                    entry.Property(nameof(Entity.Version)).CurrentValue =
+                        (int)entry.Property(nameof(Entity.Version)).CurrentValue + 1;
                 }
 
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
-                    entry.Property("DeletedAt").CurrentValue = DateTime.Now;
+                    entry.Property(nameof(Entity.DeletedAt)).CurrentValue = DateTime.Now;
                 }
             }
 

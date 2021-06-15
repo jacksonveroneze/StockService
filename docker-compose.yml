@@ -35,14 +35,11 @@ services:
             retries: 3
         links:
             - database_postgres
-            - rabbitmq
             - jaeger
         depends_on:
             - database_postgres
-            - rabbitmq
-            - jaeger
         ports:
-            - 8089:80
+            - 8085:80
 
     database_mssql:
         container_name: database_mssql
@@ -85,7 +82,7 @@ services:
             - RABBITMQ_DEFAULT_USER=guest
             - RABBITMQ_DEFAULT_PASS=guest
         healthcheck:
-            test: curl --silent --fail http://rabbitmq:15672 || exit 1
+            test: rabbitmq-diagnostics -q ping
             interval: 30s
             timeout: 3s
             start_period: 5s
@@ -103,11 +100,11 @@ services:
         environment:
             - COLLECTOR_ZIPKIN_HTTP_PORT=9411
         healthcheck:
-            test: curl --silent --fail http://jaeger:16686 || exit 1
+            test: curl --silent --fail http://jaeger:14269/metrics || exit 1
             interval: 30s
             timeout: 3s
             start_period: 5s
-            retries: 3
+            retries: 7
         ports:
             - 5775:5775/udp
             - 6831:6831/udp
@@ -115,6 +112,7 @@ services:
             - 5778:5778
             - 16686:16686
             - 14268:14268
+            - 14269:14269
             - 9411:9411
 volumes:
     database_mssql:

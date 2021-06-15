@@ -13,7 +13,7 @@ namespace JacksonVeroneze.StockService.Domain.Queries
             Expression<Func<Product, bool>> expression = query => true;
 
             if (!string.IsNullOrEmpty(filter.Description))
-                expression = expression.And(x => x.Description.Contains(filter.Description));
+                expression = expression.And(x => x.Description.ToUpper().Equals(filter.Description.ToUpper()));
 
             if (filter.IsActive.HasValue)
                 expression = expression.And(x => x.IsActive == filter.IsActive);
