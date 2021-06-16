@@ -9,7 +9,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
         public static AddOrUpdateOutputDto GenerateValid()
         {
             return new Faker<AddOrUpdateOutputDto>()
-                .RuleFor(x => x.Description, f => f.Commerce.Product())
+                .RuleFor(x => x.Description, f => f.Lorem.Letter(150))
                 .RuleFor(x => x.Date, f => f.Date.Recent())
                 .Generate();
         }

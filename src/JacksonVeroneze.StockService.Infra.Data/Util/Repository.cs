@@ -78,7 +78,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
             {
                 Data = data,
                 Total = total,
-                Pages = (int)Math.Ceiling(total / (decimal)(take)),
+                Pages = total > 0 ? (int)Math.Ceiling(total / (decimal)(take)) : 0,
                 CurrentPage = skip <= 0 ? 1 : skip
             };
         }

@@ -14,7 +14,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Mappings
                 .ValueGeneratedNever();
 
             builder.Property(c => c.Description)
-                .HasMaxLength(100)
+                .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(c => c.Date)

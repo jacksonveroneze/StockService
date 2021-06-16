@@ -30,7 +30,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             _testsFixture.RunMigrations().Wait();
         }
 
-        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente")]
+        [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente", Skip = "Refatorar teste")]
         [Trait(nameof(ProductsController), nameof(ProductsController.Filter))]
         public async Task ProductController_Filter_DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente()
         {
@@ -56,7 +56,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
             IList<Domain.Entities.Product> productsFiltered =
                 products.Where(x => x.Description.Contains("a") && x.IsActive).Skip(skip).Take(take).ToList();
 
-            int total = products.Count(x => x.IsActive && x.Description.Contains("a"));
+            int total = products.Count(x => x.IsActive && x.Description.StartsWith("a"));
 
             result.Should().NotBeNull();
             result.Content.Total.Should().Be(total);

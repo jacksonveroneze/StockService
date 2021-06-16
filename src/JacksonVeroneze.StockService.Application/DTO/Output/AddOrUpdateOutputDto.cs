@@ -20,7 +20,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.Output
             public AddOrUpdateOutputDtoValidator()
             {
                 RuleFor(x => x.Description)
-                    .Length(1, 100);
+                    .Length(1, 200);
 
                 RuleFor(x => x.Date)
                     .NotNull()

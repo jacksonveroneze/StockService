@@ -19,7 +19,7 @@ namespace JacksonVeroneze.StockService.Domain.Tests.Entities
         {
             // Arange && Act
             Func<Output> func1 = () => new Output(string.Empty, DateTime.Now);
-            Func<Output> func2 = () => new Output(UtilCommon.GenerateStringFaker(101), DateTime.Now);
+            Func<Output> func2 = () => new Output(UtilCommon.GenerateStringFaker(201), DateTime.Now);
             Func<Output> func3 = () => new Output("descrição", DateTime.Now.AddDays(1));
 
             // Assert

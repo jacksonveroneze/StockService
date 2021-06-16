@@ -3,7 +3,7 @@ version: "3.8"
 services:
     api:
         container_name: api
-        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:1.0.3
         restart: always
         tty: true
         environment:
@@ -12,7 +12,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Production
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock;Username=postgres;Password=localPass@word
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock_service;Username=postgres;Password=localPass@word
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
             - APP_CONFIG_Serilog__MinimumLevel__Default=Information
