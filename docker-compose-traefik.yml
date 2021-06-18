@@ -6,28 +6,49 @@ services:
         image: traefik:v2.4
         restart: always
         command:
-            - --log.level=INFO
-            - --api.insecure=true
+            - --log.level=DEBUG
+            - --api.insecure=false
             - --providers.docker=true
             - --providers.docker.exposedbydefault=false
             - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --tracing.jaeger=true
+            - --tracing.jaeger.samplingServerURL=http://jaeger:5778
+            - --tracing.jaeger.localAgentHostPort=jaeger:6831
+            - --pilot.token=7002c54f-05e4-4860-a03f-8fbf72a42a6f
+            - --certificatesresolvers.letsencryptresolver.acme.email=jackson@jacksonveroneze.com
+            - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json
+            - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
+            - --certificatesresolvers.letsencryptresolver.acme.httpchallenge=true
         volumes:
+            - ./acme.json:/acme.json
             - /var/run/docker.sock:/var/run/docker.sock:ro
         labels:
-            - traefik.docker.network=stock_network
+            - traefik.enable=true
+            - traefik.http.routers.traefik.entrypoints=websecure
+            - traefik.http.routers.traefik.tls.certresolver=letsencryptresolver
+            - traefik.http.routers.traefik.rule=Host(`stockservice.jacksonveroneze.com`)
+            - traefik.http.routers.traefik.service=api@internal
+            - traefik.http.middlewares.traefik-redirect-to-https-md.redirectscheme.scheme=https
+            - traefik.http.middlewares.traefik-auth-md.basicauth.users=admin:$$apr1$$8EVjn/nj$$GiLUZqcbueTFeD23SuB6x0
+            - traefik.http.routers.traefik.middlewares=traefik-redirect-to-https-md,traefik-auth-md
         links:
             - api
         depends_on:
             - api
         ports:
             - 80:80
+            - 443:443
             - 8080:8080
 
     api:
         labels:
+            - --metrics=true
             - traefik.enable=true
-            - traefik.http.routers.api.entrypoints=web
-            - traefik.http.routers.api.rule=Host(`stockservice.jacksonveroneze.com`)
+            - traefik.http.routers.api.entrypoints=websecure
+            - traefik.http.routers.api.tls=true
+            - traefik.http.routers.api.tls.certresolver=letsencryptresolver
+            - traefik.http.routers.api.rule=Host(`api.stockservice.jacksonveroneze.com`)
             - traefik.http.services.api.loadbalancer.server.port=80
             - traefik.http.middlewares.api-compress-md.compress=true
             - traefik.http.middlewares.api-ratelimit-md.ratelimit.average=10
@@ -36,8 +57,6 @@ services:
             - traefik.http.middlewares.api-request-body-md.buffering.maxRequestBodyBytes=2000000
             - traefik.http.middlewares.api-retry-md.retry.attempts=4
             - traefik.http.middlewares.api-retry-md.retry.initialinterval=100ms
-            - traefik.http.routers.api.middlewares=api-compress-md,api-ratelimit-md,api-request-body-md,api-retry-md
-
-networks:
-    stock_network:
-        external: true
+            - traefik.http.middlewares.api-redirect-to-https-md.redirectscheme.scheme=https
+            - traefik.http.middlewares.api-header-server-md.headers.customresponseheaders.X-Custom-Response-Header-Server=kestrel
+            - traefik.http.routers.api.middlewares=api-compress-md,api-ratelimit-md,api-request-body-md,api-retry-md,api-redirect-to-https-md,api-header-server-md

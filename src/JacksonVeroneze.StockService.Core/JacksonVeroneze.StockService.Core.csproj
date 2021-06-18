@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.2.1" />
+    <PackageReference Include="FluentValidation" Version="10.2.3" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
 
     <PackageReference Include="JacksonVeroneze.NET.Commons" Version="$(CommonsVersion)" />
   </ItemGroup>

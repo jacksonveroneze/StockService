@@ -24,7 +24,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
 
             List<MovementModel> data = await _context.Set<Movement>()
                 .AsSplitQuery()
-                .AsNoTracking()
+                .AsNoTrackingWithIdentityResolution()
                 .Where(filter.ToQuery())
                 .Select(x => new MovementModel()
                 {
