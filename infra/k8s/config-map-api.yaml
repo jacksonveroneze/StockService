@@ -7,3 +7,4 @@ data:
     APP_CONFIG_Auth__Authority: https://jacksonveroneze.auth0.com/
     APP_CONFIG_Auth__Audience: https://stock-jacksonveroneze.azurewebsites.net
     APP_CONFIG_Urls_Allow_Cors: http://localhost
+    APP_CONFIG_ApplicationInsights_InstrumentationKey:

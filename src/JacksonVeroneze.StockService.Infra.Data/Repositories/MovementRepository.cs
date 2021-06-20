@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
         {
             int total = await CountAsync(filter);
 
-            List<MovementModel> data = await _context.Set<Movement>()
+            List<MovementModel> data = await Context.Set<Movement>()
                 .AsSplitQuery()
                 .AsNoTrackingWithIdentityResolution()
                 .Where(filter.ToQuery())
@@ -35,6 +36,21 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
                 .ToListAsync();
 
             return FactoryPageable(data, total, 0, total);
+        }
+
+        public Task<MovementModel> FindByProductAsync(Guid productId)
+        {
+            return Context.Set<Movement>()
+                .AsSplitQuery()
+                .AsNoTrackingWithIdentityResolution()
+                .Where(x => x.Product.Id == productId)
+                .Select(x => new MovementModel()
+                {
+                    ProductId = x.Product.Id,
+                    ProductDescription = x.Product.Description,
+                    Ammount = x.Items.OrderByDescending(b => b.CreatedAt).FirstOrDefault().Amount
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

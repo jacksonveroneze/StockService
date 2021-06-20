@@ -27,7 +27,6 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 .AddDependencyInjectionConfiguration()
                 .AddSwaggerConfiguration()
                 .AddAutoMediatRConfiguration()
-                .AddBusConfiguration(configuration)
                 .AddOpenTelemetryTracingConfiguration(configuration, hostEnvironment)
                 .AddAuthenticationConfiguration(configuration)
                 .AddAuthorizationConfiguration(configuration)
@@ -42,13 +41,13 @@ namespace JacksonVeroneze.StockService.Api.Configuration
             IApiVersionDescriptionProvider provider)
         {
             app.UseCultureConfiguration()
+                .UseMiddleware<ErrorHandlingMiddleware>()
+                .UseRouting()
                 .UseCorsConfiguration()
                 .UseHealthCheckConfiguration()
                 .UseSerilogRequestLogging()
-                .UseRouting()
                 .UseAuthentication()
                 .UseAuthorization()
-                .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseSwaggerConfiguration(provider)
                 .UseEndpoints(endpoints => endpoints.MapControllers());
 

@@ -12,27 +12,27 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
     {
         public IUnitOfWork UnitOfWork { get; set; }
 
-        protected readonly DatabaseContext _context;
+        protected readonly DatabaseContext Context;
 
         protected Repository(DatabaseContext context)
         {
-            _context = context;
-            UnitOfWork = _context;
+            Context = context;
+            UnitOfWork = Context;
         }
 
         public async Task AddAsync(T entity)
-            => await _context.Set<T>().AddAsync(entity);
+            => await Context.Set<T>().AddAsync(entity);
 
         public void Update(T entity)
-            => _context.Set<T>().Update(entity);
+            => Context.Set<T>().Update(entity);
 
         public void Remove(T entity)
-            => _context.Set<T>().Remove(entity);
+            => Context.Set<T>().Remove(entity);
 
         public Task<T> FindAsync(Guid id)
             => EF.CompileAsyncQuery((DatabaseContext context, Guid idInner) =>
                 context.Set<T>()
-                    .FirstOrDefault(c => c.Id == idInner)).Invoke(_context, id);
+                    .FirstOrDefault(c => c.Id == idInner)).Invoke(Context, id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)
@@ -46,8 +46,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
             => BuidQueryable(pagination, filter)
                 .ToListAsync();
 
-        public Task<int> CountAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
-            => _context.Set<T>()
+        protected Task<int> CountAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
+            => Context.Set<T>()
                 .AsNoTracking()
                 .Where(filter.ToQuery())
                 .CountAsync();
@@ -59,13 +59,13 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
 
             List<T> data = await BuidQueryable(pagination, filter).ToListAsync();
 
-            return FactoryPageable<T>(data, total, pagination.Skip ??= 0, pagination.Take ??= 30);
+            return FactoryPageable(data, total, pagination.Skip ??= 0, pagination.Take ??= 30);
         }
 
         private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter)
             where TFilter : BaseFilter<T>
         {
-            return _context.Set<T>()
+            return Context.Set<T>()
                 .Where(filter.ToQuery())
                 .OrderByDescending(x => x.CreatedAt)
                 .ConfigureSkipTakeFromPagination(pagination);

@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Domain.Filters;
 using JacksonVeroneze.StockService.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JacksonVeroneze.StockService.Api.Controllers.v1
@@ -28,10 +30,30 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize("movements:filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
         public async Task<ActionResult<IList<MovementModel>>> Filter(
             [FromQuery] MovementFilter filter)
             => Ok(await _applicationService.FilterAsync(filter));
+
+        /// <summary>
+        /// Method responsible for action: Find.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [HttpGet("{productId:guid}")]
+        [Authorize("movements:find")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Find))]
+        public async Task<ActionResult<MovementModel>> Find(Guid productId)
+        {
+            MovementModel movementModel = await _applicationService.FindByProductAsync(productId);
+
+            if (movementModel is null)
+                return NoContent();
+
+            return Ok(movementModel);
+        }
     }
 }

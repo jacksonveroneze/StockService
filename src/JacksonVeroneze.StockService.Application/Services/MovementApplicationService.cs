@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Application.Interfaces;
 using JacksonVeroneze.StockService.Core.Data;
@@ -25,5 +26,13 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <returns></returns>
         public async Task<Pageable<MovementModel>> FilterAsync(MovementFilter filter)
             => await _movementRepository.ReportFilterAsync(filter);
+
+        /// <summary>
+        /// Method responsible for find by product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        public async Task<MovementModel> FindByProductAsync(Guid productId)
+            => await _movementRepository.FindByProductAsync(productId);
     }
 }
