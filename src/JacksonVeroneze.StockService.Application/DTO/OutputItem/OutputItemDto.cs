@@ -11,5 +11,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.OutputItem
         public Guid OutputId { get; set; }
 
         public Guid ProductId { get; set; }
+
+        public string ProductDescription { get; set; }
     }
 }

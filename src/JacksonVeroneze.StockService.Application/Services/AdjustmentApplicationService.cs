@@ -185,7 +185,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (adjustment is null)
                 throw ExceptionsFactory.FactoryNotFoundException<Adjustment>(adjustmentId);
 
-            return _mapper.Map<IList<AdjustmentItemDto>>(adjustment.Items);
+            return _mapper.Map<IList<AdjustmentItemDto>>(await _adjustmentRepository.FindItems(adjustmentId));
         }
 
         /// <summary>
@@ -198,7 +198,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         public async Task<ApplicationDataResult<AdjustmentItemDto>> AddItemAsync(Guid adjustmentId,
             AddOrUpdateAdjustmentItemDto adjustmentItemDto)
         {
-            NotificationContext result = await _adjustmentItemValidator.ValidateCreateAsync(adjustmentId, adjustmentItemDto);
+            NotificationContext result =
+                await _adjustmentItemValidator.ValidateCreateAsync(adjustmentId, adjustmentItemDto);
 
             if (result.HasNotifications)
                 return ApplicationDataResult<AdjustmentItemDto>.FactoryFromNotificationContext(result);
@@ -211,7 +212,8 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _adjustmentService.AddItemAsync(adjustment, adjustmentItem);
 
-            return ApplicationDataResult<AdjustmentItemDto>.FactoryFromData(_mapper.Map<AdjustmentItemDto>(adjustmentItem));
+            return ApplicationDataResult<AdjustmentItemDto>.FactoryFromData(
+                _mapper.Map<AdjustmentItemDto>(adjustmentItem));
         }
 
         /// <summary>
@@ -221,7 +223,8 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <param name="adjustmentItemId"></param>
         /// <param name="adjustmentItemDto"></param>
         /// <returns></returns>
-        public async Task<ApplicationDataResult<AdjustmentItemDto>> UpdateItemAsync(Guid adjustmentId, Guid adjustmentItemId,
+        public async Task<ApplicationDataResult<AdjustmentItemDto>> UpdateItemAsync(Guid adjustmentId,
+            Guid adjustmentItemId,
             AddOrUpdateAdjustmentItemDto adjustmentItemDto)
         {
             NotificationContext result =
@@ -240,7 +243,8 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             await _adjustmentService.UpdateItemAsync(adjustment, adjustmentItem);
 
-            return ApplicationDataResult<AdjustmentItemDto>.FactoryFromData(_mapper.Map<AdjustmentItemDto>(adjustmentItem));
+            return ApplicationDataResult<AdjustmentItemDto>.FactoryFromData(
+                _mapper.Map<AdjustmentItemDto>(adjustmentItem));
         }
 
         /// <summary>
@@ -249,9 +253,11 @@ namespace JacksonVeroneze.StockService.Application.Services
         /// <param name="adjustmentId"></param>
         /// <param name="adjustmentItemId"></param>
         /// <returns></returns>
-        public async Task<ApplicationDataResult<AdjustmentItemDto>> RemoveItemAsync(Guid adjustmentId, Guid adjustmentItemId)
+        public async Task<ApplicationDataResult<AdjustmentItemDto>> RemoveItemAsync(Guid adjustmentId,
+            Guid adjustmentItemId)
         {
-            NotificationContext result = await _adjustmentItemValidator.ValidateRemoveAsync(adjustmentId, adjustmentItemId);
+            NotificationContext result =
+                await _adjustmentItemValidator.ValidateRemoveAsync(adjustmentId, adjustmentItemId);
 
             if (result.HasNotifications)
                 return ApplicationDataResult<AdjustmentItemDto>.FactoryFromNotificationContext(result);

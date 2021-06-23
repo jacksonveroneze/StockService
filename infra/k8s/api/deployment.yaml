@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: stock-service
-    namespace: stock-service
+    name: api-deployment
+    namespace: stock-application
     labels:
-        app: stock-service
+        app: api-stock
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: stock-service
+            app: api-stock
     template:
         metadata:
             labels:
-                app: stock-service
+                app: api-stock
         spec:
             containers:
-                - name: stock-service
-                  image: jacksonveroneze.azurecr.io/stock-service:1.0.5
+                - name: api
+                  image: 'jacksonveroneze.azurecr.io/stock-service:1.0.6'
                   imagePullPolicy: Always
                   ports:
                       - containerPort: 80
@@ -25,29 +25,25 @@ spec:
                       - name: APP_CONFIG_ConnectionStrings__DefaultConnection
                         valueFrom:
                             secretKeyRef:
-                                name: db-credentials
+                                name: api-secret
                                 key: connectionString
-
                       - name: APP_CONFIG_Auth__Authority
                         valueFrom:
                             configMapKeyRef:
                                 name: api-configmap
                                 key: APP_CONFIG_Auth__Authority
-
                       - name: APP_CONFIG_Auth__Audience
                         valueFrom:
                             configMapKeyRef:
                                 name: api-configmap
                                 key: APP_CONFIG_Auth__Audience
-
                       - name: APP_CONFIG_Urls_Allow_Cors
                         valueFrom:
                             configMapKeyRef:
                                 name: api-configmap
                                 key: APP_CONFIG_Urls_Allow_Cors
-
-                      - name: APP_CONFIG_ApplicationInsights_InstrumentationKey
+                      - name: ASPNETCORE_ENVIRONMENT
                         valueFrom:
                             configMapKeyRef:
                                 name: api-configmap
-                                key: APP_CONFIG_ApplicationInsights_InstrumentationKey
+                                key: ASPNETCORE_ENVIRONMENT

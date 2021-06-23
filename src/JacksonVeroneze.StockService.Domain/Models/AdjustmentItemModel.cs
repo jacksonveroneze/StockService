@@ -1,8 +1,8 @@
 using System;
 
-namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
+namespace JacksonVeroneze.StockService.Domain.Models
 {
-    public class AdjustmentItemDto
+    public class AdjustmentItemModel
     {
         public Guid Id { get; set; }
 

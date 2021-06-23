@@ -1,8 +1,8 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-    name: autoscaling-stock-service
-    namespace: stock-service
+    name: api-horizontalpodsutoscaler
+    namespace: api-deployment
 spec:
     scaleTargetRef:
         apiVersion: apps/v1

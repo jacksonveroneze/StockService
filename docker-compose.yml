@@ -3,7 +3,7 @@ version: "3.8"
 services:
     api:
         container_name: api
-        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
+        image: jacksonveroneze.azurecr.io/stock-service:1.0.7
         restart: always
         tty: true
         environment:

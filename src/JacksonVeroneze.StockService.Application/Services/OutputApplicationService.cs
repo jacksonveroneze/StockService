@@ -185,7 +185,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (output is null)
                 throw ExceptionsFactory.FactoryNotFoundException<Output>(outputId);
 
-            return _mapper.Map<IList<OutputItemDto>>(output.Items);
+            return _mapper.Map<IList<OutputItemDto>>(await _outputRepository.FindItems(outputId));
         }
 
         /// <summary>

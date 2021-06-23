@@ -27,7 +27,7 @@ namespace JacksonVeroneze.StockService.Api
 
                 IHost host = CreateHostBuilder(args).Build();
 
-                await MigrateDatabase(host, args, environment);
+                //await MigrateDatabase(host, args, environment);
 
                 await host.RunAsync();
             }

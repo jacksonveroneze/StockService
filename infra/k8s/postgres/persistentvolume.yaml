@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: database-persistentvolume-volume
+    namespace: stock-application
+spec:
+    storageClassName: manual
+    capacity:
+        storage: 1Gi
+    accessModes:
+        - ReadWriteOnce
+    hostPath:
+        path: /mnt/data
+        type: DirectoryOrCreate
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: database-persistentvolumeclaim
+    namespace: stock-application
+    labels:
+        app: database-stock
+spec:
+    storageClassName: manual
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 1Gi

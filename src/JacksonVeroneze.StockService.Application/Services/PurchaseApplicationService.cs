@@ -185,7 +185,7 @@ namespace JacksonVeroneze.StockService.Application.Services
             if (purchase is null)
                 throw ExceptionsFactory.FactoryNotFoundException<Purchase>(purchaseId);
 
-            return _mapper.Map<IList<PurchaseItemDto>>(purchase.Items);
+            return _mapper.Map<IList<PurchaseItemDto>>(await _purchaseRepository.FindItems(purchaseId));
         }
 
         /// <summary>

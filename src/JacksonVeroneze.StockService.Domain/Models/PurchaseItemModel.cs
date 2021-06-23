@@ -1,14 +1,16 @@
 using System;
 
-namespace JacksonVeroneze.StockService.Application.DTO.AdjustmentItem
+namespace JacksonVeroneze.StockService.Domain.Models
 {
-    public class AdjustmentItemDto
+    public class PurchaseItemModel
     {
         public Guid Id { get; set; }
 
         public int Amount { get; set; }
 
-        public Guid AdjustmentId { get; set; }
+        public decimal Value { get; set; }
+
+        public Guid PurchaseId { get; set; }
 
         public Guid ProductId { get; set; }
 

@@ -9,6 +9,7 @@ using JacksonVeroneze.StockService.Application.DTO.PurchaseItem;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Product;
+using JacksonVeroneze.StockService.Domain.Models;
 
 namespace JacksonVeroneze.StockService.Mapper
 {
@@ -48,17 +49,24 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<Output, OutputDto>();
             CreateMap<Purchase, PurchaseDto>();
 
+            CreateMap<AdjustmentItemModel, AdjustmentItemDto>();
+            CreateMap<OutputItemModel, OutputItemDto>();
+            CreateMap<PurchaseItemModel, PurchaseItemDto>();
+
             CreateMap<AdjustmentItem, AdjustmentItemDto>()
                 .ForMember(x => x.AdjustmentId, f => f.MapFrom(x => x.Adjustment.Id))
-                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id))
+                .ForMember(x => x.ProductDescription, f => f.Ignore());
 
             CreateMap<OutputItem, OutputItemDto>()
                 .ForMember(x => x.OutputId, f => f.MapFrom(x => x.Output.Id))
-                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id))
+                .ForMember(x => x.ProductDescription, f => f.Ignore());
 
             CreateMap<PurchaseItem, PurchaseItemDto>()
                 .ForMember(x => x.PurchaseId, f => f.MapFrom(x => x.Purchase.Id))
-                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id));
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id))
+                .ForMember(x => x.ProductDescription, f => f.Ignore());
         }
 
         private void MapEntityToEvent()

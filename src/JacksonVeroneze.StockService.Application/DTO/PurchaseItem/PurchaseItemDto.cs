@@ -13,5 +13,7 @@ namespace JacksonVeroneze.StockService.Application.DTO.PurchaseItem
         public Guid PurchaseId { get; set; }
 
         public Guid ProductId { get; set; }
+
+        public string ProductDescription { get; set; }
     }
 }
