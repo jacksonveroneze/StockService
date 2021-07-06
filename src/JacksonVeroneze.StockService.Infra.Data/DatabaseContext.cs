@@ -65,7 +65,9 @@ namespace JacksonVeroneze.StockService.Infra.Data
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
-                    entry.Property(nameof(Entity.DeletedAt)).CurrentValue = DateTime.Now;
+
+                    if (entry.Members.Any(x => x.Metadata.Name.Equals(nameof(Entity.DeletedAt))))
+                        entry.Property(nameof(Entity.DeletedAt)).CurrentValue = DateTime.Now;
                 }
             }
 

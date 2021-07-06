@@ -36,5 +36,7 @@ namespace JacksonVeroneze.StockService.Application.Interfaces
             AddOrUpdateOutputItemDto outputItemDto);
 
         Task<ApplicationDataResult<OutputItemDto>> RemoveItemAsync(Guid outputId, Guid outputItemId);
+
+        Task<ApplicationDataResult<OutputItemDto>> UndoItemAsync(Guid outputId, Guid outputItemId);
     }
 }

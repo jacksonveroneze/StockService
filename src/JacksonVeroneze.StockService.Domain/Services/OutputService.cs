@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Threading.Tasks;
+using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Events.Output;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
+using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Services
 {
@@ -87,6 +90,32 @@ namespace JacksonVeroneze.StockService.Domain.Services
 
             if (await _repository.UnitOfWork.CommitAsync())
                 await _bus.PublishDomainEvent(new OutputClosedEvent(output.Id));
+        }
+
+        /// <summary>
+        /// Method responsible for undo item.
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public async Task UndoItemAsync(Output output, OutputItem item)
+        {
+            output.Open();
+
+            output.RemoveItem(item);
+
+            output.Close();
+
+            _repository.Remove(output);
+
+            MovementItem movementItem = item.MovementItems.FirstOrDefault();
+
+            if (movementItem is null)
+                throw ExceptionsFactory.FactoryDomainException(Messages.MovementItemNotFound);
+
+            if (await _repository.UnitOfWork.CommitAsync())
+                await _bus.PublishDomainEvent(new OutputUndoItemEvent(movementItem.Movement.Id, movementItem.Id,
+                    item.Amount));
         }
     }
 }

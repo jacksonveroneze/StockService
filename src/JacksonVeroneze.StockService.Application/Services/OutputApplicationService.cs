@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using JacksonVeroneze.NET.Commons.Exceptions;
@@ -261,6 +262,28 @@ namespace JacksonVeroneze.StockService.Application.Services
             OutputItem outputItem = output.FindItem(outputItemId);
 
             await _outputService.RemoveItemAsync(output, outputItem);
+
+            return ApplicationDataResult<OutputItemDto>.FactoryFromEmpty();
+        }
+
+        /// <summary>
+        /// Method responsible for undo outputItem.
+        /// </summary>
+        /// <param name="outputId"></param>
+        /// <param name="outputItemId"></param>
+        /// <returns></returns>
+        public async Task<ApplicationDataResult<OutputItemDto>> UndoItemAsync(Guid outputId, Guid outputItemId)
+        {
+            NotificationContext result = await _outputItemValidator.ValidateUndoItemAsync(outputId, outputItemId);
+
+            if (result.HasNotifications)
+                return ApplicationDataResult<OutputItemDto>.FactoryFromNotificationContext(result);
+
+            Output output = await _outputRepository.FindAsync(outputId);
+
+            OutputItem outputItem = output.FindItem(outputItemId);
+
+            await _outputService.UndoItemAsync(output, outputItem);
 
             return ApplicationDataResult<OutputItemDto>.FactoryFromEmpty();
         }

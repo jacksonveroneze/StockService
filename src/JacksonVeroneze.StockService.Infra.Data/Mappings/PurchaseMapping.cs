@@ -23,18 +23,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Mappings
             builder.Property(c => c.State)
                 .IsRequired();
 
-            builder.Property(c => c.CreatedAt)
-                .IsRequired();
-
-            builder.Property(c => c.UpdatedAt);
-
-            builder.Property(c => c.DeletedAt);
-
-            builder.Property(c => c.Version)
-                .IsRequired();
-
-            builder.Property(c => c.TenantId)
-                .IsRequired();
+            builder.ConfigureDefaultFiledsMapping();
 
             builder.Ignore(x => x.TotalValue);
         }

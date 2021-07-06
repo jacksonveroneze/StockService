@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: database-deployment
-    namespace: stock-application
+    namespace: stockservice-jacksonveroneze
 spec:
     replicas: 1
     selector:

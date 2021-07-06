@@ -20,6 +20,8 @@ services:
             - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json
             - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
             - --certificatesresolvers.letsencryptresolver.acme.httpchallenge=true
+            - --certificatesresolvers.letsencryptresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+
         volumes:
             - ./acme.json:/acme.json
             - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -27,7 +29,7 @@ services:
             - traefik.enable=true
             - traefik.http.routers.traefik.entrypoints=websecure
             - traefik.http.routers.traefik.tls.certresolver=letsencryptresolver
-            - traefik.http.routers.traefik.rule=Host(`stockservice.jacksonveroneze.com`)
+            - traefik.http.routers.traefik.rule=Host(`stockservice.localhost`)
             - traefik.http.routers.traefik.service=api@internal
             - traefik.http.middlewares.traefik-redirect-to-https-md.redirectscheme.scheme=https
             - traefik.http.middlewares.traefik-auth-md.basicauth.users=admin:$$apr1$$8EVjn/nj$$GiLUZqcbueTFeD23SuB6x0
@@ -48,7 +50,7 @@ services:
             - traefik.http.routers.api.entrypoints=websecure
             - traefik.http.routers.api.tls=true
             - traefik.http.routers.api.tls.certresolver=letsencryptresolver
-            - traefik.http.routers.api.rule=Host(`api.stockservice.jacksonveroneze.com`)
+            - traefik.http.routers.api.rule=Host(`api.stockservice.localhost`)
             - traefik.http.services.api.loadbalancer.server.port=80
             - traefik.http.middlewares.api-compress-md.compress=true
             - traefik.http.middlewares.api-ratelimit-md.ratelimit.average=10

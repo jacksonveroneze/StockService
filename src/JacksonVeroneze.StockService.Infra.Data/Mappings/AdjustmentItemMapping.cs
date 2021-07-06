@@ -16,19 +16,6 @@ namespace JacksonVeroneze.StockService.Infra.Data.Mappings
             builder.Property(c => c.Amount)
                 .IsRequired();
 
-            builder.Property(c => c.CreatedAt)
-                .IsRequired();
-
-            builder.Property(c => c.UpdatedAt);
-
-            builder.Property(c => c.DeletedAt);
-
-            builder.Property(c => c.Version)
-                .IsRequired();
-
-            builder.Property(c => c.TenantId)
-                .IsRequired();
-
             builder.HasOne(p => p.Adjustment)
                 .WithMany(b => b.Items)
                 .IsRequired()
@@ -38,6 +25,8 @@ namespace JacksonVeroneze.StockService.Infra.Data.Mappings
                 .WithMany(b => b.ItemsAdjustment)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.ConfigureDefaultFiledsMapping();
         }
     }
 }

@@ -36,6 +36,8 @@ namespace JacksonVeroneze.StockService.Application.Validations
         public const string OutputIsClosed =
             "A saída informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
 
+        public const string OutputIsOpened =
+            "A saída informada está aberta, portanto não pode ser reaberta";
 
         // OutputItem
         public const string OutputItemNotFoundById = "Item da saída não encontrado com o código informado";

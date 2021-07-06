@@ -2,14 +2,13 @@ version: "3.8"
 
 services:
     api:
-        container_name: api
-        image: jacksonveroneze.azurecr.io/stock-service:1.0.7
+        image: docker.pkg.github.com/jacksonveroneze/stock-service/stock-service:latest
         restart: always
         tty: true
         environment:
             - ASPNETCORE_URLS=http://+:80
             - DOTNET_RUNNING_IN_CONTAINER=true
-            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_ENVIRONMENT=Development
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
             - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock_service;Username=postgres;Password=localPass@word
@@ -39,7 +38,7 @@ services:
         depends_on:
             - database_postgres
         ports:
-            - 8085:80
+            - 8085-8090:80
 
     database_mssql:
         container_name: database_mssql
@@ -64,7 +63,7 @@ services:
         environment:
             - POSTGRES_PASSWORD=localPass@word
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
             interval: 30s
             timeout: 3s
             start_period: 5s

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Core.DomainObjects;
 using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Models;
+using JacksonVeroneze.StockService.Domain.Util;
 using JacksonVeroneze.StockService.Infra.Data.Util;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +52,36 @@ namespace JacksonVeroneze.StockService.Infra.Data.Repositories
                     ProductDescription = x.Product.Description,
                     Ammount = x.Items.OrderByDescending(b => b.CreatedAt).FirstOrDefault().Amount
                 })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<IList<MovementItem>> FindItensToRecalcOnUndoOutputItemAsync(Guid productId,
+            DateTime startDate,
+            DateTime? endDate)
+        {
+            Expression<Func<MovementItem, bool>> expression = x
+                => x.Movement.Product.Id == productId && (x.OutputItems.Any() || x.PurchaseItems.Any()) &&
+                   x.CreatedAt > startDate;
+
+            if (endDate.HasValue)
+                expression = expression.And(b => b.CreatedAt < endDate);
+
+            return await Context.Set<MovementItem>()
+                .AsSplitQuery()
+                .AsNoTrackingWithIdentityResolution()
+                .Where(expression)
+                .OrderBy(x => x.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<MovementItem> FindFirstAjustment(Guid movementId, DateTime startDate)
+        {
+            return await Context.Set<MovementItem>()
+                .AsSplitQuery()
+                .AsNoTrackingWithIdentityResolution()
+                .Where(x => x.Movement.Id == movementId && x.CreatedAt > startDate &&
+                            x.AdjustmentItems.Any())
+                .OrderBy(x => x.CreatedAt)
                 .FirstOrDefaultAsync();
         }
     }

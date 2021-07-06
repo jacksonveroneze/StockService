@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: api-configmap
-    namespace: stock-application
+    namespace: stockservice-jacksonveroneze
 data:
     APP_CONFIG_Auth__Authority: https://jacksonveroneze.auth0.com/
     APP_CONFIG_Auth__Audience: https://stock-jacksonveroneze.azurewebsites.net

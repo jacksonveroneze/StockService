@@ -351,6 +351,7 @@ MigrationBackup/
 
 .idea
 
+acme.json
 coverage.json
 coverage.opencover.xml
 package-lock.json

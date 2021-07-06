@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+    traefik:
+        container_name: traefik
+        image: traefik:v2.4
+        restart: always
+        command:
+            - --log.level=INFO
+            - --pilot.token=7002c54f-05e4-4860-a03f-8fbf72a42a6f
+            - --certificatesresolvers.letsencryptresolver.acme.email=jackson@jacksonveroneze.com
+            - --certificatesresolvers.letsencryptresolver.acme.storage=/acme.json
+            - --certificatesresolvers.letsencryptresolver.acme.tlschallenge=true
+            - --certificatesresolvers.letsencryptresolver.acme.httpchallenge=true
+        volumes:
+            - ./acme.json:/acme.json
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        labels:
+            - traefik.http.routers.traefik.rule=Host(`stockservice.jacksonveroneze.com`)
+
+    api:
+        labels:
+            - traefik.http.routers.api.rule=Host(`api.stockservice.jacksonveroneze.com`)

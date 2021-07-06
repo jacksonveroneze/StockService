@@ -13,8 +13,4 @@
     <ProjectReference Include="..\JacksonVeroneze.StockService.Infra.Bus\JacksonVeroneze.StockService.Infra.Bus.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations" />
-  </ItemGroup>
-
 </Project>

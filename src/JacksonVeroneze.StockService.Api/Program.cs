@@ -23,11 +23,11 @@ namespace JacksonVeroneze.StockService.Api
 
                 Log.Logger = FactoryLogger(environment);
 
-                Log.Information($"Application: {0}", "Starting up");
+                Log.Information("Application: {0}", "Starting up");
 
                 IHost host = CreateHostBuilder(args).Build();
 
-                //await MigrateDatabase(host, args, environment);
+                await MigrateDatabase(host, args, environment);
 
                 await host.RunAsync();
             }
@@ -62,7 +62,7 @@ namespace JacksonVeroneze.StockService.Api
         private static async Task MigrateDatabase(IHost host, string[] args, string environment)
         {
             if (environment != null &&
-                !environment.Equals("Production", StringComparison.InvariantCultureIgnoreCase))
+                environment.Equals("Testing", StringComparison.InvariantCultureIgnoreCase))
             {
                 await ExecuteMigrations.Execute(host, args);
 

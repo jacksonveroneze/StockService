@@ -35,6 +35,11 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
+        public void Open()
+        {
+            State = OutputState.Open;
+        }
+
         public void Close()
         {
             ValidateIsOpenState();

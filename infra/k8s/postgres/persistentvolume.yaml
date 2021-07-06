@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
     name: database-persistentvolume-volume
-    namespace: stock-application
+    namespace: stockservice-jacksonveroneze
 spec:
     storageClassName: manual
     capacity:
@@ -10,7 +10,7 @@ spec:
     accessModes:
         - ReadWriteOnce
     hostPath:
-        path: /mnt/data
+        path: /tmp
         type: DirectoryOrCreate
 
 ---
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
     name: database-persistentvolumeclaim
-    namespace: stock-application
+    namespace: stockservice-jacksonveroneze
     labels:
         app: database-stock
 spec:

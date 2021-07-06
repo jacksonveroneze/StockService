@@ -234,5 +234,25 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
 
             return NoContent();
         }
+
+        /// <summary>
+        /// Method responsible for action: UndoItem.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [HttpPut("{id:guid}/items/{itemId:guid}/undo")]
+        [Authorize("outputs:undo-item")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Put))]
+        public async Task<ActionResult> UndoItem(Guid id, Guid itemId)
+        {
+            ApplicationDataResult<OutputItemDto> result = await _applicationService.UndoItemAsync(id, itemId);
+
+            if (!result.IsSuccess)
+                return BadRequest(FactoryBadRequest(result));
+
+            return NoContent();
+        }
     }
 }

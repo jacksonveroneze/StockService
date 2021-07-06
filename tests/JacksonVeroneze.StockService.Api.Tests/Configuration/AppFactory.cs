@@ -11,13 +11,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
     {
         protected override IHostBuilder CreateHostBuilder()
         {
-            // Log.Logger = new LoggerConfiguration()
-            //     .WriteTo.Console(
-            //         outputTemplate:
-            //         "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-            //         theme: AnsiConsoleTheme.Literate)
-            //     .Enrich.FromLogContext()
-            //     .CreateLogger();
+            //FactoryLogger();
 
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -31,6 +25,17 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
                             logging.AddConsole();
                         });
                 });
+        }
+
+        private void FactoryLogger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console(
+                    outputTemplate:
+                    "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                    theme: AnsiConsoleTheme.Literate)
+                .Enrich.FromLogContext()
+                .CreateLogger();
         }
     }
 }

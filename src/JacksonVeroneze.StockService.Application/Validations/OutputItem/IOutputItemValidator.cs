@@ -13,5 +13,7 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
             AddOrUpdateOutputItemDto outputItemDto);
 
         Task<NotificationContext> ValidateRemoveAsync(Guid outputId, Guid outputItemId);
+        
+        Task<NotificationContext> ValidateUndoItemAsync(Guid outputId, Guid outputItemId);
     }
 }

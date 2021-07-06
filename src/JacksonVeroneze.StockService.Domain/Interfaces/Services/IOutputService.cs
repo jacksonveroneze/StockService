@@ -12,5 +12,7 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
         Task RemoveItemAsync(Output output, OutputItem item);
 
         Task CloseAsync(Output output);
+
+        Task UndoItemAsync(Output output, OutputItem item);
     }
 }

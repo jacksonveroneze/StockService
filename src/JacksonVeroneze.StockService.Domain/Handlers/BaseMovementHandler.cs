@@ -8,7 +8,7 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 {
     public abstract class BaseMovementHandler
     {
-        private readonly IMovementRepository _movementRepository;
+        protected readonly IMovementRepository _movementRepository;
         protected readonly IMovementService _movementService;
 
         protected BaseMovementHandler(
