@@ -54,7 +54,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// </summary>
         /// <returns></returns>
         public async Task RunMigrations()
-            => await _context.Database.MigrateAsync();
+            => await _context.Database.EnsureCreatedAsync();
+
 
         /// <summary>
         /// Method responsible for mock data in database.
@@ -87,7 +88,9 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// </summary>
         /// <returns></returns>
         public async Task ClearDatabase()
-            => await _context.Database.EnsureDeletedAsync();
+        {
+            await _context.Database.EnsureDeletedAsync();
+        }
 
         /// <summary>
         /// Method responsible for deserialize data.

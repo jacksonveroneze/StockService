@@ -19,7 +19,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
             => new Faker<AdjustmentItem>()
                 .CustomInstantiator(f =>
                     new AdjustmentItem(
-                        f.Random.Int(1, 100),
+                        f.Random.Int(10, 100),
                         adjustment,
                         product
                     )
@@ -29,7 +29,7 @@ namespace JacksonVeroneze.StockService.Common.Fakers
             => new Faker<AdjustmentItem>()
                 .CustomInstantiator(f =>
                     new AdjustmentItem(
-                        f.Random.Int(1, 100),
+                        f.Random.Int(10, 100),
                         adjustment,
                         ProductFaker.Generate()
                     )

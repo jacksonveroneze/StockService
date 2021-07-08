@@ -11,7 +11,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
     {
         protected override IHostBuilder CreateHostBuilder()
         {
-            //FactoryLogger();
+            FactoryLogger();
 
             return Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder =>

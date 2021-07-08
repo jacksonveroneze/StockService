@@ -103,6 +103,10 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
         {
             NotificationContext notificationContext = new();
 
+            new ValidatorOutputHandler()
+                .SetNext(new ValidatorOutputHandler());
+
+
             await ValidateExistsOutputAsync(notificationContext, outputId);
 
             if (notificationContext.HasNotifications)
@@ -237,5 +241,15 @@ namespace JacksonVeroneze.StockService.Application.Validations.OutputItem
 
         private async Task<Domain.Entities.Output> FindOutput(Guid outputId)
             => _output ??= await _outputRepository.FindAsync(outputId);
+    }
+
+    public class ValidatorOutputHandler : AbstractHandler
+    {
+        public object Handle(object request) => throw new NotImplementedException();
+    }
+
+    public class ValidatorOutputItemHandler : AbstractHandler
+    {
+        public object Handle(object request) => throw new NotImplementedException();
     }
 }

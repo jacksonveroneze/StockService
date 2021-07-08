@@ -12,7 +12,10 @@ using JacksonVeroneze.StockService.Common.Fakers;
 using JacksonVeroneze.StockService.Common.Integration;
 using JacksonVeroneze.StockService.Core.Data;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Events.Adjustment;
+using JacksonVeroneze.StockService.Domain.Events.Output;
 using JacksonVeroneze.StockService.Domain.Events.Purchase;
+using JacksonVeroneze.StockService.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
@@ -795,6 +798,127 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.HttpResponse.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             result.Status.Should().Be(StatusCodes.Status400BadRequest);
             result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.OutputIsClosed));
+        }
+
+        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValido")]
+        [Trait(nameof(OutputsController), nameof(OutputsController.UndoItem))]
+        public async Task OutputsController_UndoItem_DeveDesfazerCorretamenteOItemQuandoEmEstadoValido()
+        {
+            // Arrange
+            IList<Domain.Entities.Product> products = ProductFaker.Generate(5);
+
+            await _testsFixture.MockInDatabase(products);
+
+            Domain.Entities.Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<Domain.Entities.Output> outputs = OutputFaker.Generate(3);
+
+            await MockUndoItemAjustmentTestAsync(products, adjustment);
+            await MockUndoItemOutputTestAsync(products, outputs);
+
+            Domain.Entities.Output outputUndo = outputs.First();
+            OutputItem outputItemUndo = outputs.First().Items.Last();
+            Domain.Entities.Product productTest = outputItemUndo.Product;
+
+            // Act
+            TestApiResponseOperationGet<MovementModel> resultMovement =
+                await _testsFixture.SendGetRequest<MovementModel>(
+                    $"/api/v1/movements/find-by-product/{productTest.Id}");
+
+            TestApiResponseBase resultUndo = await _testsFixture.SendPutEmptyBodyRequest(
+                $"{_uriPart}/{outputUndo.Id}/items/{outputItemUndo.Id}/undo");
+
+            TestApiResponseOperationGet<MovementModel> resultMovement1 =
+                await _testsFixture.SendGetRequest<MovementModel>(
+                    $"/api/v1/movements/find-by-product/{productTest.Id}");
+
+            // Assert
+            int totalAmmountAdjustment = adjustment.Items.First(x => x.Product == productTest).Amount;
+            int totalAmmountOutput = outputs
+                .SelectMany(x => x.Items.Where(x => x.Product == productTest)
+                    .Select(x => x.Amount)).Sum(x => x);
+
+            int totalAmmountInStockBeforeUndo = totalAmmountAdjustment - totalAmmountOutput;
+            int totalAmmountInStockAfterUndo = totalAmmountAdjustment - totalAmmountOutput + 1;
+
+            resultMovement.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
+            resultMovement1.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
+            resultUndo.HttpResponse.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+
+            resultMovement.Content.Ammount.Should().Be(totalAmmountInStockBeforeUndo);
+            resultMovement1.Content.Ammount.Should().Be(totalAmmountInStockAfterUndo);
+        }
+
+        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValidoAposAjustment")]
+        [Trait(nameof(OutputsController), nameof(OutputsController.UndoItem))]
+        public async Task OutputsController_UndoItem_DeveDesfazerCorretamenteOItemQuandoEmEstadoValidoAposAjustment()
+        {
+            // Arrange
+            IList<Domain.Entities.Product> products = ProductFaker.Generate(5);
+
+            await _testsFixture.MockInDatabase(products);
+
+            Domain.Entities.Adjustment adjustment = AdjustmentFaker.Generate();
+            IList<Domain.Entities.Output> outputs = OutputFaker.Generate(3);
+            Domain.Entities.Adjustment adjustment1 = AdjustmentFaker.Generate();
+
+            await MockUndoItemAjustmentTestAsync(products, adjustment);
+            await MockUndoItemOutputTestAsync(products, outputs);
+            await MockUndoItemAjustmentTestAsync(products, adjustment1);
+
+            Domain.Entities.Output outputUndo = outputs.First();
+            OutputItem outputItemUndo = outputs.First().Items.Last();
+            Domain.Entities.Product productTest = outputItemUndo.Product;
+
+            // Act
+            TestApiResponseBase resultUndo = await _testsFixture.SendPutEmptyBodyRequest(
+                $"{_uriPart}/{outputUndo.Id}/items/{outputItemUndo.Id}/undo");
+
+            TestApiResponseOperationGet<MovementModel> resultMovement1 =
+                await _testsFixture.SendGetRequest<MovementModel>(
+                    $"/api/v1/movements/find-by-product/{productTest.Id}");
+
+            // Assert
+            int totalAmmountAdjustment = adjustment.Items.First(x => x.Product == productTest).Amount;
+            int totalAmmountAdjustment1 = adjustment1.Items.First(x => x.Product == productTest).Amount;
+            int totalAmmountOutput = outputs
+                .SelectMany(x => x.Items.Where(x => x.Product == productTest)
+                    .Select(x => x.Amount)).Sum(x => x);
+
+            int totalAmmountInStockBeforeUndo = totalAmmountAdjustment - totalAmmountOutput;
+            int totalAmmountInStockAfterUndo = totalAmmountAdjustment1;
+
+            resultMovement1.HttpResponse.StatusCode.Should().Be(StatusCodes.Status200OK);
+            resultUndo.HttpResponse.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+
+            resultMovement1.Content.Ammount.Should().NotBe(totalAmmountInStockBeforeUndo);
+            resultMovement1.Content.Ammount.Should().Be(totalAmmountInStockAfterUndo);
+        }
+
+        private async Task MockUndoItemAjustmentTestAsync(IList<Domain.Entities.Product> products,
+            Domain.Entities.Adjustment adjustment)
+        {
+            foreach (Domain.Entities.Product product in products)
+                adjustment.AddItem(AdjustmentItemFaker.Generate(adjustment, product));
+
+            adjustment.AddEvent(new AdjustmentClosedEvent(adjustment.Id));
+            adjustment.Close();
+
+            await _testsFixture.MockInDatabase(adjustment);
+        }
+
+        private async Task MockUndoItemOutputTestAsync(IList<Domain.Entities.Product> products,
+            IList<Domain.Entities.Output> outputs)
+        {
+            foreach (Domain.Entities.Output output in outputs)
+            {
+                foreach (Domain.Entities.Product product in products)
+                    output.AddItem(OutputItemFaker.Generate(output, product, 1));
+
+                output.AddEvent(new OutputClosedEvent(output.Id));
+                output.Close();
+
+                await _testsFixture.MockInDatabase(output);
+            }
         }
     }
 }

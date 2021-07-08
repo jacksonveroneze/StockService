@@ -16,11 +16,11 @@ namespace JacksonVeroneze.StockService.Api.Configuration
                 "adjustments:create-item", "adjustments:update-item", "adjustments:remove-item", "outputs:filter",
                 "outputs:find", "outputs:create", "outputs:update", "outputs:delete", "outputs:close",
                 "outputs:find-items", "outputs:find-item", "outputs:create-item", "outputs:update-item",
-                "outputs:remove-item", "purchases:filter", "purchases:find", "purchases:create", "purchases:update",
-                "purchases:delete", "purchases:close", "purchases:find-items", "purchases:find-item",
-                "purchases:create-item", "purchases:update-item", "purchases:remove-item", "products:filter",
-                "products:find", "products:create", "products:update", "products:delete",
-                "movements:filter", "movements:find", "outputs:undo-item"
+                "outputs:remove-item", "outputs:undo-item", "purchases:filter", "purchases:find",
+                "purchases:create", "purchases:update", "purchases:delete", "purchases:close",
+                "purchases:find-items", "purchases:find-item", "purchases:create-item", "purchases:update-item",
+                "purchases:remove-item", "products:filter", "products:find", "products:create", "products:update",
+                "products:delete", "movements:filter", "movements:find", "movements:find-by-product"
             };
 
             return services.AddAuthorizationConfiguration(x =>

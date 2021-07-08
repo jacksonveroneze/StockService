@@ -10,28 +10,30 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
 {
     public class Repository<T> : IRepository<T> where T : EntityRoot
     {
-        public IUnitOfWork UnitOfWork { get; set; }
+        private readonly DbSet<T> _dbSet;
 
         protected readonly DatabaseContext Context;
 
+        public IUnitOfWork UnitOfWork { get; set; }
+
         protected Repository(DatabaseContext context)
         {
+            _dbSet = context.Set<T>();
             Context = context;
             UnitOfWork = Context;
         }
 
         public async Task AddAsync(T entity)
-            => await Context.Set<T>().AddAsync(entity);
+            => await _dbSet.AddAsync(entity);
 
         public void Update(T entity)
-            => Context.Set<T>().Update(entity);
+            => _dbSet.Update(entity);
 
         public void Remove(T entity)
-            => Context.Set<T>().Remove(entity);
+            => _dbSet.Remove(entity);
 
         public Task<T> FindAsync(Guid id)
-            => Context.Set<T>()
-                .FirstOrDefaultAsync(c => c.Id == id);
+            => _dbSet.FirstOrDefaultAsync(c => c.Id == id);
 
         public Task<T> FindAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
             => BuidQueryable(new Pagination(), filter)
@@ -46,7 +48,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
                 .ToListAsync();
 
         protected Task<int> CountAsync<TFilter>(TFilter filter) where TFilter : BaseFilter<T>
-            => Context.Set<T>()
+            => _dbSet
                 .AsNoTracking()
                 .Where(filter.ToQuery())
                 .CountAsync();
@@ -64,7 +66,7 @@ namespace JacksonVeroneze.StockService.Infra.Data.Util
         private IQueryable<T> BuidQueryable<TFilter>(Pagination pagination, TFilter filter)
             where TFilter : BaseFilter<T>
         {
-            return Context.Set<T>()
+            return _dbSet
                 .Where(filter.ToQuery())
                 .OrderByDescending(x => x.CreatedAt)
                 .ConfigureSkipTakeFromPagination(pagination);

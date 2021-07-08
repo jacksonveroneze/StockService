@@ -37,6 +37,8 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
 
                 int? lastAmmount = movement.FindLastAmmount();
 
+                // não pode chegar aqui em ter o movimento.
+
                 int newAmmount = (lastAmmount ?? 0) - outputItem.Amount;
 
                 if (newAmmount < 10)

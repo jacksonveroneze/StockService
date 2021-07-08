@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -28,12 +29,23 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("filter")]
         [Authorize("movements:filter")]
         [Produces(MediaTypeNames.Application.Json)]
         [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
-        public async Task<ActionResult<IList<MovementModel>>> Filter(
-            [FromQuery] MovementFilter filter)
+        public async Task<ActionResult<IList<MovementModel>>> Filter([FromQuery] MovementFilter filter)
             => Ok(await _applicationService.FilterAsync(filter));
+
+        /// <summary>
+        /// Method responsible for action: FindByProduct.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [HttpGet("find-by-product/{productId:guid}")]
+        [Authorize("movements:find-by-product")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Get))]
+        public async Task<ActionResult<MovementModel>> FindByProduct([FromRoute] Guid productId)
+            => Ok(await _applicationService.FindByProductAsync(productId));
     }
 }

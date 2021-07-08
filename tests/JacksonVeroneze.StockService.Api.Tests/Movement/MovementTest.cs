@@ -45,7 +45,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
 
             // Act
             TestApiResponseOperationGet<Pageable<MovementModel>> result =
-                await _testsFixture.SendGetRequest<Pageable<MovementModel>>($"{_uriPart}/");
+                await _testsFixture.SendGetRequest<Pageable<MovementModel>>($"{_uriPart}/filter");
 
             // Assert
             result.Should().NotBeNull();
@@ -74,7 +74,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Movement
 
             // Act
             TestApiResponseOperationGet<Pageable<MovementModel>> result =
-                await _testsFixture.SendGetRequest<Pageable<MovementModel>>($"{_uriPart}?ProductId={product.Id}");
+                await _testsFixture.SendGetRequest<Pageable<MovementModel>>($"{_uriPart}/filter/?ProductId={product.Id}");
 
             // Assert
             result.Should().NotBeNull();

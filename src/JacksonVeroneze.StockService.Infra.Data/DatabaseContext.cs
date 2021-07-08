@@ -32,7 +32,7 @@ namespace JacksonVeroneze.StockService.Infra.Data
 
             modelBuilder.Ignore<Event>();
 
-            modelBuilder.HasDefaultSchema("stock");
+            //modelBuilder.HasDefaultSchema("stock");
 
             Guid tentantId = _teantId;
 
