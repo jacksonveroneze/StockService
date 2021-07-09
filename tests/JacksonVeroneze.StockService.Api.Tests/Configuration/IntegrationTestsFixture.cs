@@ -53,7 +53,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// Method responsible for run migrations.
         /// </summary>
         /// <returns></returns>
-        public async Task RunMigrations()
+        public async Task CreateDatabase()
             => await _context.Database.EnsureCreatedAsync();
 
 
@@ -87,10 +87,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Configuration
         /// Method responsible for remove data.
         /// </summary>
         /// <returns></returns>
-        public async Task ClearDatabase()
-        {
-            await _context.Database.EnsureDeletedAsync();
-        }
+        public async Task DropDatabase()
+            => await _context.Database.EnsureDeletedAsync();
 
         /// <summary>
         /// Method responsible for deserialize data.

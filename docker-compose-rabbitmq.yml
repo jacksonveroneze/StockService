@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:3.8-management-alpine
+        restart: always
+        environment:
+            - RABBITMQ_DEFAULT_USER=guest
+            - RABBITMQ_DEFAULT_PASS=guest
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 60s
+            timeout: 3s
+            start_period: 5s
+            retries: 3
+        volumes:
+            - rabbitmq:/var/lib/rabbitmq
+        ports:
+            - 15672:15672
+            - 5672:5672
+
+volumes:
+    rabbitmq:

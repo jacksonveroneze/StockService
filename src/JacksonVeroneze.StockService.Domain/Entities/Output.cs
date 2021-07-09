@@ -118,7 +118,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 
-        private bool CheckIfExistsItemById(Guid id)
+        public bool CheckIfExistsItemById(Guid id)
             => Items.Any(x => x.Id == id);
 
         private void Validate()

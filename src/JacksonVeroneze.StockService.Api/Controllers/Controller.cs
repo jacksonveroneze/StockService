@@ -8,7 +8,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers
 {
     [ApiController]
     [Authorize]
-    [ApiVersion("2")]
+    [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public abstract class Controller : ControllerBase
     {

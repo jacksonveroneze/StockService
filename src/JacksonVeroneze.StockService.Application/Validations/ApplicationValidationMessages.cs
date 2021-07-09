@@ -36,6 +36,9 @@ namespace JacksonVeroneze.StockService.Application.Validations
         public const string OutputIsClosed =
             "A saída informada já encontra-se fechada, portanto não pode ser movimentada ou excluida";
 
+        public const string OutputIsNotClosed =
+            "A saída informada não está fechada, portanto não pode ser movimentada ou excluida";
+
         public const string OutputIsOpened =
             "A saída informada está aberta, portanto não pode ser reaberta";
 
@@ -43,5 +46,6 @@ namespace JacksonVeroneze.StockService.Application.Validations
         public const string OutputItemNotFoundById = "Item da saída não encontrado com o código informado";
         public const string OutputItemProductNotMovement = "Item da saída (Produto) não tem movimentação de estoque";
         public const string OutputItemProductNotSufficientStock= "Item da saída (Produto) não tem estoque suficiente para esta saída";
+        public const string OutputItemWithoutMovementItem = "Item da saída sem movimentação de estoque";
     }
 }

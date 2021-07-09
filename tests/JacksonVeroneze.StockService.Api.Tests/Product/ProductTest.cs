@@ -26,8 +26,8 @@ namespace JacksonVeroneze.StockService.Api.Tests.Product
         {
             _testsFixture = testsFixture;
 
-            _testsFixture.ClearDatabase().Wait();
-            _testsFixture.RunMigrations().Wait();
+            _testsFixture.DropDatabase().Wait();
+            _testsFixture.CreateDatabase().Wait();
         }
 
         [Fact(DisplayName = "DeveFiltrarEPaginarOsDadosComSkipTakeCorretamente", Skip = "Refatorar teste")]

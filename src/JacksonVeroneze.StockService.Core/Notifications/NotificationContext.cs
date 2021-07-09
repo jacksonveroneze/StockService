@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -33,6 +34,14 @@ namespace JacksonVeroneze.StockService.Core.Notifications
         {
             foreach (ValidationFailure error in validationResult.Errors)
                 AddNotification(error.PropertyName, error.ErrorMessage.Replace("'", String.Empty));
+
+            return this;
+        }
+
+        public NotificationContext AddNotifications(IList<Notification> validationResult)
+        {
+            foreach (Notification error in validationResult)
+                AddNotification(error);
 
             return this;
         }
