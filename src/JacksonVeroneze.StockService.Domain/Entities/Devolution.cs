@@ -8,26 +8,26 @@ using JacksonVeroneze.StockService.Domain.Util;
 
 namespace JacksonVeroneze.StockService.Domain.Entities
 {
-    public class Output : EntityRoot, IAggregateRoot
+    public class Devolution : EntityRoot, IAggregateRoot
     {
         public string Description { get; private set; }
 
         public DateTime Date { get; private set; }
 
-        public OutputState State { get; private set; } = OutputState.Open;
+        public DevolutionState State { get; private set; } = DevolutionState.Open;
 
         public decimal TotalValue { get; private set; }
 
-        private readonly List<OutputItem> _items = new();
-        public virtual IReadOnlyCollection<OutputItem> Items => _items;
+        private readonly List<DevolutionItem> _items = new();
+        public virtual IReadOnlyCollection<DevolutionItem> Items => _items;
 
         public bool HasItems => Items.Any();
 
-        protected Output()
+        protected Devolution()
         {
         }
 
-        public Output(string description, DateTime date)
+        public Devolution(string description, DateTime date)
         {
             Description = description;
             Date = date;
@@ -37,14 +37,14 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public void Open()
         {
-            State = OutputState.Open;
+            State = DevolutionState.Open;
         }
 
         public void Close()
         {
             ValidateIsOpenState();
 
-            State = OutputState.Closed;
+            State = DevolutionState.Closed;
         }
 
         public void Update(string description, DateTime date)
@@ -57,7 +57,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Validate();
         }
 
-        public void AddItem(OutputItem item)
+        public void AddItem(DevolutionItem item)
         {
             ValidateIsOpenState();
             ValidateIfExistsDuplicatedItem(item);
@@ -66,20 +66,20 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             _items.Add(item);
         }
 
-        public void UpdateItem(OutputItem item)
+        public void UpdateItem(DevolutionItem item)
         {
             ValidateIsOpenState();
             ValidateIfItemNotExist(item);
             ValidateIfExistsItemByProduct(item);
 
-            OutputItem putputItem = FindItem(item.Id);
+            DevolutionItem putputItem = FindItem(item.Id);
 
             _items.Remove(putputItem);
 
             _items.Add(item);
         }
 
-        public void RemoveItem(OutputItem item)
+        public void RemoveItem(DevolutionItem item)
         {
             ValidateIsOpenState();
 
@@ -88,26 +88,26 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             _items.Remove(item);
         }
 
-        public OutputItem FindItem(Guid id)
+        public DevolutionItem FindItem(Guid id)
             => Items.FirstOrDefault(x => x.Id == id);
 
-        private void ValidateIfItemNotExist(OutputItem item)
+        private void ValidateIfItemNotExist(DevolutionItem item)
         {
             if (CheckIfExistsItemById(item.Id) is false)
-                throw ExceptionsFactory.FactoryNotFoundException<Output>(item.Id);
+                throw ExceptionsFactory.FactoryNotFoundException<Devolution>(item.Id);
         }
 
-        private void ValidateIfExistsDuplicatedItem(OutputItem item)
+        private void ValidateIfExistsDuplicatedItem(DevolutionItem item)
         {
-            OutputItem existItem = FindItem(item.Id);
+            DevolutionItem existItem = FindItem(item.Id);
 
             if (existItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ItemFound);
         }
 
-        private void ValidateIfExistsItemByProduct(OutputItem item)
+        private void ValidateIfExistsItemByProduct(DevolutionItem item)
         {
-            OutputItem putputItem = Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
+            DevolutionItem putputItem = Items.FirstOrDefault(x => x.Product.Id == item.Product.Id && x.Id != item.Id);
 
             if (putputItem != null)
                 throw ExceptionsFactory.FactoryDomainException(Messages.ProductFound);
@@ -115,7 +115,7 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         private void ValidateIsOpenState()
         {
-            if (State == OutputState.Closed)
+            if (State == DevolutionState.Closed)
                 throw ExceptionsFactory.FactoryDomainException(Messages.RegisterClosedNotMoviment);
         }
 

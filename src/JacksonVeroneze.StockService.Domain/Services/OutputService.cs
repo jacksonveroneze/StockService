@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using JacksonVeroneze.StockService.Core.Exceptions;
 using JacksonVeroneze.StockService.Infra.Bus;
 using JacksonVeroneze.StockService.Domain.Entities;
+using JacksonVeroneze.StockService.Domain.Events.Devolution;
 using JacksonVeroneze.StockService.Domain.Events.Output;
 using JacksonVeroneze.StockService.Domain.Interfaces.Repositories;
 using JacksonVeroneze.StockService.Domain.Interfaces.Services;
@@ -27,6 +28,18 @@ namespace JacksonVeroneze.StockService.Domain.Services
         {
             _repository = repository;
             _bus = bus;
+        }
+
+        /// <summary>
+        /// Method responsible for item.
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
+        public async Task AddAsync(Output output)
+        {
+            await _repository.AddAsync(output);
+
+            await _repository.UnitOfWork.CommitAsync();
         }
 
         /// <summary>
@@ -108,14 +121,19 @@ namespace JacksonVeroneze.StockService.Domain.Services
 
             _repository.Remove(output);
 
-            MovementItem movementItem = item.MovementItems.FirstOrDefault();
-
-            if (movementItem is null)
-                throw ExceptionsFactory.FactoryDomainException(Messages.MovementItemNotFound);
+            // MovementItem movementItem = item.MovementItems.FirstOrDefault();
+            //
+            // if (movementItem is null)
+            //     throw ExceptionsFactory.FactoryDomainException(Messages.MovementItemNotFound);
 
             if (await _repository.UnitOfWork.CommitAsync())
-                await _bus.PublishDomainEvent(new OutputUndoItemEvent(movementItem.Movement.Id, movementItem.Id,
-                    item.Amount));
+            {
+                // await _bus.PublishDomainEvent(new OutputItemUndoEvent(movementItem.Movement.Id, movementItem.Id,
+                //     item.Amount));
+
+                await _bus.PublishDomainEvent(
+                    new OutputItemUndoDevolutionEvent(item.Id, output.Description, item.Amount, item.Product.Id));
+            }
         }
     }
 }

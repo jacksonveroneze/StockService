@@ -30,6 +30,18 @@ namespace JacksonVeroneze.StockService.Domain.Services
         /// Method responsible for add item.
         /// </summary>
         /// <param name="purchase"></param>
+        /// <returns></returns>
+        public async Task AddAsync(Purchase purchase)
+        {
+            await _repository.AddAsync(purchase);
+
+            await _repository.UnitOfWork.CommitAsync();
+        }
+
+        /// <summary>
+        /// Method responsible for add item.
+        /// </summary>
+        /// <param name="purchase"></param>
         /// <param name="item"></param>
         /// <returns></returns>
         public async Task AddItemAsync(Purchase purchase, PurchaseItem item)

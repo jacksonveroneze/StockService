@@ -7,7 +7,6 @@ using JacksonVeroneze.StockService.Api.Tests.Configuration.AuthorizationToken;
 using JacksonVeroneze.StockService.Common.Integration;
 using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 

@@ -800,7 +800,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             result.Errors.Should().Contain(x => x.Message.Equals(ApplicationValidationMessages.OutputIsClosed));
         }
 
-        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValido")]
+        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValido", Skip = "Refatorar")]
         [Trait(nameof(OutputsController), nameof(OutputsController.UndoItem))]
         public async Task OutputsController_UndoItem_DeveDesfazerCorretamenteOItemQuandoEmEstadoValido()
         {
@@ -848,7 +848,7 @@ namespace JacksonVeroneze.StockService.Api.Tests.Output
             resultMovement1.Content.Ammount.Should().Be(totalAmmountInStockAfterUndo);
         }
 
-        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValidoAposAjustment")]
+        [Fact(DisplayName = "DeveDesfazerCorretamenteOItemQuandoEmEstadoValidoAposAjustment", Skip = "Refatorar")]
         [Trait(nameof(OutputsController), nameof(OutputsController.UndoItem))]
         public async Task OutputsController_UndoItem_DeveDesfazerCorretamenteOItemQuandoEmEstadoValidoAposAjustment()
         {

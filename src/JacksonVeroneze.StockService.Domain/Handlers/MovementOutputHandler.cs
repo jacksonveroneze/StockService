@@ -12,7 +12,7 @@ using MediatR;
 namespace JacksonVeroneze.StockService.Domain.Handlers
 {
     public class MovementOutputHandler : BaseMovementHandler, INotificationHandler<OutputClosedEvent>,
-        INotificationHandler<OutputUndoItemEvent>
+        INotificationHandler<OutputItemUndoEvent>
     {
         private readonly IOutputRepository _outputRepository;
 
@@ -50,7 +50,7 @@ namespace JacksonVeroneze.StockService.Domain.Handlers
             }
         }
 
-        public async Task Handle(OutputUndoItemEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(OutputItemUndoEvent notification, CancellationToken cancellationToken)
         {
             Movement movement = await _movementRepository.FindAsync(notification.AggregateId);
 

@@ -1,8 +1,3 @@
-using System;
-using JacksonVeroneze.StockService.Core.Messages;
-using JacksonVeroneze.StockService.Core.Messages.CommonMessages.DomainEvents;
-using JacksonVeroneze.StockService.Domain.Events.Product;
-using MassTransit;
 // using MassTransit.RabbitMqTransport.Topology;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

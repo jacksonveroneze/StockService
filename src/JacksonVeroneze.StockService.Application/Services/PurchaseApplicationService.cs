@@ -83,9 +83,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Purchase purchase = _mapper.Map<Purchase>(purchaseDto);
 
-            await _purchaseRepository.AddAsync(purchase);
-
-            await _purchaseRepository.UnitOfWork.CommitAsync();
+            await _purchaseService.AddAsync(purchase);
 
             return ApplicationDataResult<PurchaseDto>.FactoryFromData(_mapper.Map<PurchaseDto>(purchase));
         }

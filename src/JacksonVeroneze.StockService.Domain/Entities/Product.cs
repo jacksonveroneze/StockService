@@ -13,15 +13,18 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private readonly List<PurchaseItem> _itemsPurchase = new();
         private readonly List<AdjustmentItem> _itemsAdjustment = new();
         private readonly List<OutputItem> _itemsOutput = new();
+        private readonly List<DevolutionItem> _itemsDevolution = new();
         private readonly List<Movement> _itemsMovement = new();
 
         public virtual IReadOnlyCollection<PurchaseItem> ItemsPurchase => _itemsPurchase;
         public virtual IReadOnlyCollection<AdjustmentItem> ItemsAdjustment => _itemsAdjustment;
         public virtual IReadOnlyCollection<OutputItem> ItemsOutput => _itemsOutput;
+        public virtual IReadOnlyCollection<DevolutionItem> ItemsDevolution => _itemsDevolution;
         public virtual IReadOnlyCollection<Movement> ItemsMovement => _itemsMovement;
 
         public bool HasItems =>
-            ItemsPurchase.Any() || ItemsAdjustment.Any() || ItemsOutput.Any() || ItemsMovement.Any();
+            ItemsPurchase.Any() || ItemsAdjustment.Any() || ItemsOutput.Any() || ItemsDevolution.Any() ||
+            ItemsMovement.Any();
 
         protected Product()
         {

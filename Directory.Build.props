@@ -1,9 +1,9 @@
 <Project>
-    <PropertyGroup Label="Сommon properties">
-        <LangVersion>latest</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Label="Packages dependency versions">
-        <CommonsVersion>0.0.12</CommonsVersion>
-        <AutoMapperVersion>10.1.1</AutoMapperVersion>
-      </PropertyGroup>
+  <PropertyGroup Label="Сommon properties">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="Packages dependency versions">
+    <CommonsVersion>1.0.0</CommonsVersion>
+    <AutoMapperVersion>10.1.1</AutoMapperVersion>
+  </PropertyGroup>
 </Project>

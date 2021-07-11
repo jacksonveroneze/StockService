@@ -12,10 +12,12 @@ namespace JacksonVeroneze.StockService.Domain.Entities
         private readonly List<AdjustmentItem> _adjustmentItems = new();
         private readonly List<OutputItem> _outputItems = new();
         private readonly List<PurchaseItem> _purchaseItems = new();
+        private readonly List<DevolutionItem> _devolutionItems = new();
 
         public virtual IReadOnlyCollection<AdjustmentItem> AdjustmentItems => _adjustmentItems;
         public virtual IReadOnlyCollection<OutputItem> OutputItems => _outputItems;
         public virtual IReadOnlyCollection<PurchaseItem> PurchaseItems => _purchaseItems;
+        public virtual IReadOnlyCollection<DevolutionItem> DevolutionItems => _devolutionItems;
 
         public MovementItem()
         {
@@ -44,6 +46,15 @@ namespace JacksonVeroneze.StockService.Domain.Entities
             Amount = amount;
             Movement = movement;
             _purchaseItems.Add(purchaseItem);
+
+            Validate();
+        }
+
+        public MovementItem(int amount, Movement movement, DevolutionItem devolutionItem)
+        {
+            Amount = amount;
+            Movement = movement;
+            _devolutionItems.Add(devolutionItem);
 
             Validate();
         }

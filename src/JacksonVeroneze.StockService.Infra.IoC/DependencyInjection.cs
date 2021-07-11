@@ -43,6 +43,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         private static void RegisterDomainServices(IServiceCollection services)
         {
             services.AddScoped<IAdjustmentService, AdjustmentService>();
+            services.AddScoped<IDevolutionService, DevolutionService>();
             services.AddScoped<IOutputService, OutputService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IMovementService, MovementService>();
@@ -52,6 +53,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddScoped<IAdjustmentRepository, AdjustmentRepository>();
+            services.AddScoped<IDevolutionRepository, DevolutionRepository>();
             services.AddScoped<IOutputRepository, OutputRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IMovementRepository, MovementRepository>();
@@ -74,7 +76,6 @@ namespace JacksonVeroneze.StockService.Infra.IoC
         private static void RegisterServicesOthers(IServiceCollection services)
         {
             services.AddScoped<IBus, BusMediator>();
-            //services.AddScoped<IBusExternal, Bus.MassTransit.BusMassTransit>();
             services.AddScoped<IUser, AspNetUser>();
             services.AddScoped<DatabaseContext>();
         }

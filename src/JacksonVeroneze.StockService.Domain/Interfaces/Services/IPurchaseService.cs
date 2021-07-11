@@ -5,6 +5,8 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
 {
     public interface IPurchaseService
     {
+        Task AddAsync(Purchase purchase);
+        
         Task AddItemAsync(Purchase purchase, PurchaseItem item);
 
         Task UpdateItemAsync(Purchase purchase, PurchaseItem item);

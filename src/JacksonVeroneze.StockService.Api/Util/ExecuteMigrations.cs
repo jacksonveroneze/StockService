@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Threading.Tasks;
-using JacksonVeroneze.StockService.Domain.Entities;
 using JacksonVeroneze.StockService.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

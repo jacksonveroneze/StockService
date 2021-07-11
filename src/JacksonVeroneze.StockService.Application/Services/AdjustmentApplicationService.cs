@@ -83,9 +83,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Adjustment adjustment = _mapper.Map<Adjustment>(adjustmentDto);
 
-            await _adjustmentRepository.AddAsync(adjustment);
-
-            await _adjustmentRepository.UnitOfWork.CommitAsync();
+            await _adjustmentService.AddAsync(adjustment);
 
             return ApplicationDataResult<AdjustmentDto>.FactoryFromData(_mapper.Map<AdjustmentDto>(adjustment));
         }

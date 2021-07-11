@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using JacksonVeroneze.NET.Commons.Exceptions;
@@ -84,9 +83,7 @@ namespace JacksonVeroneze.StockService.Application.Services
 
             Output output = _mapper.Map<Output>(outputDto);
 
-            await _outputRepository.AddAsync(output);
-
-            await _outputRepository.UnitOfWork.CommitAsync();
+            await _outputService.AddAsync(output);
 
             return ApplicationDataResult<OutputDto>.FactoryFromData(_mapper.Map<OutputDto>(output));
         }

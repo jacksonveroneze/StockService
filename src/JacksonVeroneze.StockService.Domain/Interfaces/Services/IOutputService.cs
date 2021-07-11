@@ -5,6 +5,8 @@ namespace JacksonVeroneze.StockService.Domain.Interfaces.Services
 {
     public interface IOutputService
     {
+        Task AddAsync(Output output);
+        
         Task AddItemAsync(Output output, OutputItem item);
 
         Task UpdateItemAsync(Output output, OutputItem item);

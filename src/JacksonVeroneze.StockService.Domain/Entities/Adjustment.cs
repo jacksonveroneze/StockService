@@ -44,10 +44,11 @@ namespace JacksonVeroneze.StockService.Domain.Entities
 
         public void Update(string description, DateTime date)
         {
+            ValidateIsOpenState();
+
             Description = description;
             Date = date;
 
-            ValidateIsOpenState();
             Validate();
         }
 
