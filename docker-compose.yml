@@ -11,7 +11,7 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - APP_CONFIG_Urls_Allow_Cors=*;
             - APP_CONFIG_ApplicationInsights_InstrumentationKey=
-            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock_service;Username=postgres;Password=qAaaXj5rcMFXbB1VCKFi
+            - APP_CONFIG_ConnectionStrings__DefaultConnection=Host=database_postgres;Database=stock_service;Username=postgres;Password=localPass@word
             - APP_CONFIG_Auth__Authority=https://jacksonveroneze.auth0.com/
             - APP_CONFIG_Auth__Audience=https://stock-jacksonveroneze.azurewebsites.net
             - APP_CONFIG_Serilog__MinimumLevel__Default=Information
