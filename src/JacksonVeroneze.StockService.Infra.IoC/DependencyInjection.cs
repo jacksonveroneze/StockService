@@ -38,6 +38,7 @@ namespace JacksonVeroneze.StockService.Infra.IoC
             services.AddScoped<IAdjustmentApplicationService, AdjustmentApplicationService>();
             services.AddScoped<IOutputApplicationService, OutputApplicationService>();
             services.AddScoped<IPurchaseApplicationService, PurchaseApplicationService>();
+            services.AddScoped<IDevolutionApplicationService, DevolutionApplicationService>();
         }
 
         private static void RegisterDomainServices(IServiceCollection services)

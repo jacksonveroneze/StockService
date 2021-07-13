@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using JacksonVeroneze.StockService.Application.DTO.Adjustment;
 using JacksonVeroneze.StockService.Application.DTO.AdjustmentItem;
+using JacksonVeroneze.StockService.Application.DTO.Devolution;
+using JacksonVeroneze.StockService.Application.DTO.DevolutionItem;
 using JacksonVeroneze.StockService.Application.DTO.Output;
 using JacksonVeroneze.StockService.Application.DTO.OutputItem;
 using JacksonVeroneze.StockService.Application.DTO.Product;
@@ -48,10 +50,12 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<Adjustment, AdjustmentDto>();
             CreateMap<Output, OutputDto>();
             CreateMap<Purchase, PurchaseDto>();
+            CreateMap<Devolution, DevolutionDto>();
 
             CreateMap<AdjustmentItemModel, AdjustmentItemDto>();
             CreateMap<OutputItemModel, OutputItemDto>();
             CreateMap<PurchaseItemModel, PurchaseItemDto>();
+            CreateMap<DevolutionItemModel, DevolutionItemDto>();
 
             CreateMap<AdjustmentItem, AdjustmentItemDto>()
                 .ForMember(x => x.AdjustmentId, f => f.MapFrom(x => x.Adjustment.Id))
@@ -65,6 +69,11 @@ namespace JacksonVeroneze.StockService.Mapper
 
             CreateMap<PurchaseItem, PurchaseItemDto>()
                 .ForMember(x => x.PurchaseId, f => f.MapFrom(x => x.Purchase.Id))
+                .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id))
+                .ForMember(x => x.ProductDescription, f => f.Ignore());
+
+            CreateMap<DevolutionItem, DevolutionItemDto>()
+                .ForMember(x => x.DevolutionId, f => f.MapFrom(x => x.Devolution.Id))
                 .ForMember(x => x.ProductId, f => f.MapFrom(x => x.Product.Id))
                 .ForMember(x => x.ProductDescription, f => f.Ignore());
         }
@@ -83,6 +92,7 @@ namespace JacksonVeroneze.StockService.Mapper
             CreateMap<Pageable<Adjustment>, Pageable<AdjustmentDto>>();
             CreateMap<Pageable<Output>, Pageable<OutputDto>>();
             CreateMap<Pageable<Purchase>, Pageable<PurchaseDto>>();
+            CreateMap<Pageable<Devolution>, Pageable<DevolutionDto>>();
         }
     }
 }
