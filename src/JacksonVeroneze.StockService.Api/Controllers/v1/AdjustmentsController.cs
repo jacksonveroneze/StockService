@@ -31,7 +31,7 @@ namespace JacksonVeroneze.StockService.Api.Controllers.v1
         /// </summary>
         /// <param name="pagination"></param>
         /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <returns></returns>\
         [HttpGet]
         [Authorize("adjustments:filter")]
         [Produces(MediaTypeNames.Application.Json)]
